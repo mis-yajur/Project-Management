@@ -17,8 +17,8 @@ interface MaterialPopoverMenuProps {
   items: PopoverActionItem[];
   shape?: PopoverShape;
   position?: PopoverPosition;
-  enableHighlight?: boolean; // Guides user attention by highlighting the trigger
-  customContent?: React.ReactNode; // Allows passing any widget inside the popup!
+  enableHighlight?: boolean;
+  customContent?: React.ReactNode;
   className?: string;
 }
 
@@ -32,9 +32,7 @@ export default function MaterialPopoverMenu({
   className = "",
 }: MaterialPopoverMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [menuStyle, setMenuStyle] = useState<React.CSSProperties>({});
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const popoverRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const toggleOpen = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -43,88 +41,15 @@ export default function MaterialPopoverMenu({
 
   useEffect(() => {
     if (!isOpen) return;
-
-    const calculatePosition = () => {
-      if (!triggerRef.current) return;
-      const rect = triggerRef.current.getBoundingClientRect();
-      const scrollY = window.scrollY;
-      const scrollX = window.scrollX;
-
-      let top = 0;
-      let left = 0;
-      let transformOrigin = "top center";
-
-      // Simple auto-position intelligence
-      const viewportHeight = window.innerHeight;
-      const spaceBelow = viewportHeight - rect.bottom;
-      const spaceAbove = rect.top;
-
-      let resolvedPosition = position;
-      if (position === "auto") {
-        resolvedPosition = spaceBelow < 180 && spaceAbove > spaceBelow ? "top" : "bottom";
-      }
-
-      switch (resolvedPosition) {
-        case "top":
-          top = rect.top + scrollY - 8;
-          left = rect.left + scrollX + rect.width / 2;
-          transformOrigin = "bottom center";
-          break;
-        case "bottom":
-        default:
-          top = rect.bottom + scrollY + 8;
-          left = rect.left + scrollX + rect.width / 2;
-          transformOrigin = "top center";
-          break;
-        case "left":
-          top = rect.top + scrollY + rect.height / 2;
-          left = rect.left + scrollX - 8;
-          transformOrigin = "right center";
-          break;
-        case "right":
-          top = rect.top + scrollY + rect.height / 2;
-          left = rect.right + scrollX + 8;
-          transformOrigin = "left center";
-          break;
-      }
-
-      setMenuStyle({
-        position: "absolute",
-        top: `${top}px`,
-        left: `${left}px`,
-        transform: resolvedPosition === "top" || resolvedPosition === "bottom" ? "translateX(-50%)" : "translateY(-50%)",
-        transformOrigin,
-        zIndex: 100,
-      });
-    };
-
-    calculatePosition();
-    window.addEventListener("resize", calculatePosition);
-    window.addEventListener("scroll", calculatePosition);
-
-    return () => {
-      window.removeEventListener("resize", calculatePosition);
-      window.removeEventListener("scroll", calculatePosition);
-    };
-  }, [isOpen, position]);
-
-  // Click outside listener
-  useEffect(() => {
-    if (!isOpen) return;
     const handleOutsideClick = (e: MouseEvent) => {
-      if (
-        popoverRef.current?.contains(e.target as Node) ||
-        triggerRef.current?.contains(e.target as Node)
-      ) {
-        return;
+      if (!containerRef.current?.contains(e.target as Node)) {
+        setIsOpen(false);
       }
-      setIsOpen(false);
     };
     document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [isOpen]);
 
-  // Shapes class resolution
   const getShapeClass = () => {
     switch (shape) {
       case "circular":
@@ -137,48 +62,48 @@ export default function MaterialPopoverMenu({
         return "rounded-xl p-2.5 min-w-[180px]";
       case "standard":
       default:
-        return "rounded-2xl p-2 min-w-[180px] shadow-[0_12px_40px_rgba(0,0,0,0.12)]";
+        return "rounded-2xl p-2 min-w-[180px] shadow-[0_12px_40px_rgba(0,0,0,0.12)] border border-slate-100 bg-white";
     }
   };
 
+  // Safe CSS alignment classes
+  let positionClass = "top-full right-0 mt-1.5 origin-top-right";
+  if (position === "top") {
+    positionClass = "bottom-full right-0 mb-1.5 origin-bottom-right";
+  } else if (position === "left") {
+    positionClass = "right-full top-0 mr-1.5 origin-top-right";
+  } else if (position === "right") {
+    positionClass = "left-full top-0 ml-1.5 origin-top-left";
+  }
+
   return (
-    <div className={`relative inline-block ${className}`} ref={triggerRef}>
+    <div className={`relative inline-block ${className}`} ref={containerRef}>
       {/* Trigger Wrapper */}
       <div 
         onClick={toggleOpen} 
-        className={`relative z-10 transition-transform ${isOpen && enableHighlight ? "scale-[1.03]" : ""}`}
+        className="relative z-10 transition-transform active:scale-95 cursor-pointer"
       >
         {trigger}
       </div>
 
-      {/* Spotlight highlight to guide user attention */}
-      {isOpen && enableHighlight && (
-        <div 
-          className="fixed inset-0 bg-slate-900/10 backdrop-blur-[1px] pointer-events-none z-40 transition-opacity duration-300"
-          style={{ mixBlendMode: "multiply" }}
-        />
-      )}
-
-      {/* Popover Portal / Absolute Element */}
+      {/* Popover - rendered standard next to parent */}
       <AnimatePresence>
         {isOpen && (
-          <div style={menuStyle} ref={popoverRef} className="pointer-events-auto">
+          <div className={`absolute ${positionClass} z-50`}>
             <motion.div
-              initial={{ opacity: 0, scale: 0.85, y: position === "top" ? 4 : -4 }}
+              initial={{ opacity: 0, scale: 0.95, y: -2 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: position === "top" ? 3 : -3 }}
-              transition={{ type: "spring", stiffness: 350, damping: 24 }}
-              className={`bg-white border border-slate-200/80 text-slate-800 ${getShapeClass()}`}
+              exit={{ opacity: 0, scale: 0.95, y: -2 }}
+              transition={{ duration: 0.12, ease: "easeOut" }}
+              className={`text-slate-800 ${getShapeClass()}`}
             >
               {customContent ? (
                 <div className="p-2">{customContent}</div>
               ) : (
                 <div className="flex flex-col gap-0.5">
                   {items.map((item, idx) => (
-                    <motion.button
+                    <button
                       key={idx}
-                      whileHover={{ scale: 1.02, x: 2 }}
-                      whileTap={{ scale: 0.98 }}
                       onClick={(e) => {
                         e.stopPropagation();
                         item.onClick(e);
@@ -186,13 +111,13 @@ export default function MaterialPopoverMenu({
                       }}
                       className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold rounded-lg text-left transition-colors cursor-pointer ${
                         item.danger
-                          ? "text-red-650 hover:bg-red-50"
+                          ? "text-red-500 hover:bg-rose-50"
                           : "text-slate-700 hover:bg-slate-50 hover:text-slate-900"
                       } ${item.className || ""}`}
                     >
-                      {item.icon && <span className="opacity-80 text-current">{item.icon}</span>}
-                      <span>{item.label}</span>
-                    </motion.button>
+                      {item.icon && <span className="opacity-80 shrink-0">{item.icon}</span>}
+                      <span className="truncate">{item.label}</span>
+                    </button>
                   ))}
                 </div>
               )}
