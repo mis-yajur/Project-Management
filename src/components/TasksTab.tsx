@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ListTodo, Plus, Search, RotateCw, Edit, Trash2, Eye, Loader2, ChevronDown, ChevronRight, HelpCircle } from "lucide-react";
+import { ListTodo, Plus, Search, RotateCw, Edit, Trash2, Eye, Loader2, ChevronDown, ChevronRight, HelpCircle, MessageCircle } from "lucide-react";
 import { api } from "../api";
 import { Task, User } from "../types";
 
@@ -291,6 +291,60 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     return { text: `${d} days`, style: "text-slate-600" };
   };
 
+  const getTaskRecipientUser = (t: Task) => {
+    if (t.tags) {
+      const match = activeUsers.find(u => u.username?.toLowerCase() === t.tags.toLowerCase());
+      if (match) return match;
+    }
+    if (t.owner) {
+      const match = activeUsers.find(u => u.id === t.owner);
+      if (match) return match;
+    }
+    return null;
+  };
+
+  const handleSendWhatsApp = async (t: Task) => {
+    const recipient = getTaskRecipientUser(t);
+    const defaultPhone = recipient?.contactNumber || "";
+    const doerName = recipient?.name || t.tags || "Team Member";
+
+    const phoneInput = window.prompt(
+      `Send auto task notification via WhatsApp?\n\nRecipient: ${doerName}\n\nEnter Phone Number with country code (e.g. 919876543210):`,
+      defaultPhone
+    );
+
+    if (phoneInput === null) return;
+    const phoneVal = phoneInput.trim().replace(/[+\s-]/g, "");
+    if (!phoneVal) {
+      alert("Error: Mobile phone number is required to trigger WhatsApp.");
+      return;
+    }
+
+    const dlimit = calculateDaysLeft(t.dueDate, t.status);
+    const daysLimitStr = dlimit.text;
+    const priorityStr = t.priority || "Medium";
+    const formattedLink = `${window.location.origin}/?tab=tasks&search=${t.id}`;
+
+    try {
+      const res = await api.sendWhatsApp(
+        phoneVal,
+        doerName,
+        t.id,
+        daysLimitStr,
+        priorityStr,
+        formattedLink
+      );
+
+      if (res && res.success) {
+        alert(`Success: Auto WhatsApp template 'tsk_9' sent to ${doerName} at ${phoneVal} successfully!`);
+      } else {
+        alert(`Failed to send WhatsApp message:\n\n${res?.message || "Unknown error"}`);
+      }
+    } catch (err: any) {
+      alert(`API Exception: ${err.message}`);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Search & Action Panel */}
@@ -487,6 +541,13 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                         <td className="py-4 px-6 text-center">
                           <div className="flex items-center justify-center gap-1">
                             <button
+                              onClick={() => handleSendWhatsApp(t)}
+                              className="p-1 px-1.5 text-green-600 hover:text-green-700 hover:bg-green-50 rounded cursor-pointer transition-colors"
+                              title="Send Template via WhatsApp"
+                            >
+                              <MessageCircle size={14} className="fill-current opacity-90" />
+                            </button>
+                            <button
                               onClick={() => viewTaskDetails(t)}
                               className="p-1 px-1.5 text-slate-400 hover:text-slate-850 rounded hover:bg-slate-100 cursor-pointer"
                               title="View Details"
@@ -568,6 +629,13 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                             </td>
                             <td className="py-3 px-6 text-center">
                               <div className="flex items-center justify-center gap-1">
+                                <button
+                                  onClick={() => handleSendWhatsApp(c)}
+                                  className="p-1 text-green-600 hover:text-green-700 hover:bg-green-50 rounded cursor-pointer transition-colors"
+                                  title="Send Template via WhatsApp"
+                                >
+                                  <MessageCircle size={12} className="fill-current opacity-90" />
+                                </button>
                                 <button
                                   onClick={() => viewTaskDetails(c)}
                                   className="p-1 text-slate-400 hover:text-slate-800 rounded hover:bg-slate-100 cursor-pointer"
@@ -911,7 +979,18 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </tbody>
               </table>
             </div>
-            <div className="px-6 py-4 border-t border-slate-700/60 bg-slate-900/50 flex justify-end">
+            <div className="px-6 py-4 border-t border-slate-700/60 bg-slate-900/50 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowViewModal(false);
+                  handleSendWhatsApp(selectedTask);
+                }}
+                className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-semibold flex items-center gap-1.5 cursor-pointer transition-all"
+              >
+                <MessageCircle size={15} />
+                Send via WhatsApp
+              </button>
               <button
                 type="button"
                 onClick={() => setShowViewModal(false)}

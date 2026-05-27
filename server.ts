@@ -735,7 +735,15 @@ async function executeAction(action: string, args: any[]): Promise<any> {
     case "getAllActiveUsers": {
       const activeUsers = db.users
         .filter((u: any) => u.status === "Active")
-        .map((u: any) => ({ id: u.id, username: u.username, name: u.fullName, role: u.role, department: u.department }));
+        .map((u: any) => ({ 
+          id: u.id, 
+          username: u.username, 
+          name: u.fullName, 
+          role: u.role, 
+          department: u.department,
+          email: u.email || "",
+          contactNumber: u.contactNumber || ""
+        }));
       return { success: true, data: activeUsers };
     }
 
@@ -871,6 +879,72 @@ async function executeAction(action: string, args: any[]): Promise<any> {
 
       writeLocalDb(db);
       return { success: true, emailResult: "Sent (Logged to Notification Log)" };
+    }
+
+    case "sendWhatsApp": {
+      const [phone, name, taskId, daysLimit, priority, taskUpdateLink] = args;
+      if (!phone) {
+        return { success: false, message: "Recipient phone number is missing." };
+      }
+
+      const formattedPhone = String(phone).replace(/[+\s-]/g, "");
+
+      try {
+        const url = new URL("https://bhashsms.com/api/sendmsgutil.php");
+        url.searchParams.append("user", process.env.WA_USER || "YajurFibre_BWAI");
+        url.searchParams.append("pass", process.env.WA_PASS || "123456");
+        url.searchParams.append("sender", process.env.WA_SENDER || "BUZWAP");
+        url.searchParams.append("phone", formattedPhone);
+        url.searchParams.append("text", "tsk_9");
+        url.searchParams.append("priority", "wa");
+        url.searchParams.append("stype", "normal");
+        
+        // Params = Name, Task ID, Days Limit, Priority, task update Link
+        // Name is: Doer (Tags)
+        const paramsValue = `${encodeURIComponent(name || "")},${encodeURIComponent(taskId || "")},${encodeURIComponent(daysLimit || "")},${encodeURIComponent(priority || "")},${encodeURIComponent(taskUpdateLink || "")}`;
+        url.searchParams.append("Params", paramsValue);
+
+        console.log(`Sending WhatsApp call via BhashSMS API to ${formattedPhone} (Params: ${paramsValue})`);
+        
+        const response = await fetch(url.toString(), {
+          method: "GET",
+          headers: {
+            "Accept": "application/json, text/plain, */*"
+          }
+        });
+
+        const responseText = await response.text();
+        console.log(`WhatsApp API response text: ${responseText}`);
+
+        // Track notification in database
+        const notifId = "NOTIF-" + String(db.notifications.length + 1).padStart(4, "0");
+        db.notifications.push({
+          id: notifId,
+          referenceId: taskId || "",
+          type: "WhatsApp Broadcast",
+          recipientId: "",
+          recipientName: name || "",
+          recipientEmail: "",
+          channel: "WhatsApp",
+          status: "Sent",
+          message: `WhatsApp template 'tsk_9' sent successfully. Recipient: ${name} (${formattedPhone})`,
+          sentDate: new Date().toISOString(),
+          triggeredBy: "WhatsApp Integration Client"
+        });
+        writeLocalDb(db);
+
+        return { 
+          success: true, 
+          message: "WhatsApp broadcast successfully sent and status logged.", 
+          response: responseText 
+        };
+      } catch (err: any) {
+        console.error("WhatsApp broadcast exception:", err);
+        return { 
+          success: false, 
+          message: "Failed to dispatch WhatsApp message: " + err.message 
+        };
+      }
     }
   }
 
