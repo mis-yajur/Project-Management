@@ -878,11 +878,48 @@ async function executeAction(action: string, args: any[]): Promise<any> {
 }
 
 // REST API mapping for our Front-End client calls
+const rpcCache = new Map<string, { data: any; timestamp: number }>();
+const CACHE_TTL_MS = 15000; // 15 seconds
+
+function clearRpcCache() {
+  rpcCache.clear();
+  console.log("🧹 In-memory database cache flushed.");
+}
+
 app.post("/api/rpc", async (req, res) => {
   const { action, args } = req.body;
   console.log(`📥 API RPC received: ${action}`, args);
+  
+  const isWrite = action.startsWith("create") || 
+                  action.startsWith("update") || 
+                  action.startsWith("delete") || 
+                  action.startsWith("save") || 
+                  action.startsWith("trigger") || 
+                  action.startsWith("login");
+
+  if (isWrite) {
+    clearRpcCache();
+  } else if (action.startsWith("get") || action.startsWith("list") || action.startsWith("all")) {
+    const cacheKey = `${action}::${JSON.stringify(args || [])}`;
+    const cachedEntry = rpcCache.get(cacheKey);
+    if (cachedEntry && (Date.now() - cachedEntry.timestamp < CACHE_TTL_MS)) {
+      console.log(`⚡ Blazing-fast Cache Hit: returning cached response for action [${action}]`);
+      return res.json(cachedEntry.data);
+    }
+  }
+
   try {
     const response = await executeAction(action, args || []);
+    
+    // Catch successful reads and save to cache
+    if (!isWrite && response && response.success !== false) {
+      const cacheKey = `${action}::${JSON.stringify(args || [])}`;
+      rpcCache.set(cacheKey, {
+        data: response,
+        timestamp: Date.now()
+      });
+    }
+    
     res.json(response);
   } catch (err: any) {
     console.error(`Error executing action ${action}:`, err);

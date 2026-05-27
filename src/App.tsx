@@ -94,7 +94,7 @@ export default function App() {
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center border border-blue-100 shadow-sm">
-              <Sparkles size={19} className="text-blue-650 animate-pulse" />
+              <Sparkles size={19} className="text-blue-650" />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -103,7 +103,9 @@ export default function App() {
                 </h1>
                 <span className="text-[9px] bg-blue-50 text-blue-700 border border-blue-200 px-1.5 py-0.5 rounded-full font-mono uppercase font-black tracking-wider">PRO</span>
               </div>
-              <span className="text-[10px] text-slate-500 font-mono mt-0.5 block">Sheets Integrated Network Ledger v1.0</span>
+              <span className="text-[10px] font-extrabold mt-0.5 block bg-gradient-to-r from-blue-600 via-emerald-500 via-amber-500 to-rose-600 bg-clip-text text-transparent font-sans">
+                Sheets Integrated Network Ledger v1.0
+              </span>
             </div>
           </div>
 
@@ -228,7 +230,7 @@ export default function App() {
 
       {/* Humble branding credits */}
       <footer className="bg-white border-t border-slate-200 py-3.5 px-6 text-center text-[10px] text-slate-500 font-mono tracking-widest uppercase">
-        © 2026 Yajur Fibres. Google Sheets Powered Infrastructure. All rights reserved.
+        © 2026 Yajur Fibres. All rights reserved.
       </footer>
     </div>
   );
