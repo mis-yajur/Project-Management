@@ -913,7 +913,7 @@ async function executeAction(action: string, args: any[]): Promise<any> {
         
         // Params = Name, Task ID, Days Limit, Priority, task update Link
         // Name is: Doer (Tags)
-        const paramsValue = `${encodeURIComponent(name || "")},${encodeURIComponent(taskId || "")},${encodeURIComponent(daysLimit || "")},${encodeURIComponent(priority || "")},${encodeURIComponent(taskUpdateLink || "")}`;
+        const paramsValue = `${name || ""},${taskId || ""},${daysLimit || ""},${priority || ""},${taskUpdateLink || ""}`;
         url.searchParams.append("Params", paramsValue);
 
         console.log(`Sending WhatsApp call via BhashSMS API to ${formattedPhone} (Params: ${paramsValue})`);
