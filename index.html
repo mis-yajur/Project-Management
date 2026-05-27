@@ -3,34 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Purchase Automation</title>
-    <script>
-      (function() {
-        try {
-          var originalFetch = window.fetch || globalThis.fetch;
-          if (originalFetch) {
-            var fetchValue = originalFetch;
-            var descriptor = {
-              get: function() {
-                return fetchValue;
-              },
-              set: function(val) {
-                console.warn("fetch override intercepted:", val);
-                fetchValue = val;
-              },
-              configurable: true,
-              enumerable: true
-            };
-            Object.defineProperty(window, 'fetch', descriptor);
-            if (typeof globalThis !== 'undefined' && globalThis !== window) {
-              Object.defineProperty(globalThis, 'fetch', descriptor);
-            }
-          }
-        } catch (e) {
-          console.error("Could not define fetch redirect:", e);
-        }
-      })();
-    </script>
+    <title>Project Management Yajur</title>
   </head>
   <body>
     <div id="root"></div>
