@@ -2,18 +2,31 @@
 
 export async function rpcCall(action: string, args: any[] = []): Promise<any> {
   try {
-    const response = await fetch("/api/rpc", {
+    const isGitHubPages = window.location.hostname.endsWith(".github.io");
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbx8LMHDMa6ziSH5Vzv5C1E_C45LhXyfiaTqNXShesT8BAxZTsduoOBEdtB5nPU6Q5lqAg/exec";
+
+    const fetchUrl = isGitHubPages ? appsScriptUrl : "/api/rpc";
+    const fetchHeaders: Record<string, string> = {
+      "Content-Type": "text/plain", // Keep text/plain to avoid preflight issues in simple-request CORS for Apps Script
+    };
+
+    if (!isGitHubPages) {
+      fetchHeaders["Content-Type"] = "application/json";
+    }
+
+    const response = await fetch(fetchUrl, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: fetchHeaders,
       body: JSON.stringify({ action, args }),
     });
+
     if (!response.ok) {
       const text = await response.text();
       throw new Error(`HTTP error ${response.status}: ${text}`);
     }
-    return await response.json();
+
+    const textResult = await response.text();
+    return JSON.parse(textResult);
   } catch (error: any) {
     console.error(`RPC Exception for ${action}:`, error);
     return { success: false, message: error.message || String(error) };
