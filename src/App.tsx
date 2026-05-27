@@ -76,14 +76,14 @@ export default function App() {
   const isAdmin = currentUser.role === "Admin";
 
   const menuItems = [
-    { id: "dashboard", label: "Overview Hub", icon: LayoutDashboard },
-    { id: "tasks", label: "Milestones Backlog", icon: ListTodo },
-    { id: "issues", label: "Blockers & Issues", icon: AlertCircle },
-    { id: "dependency", label: "Predecessor Links", icon: Link },
-    { id: "reports", label: "Ledger Reports", icon: BarChart3 },
-    { id: "users", label: "Team Members", icon: Users, adminOnly: true },
-    { id: "departments", label: "Segment Departments", icon: Building2, adminOnly: true },
-    { id: "notifications", label: "System Alerts", icon: Bell },
+    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { id: "tasks", label: "Tasks", icon: ListTodo },
+    { id: "issues", label: "Issues", icon: AlertCircle },
+    { id: "dependency", label: "Dependencies", icon: Link },
+    { id: "reports", label: "Reports", icon: BarChart3 },
+    { id: "users", label: "Users", icon: Users, adminOnly: true },
+    { id: "departments", label: "Departments", icon: Building2, adminOnly: true },
+    { id: "notifications", label: "Notifications", icon: Bell },
   ];
 
   return (
