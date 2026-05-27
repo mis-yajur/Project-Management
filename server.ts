@@ -748,6 +748,17 @@ async function executeAction(action: string, args: any[]): Promise<any> {
       return { success: true, data: activeUsers };
     }
 
+    case "updateUser": {
+      const [uId, updates] = args;
+      const idx = db.users.findIndex((u: any) => u.id === uId);
+      if (idx !== -1) {
+        db.users[idx] = { ...db.users[idx], ...updates };
+        writeLocalDb(db);
+        return { success: true, message: "User updated successfully" };
+      }
+      return { success: false, message: "User not found" };
+    }
+
     case "deleteUser": {
       const [userId] = args;
       const originalLength = db.users.length;
