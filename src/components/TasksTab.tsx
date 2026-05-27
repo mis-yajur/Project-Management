@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ListTodo, Plus, Search, RotateCw, Edit, Trash2, Eye, Loader2, ChevronDown, ChevronRight, HelpCircle, MessageCircle } from "lucide-react";
+import { ListTodo, Plus, Search, RotateCw, Edit, Trash2, Eye, Loader2, ChevronDown, ChevronRight, HelpCircle, MessageCircle, Link } from "lucide-react";
 import { api } from "../api";
 import { Task, User } from "../types";
 import MaterialPopoverMenu from "./MaterialPopoverMenu";
@@ -47,6 +47,68 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
   const [showViewModal, setShowViewModal] = useState(false);
   
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+
+  // Quick Dependency Modal
+  const [showDependencyModal, setShowDependencyModal] = useState(false);
+  const [dependencyTargetTask, setDependencyTargetTask] = useState<Task | null>(null);
+  const [dependencyForm, setDependencyForm] = useState({
+    dependsOn: "",
+    type: "Finish to Start",
+    notes: ""
+  });
+  const [dependencySubmitting, setDependencySubmitting] = useState(false);
+
+  const openDependencyModal = (t: Task) => {
+    setDependencyTargetTask(t);
+    setDependencyForm({
+      dependsOn: "",
+      type: "Finish to Start",
+      notes: ""
+    });
+    setShowDependencyModal(true);
+  };
+
+  const handleDependencySubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!dependencyTargetTask) return;
+    if (!dependencyForm.dependsOn) {
+      alert("Please select a predecessor task.");
+      return;
+    }
+    if (dependencyTargetTask.id === dependencyForm.dependsOn) {
+      alert("Invalid: A task cannot establish a circular dependency on itself.");
+      return;
+    }
+
+    setDependencySubmitting(true);
+    try {
+      const depRes = await api.createDependency({
+        taskId: dependencyTargetTask.id,
+        dependsOn: dependencyForm.dependsOn,
+        type: dependencyForm.type,
+        notes: dependencyForm.notes
+      });
+
+      if (!depRes.success) {
+        alert(depRes.message || "Failed to create dependency link.");
+        setDependencySubmitting(false);
+        return;
+      }
+
+      // Automatically flag task dependency as "Yes"
+      if (dependencyTargetTask.dependency !== "Yes") {
+        await api.updateTask(dependencyTargetTask.id, { dependency: "Yes" });
+      }
+
+      alert("Dependency link established successfully!");
+      setShowDependencyModal(false);
+      loadData();
+    } catch (err: any) {
+      alert("Error: " + err.message);
+    } finally {
+      setDependencySubmitting(false);
+    }
+  };
 
   // Forms states
   const [createForm, setCreateForm] = useState({
@@ -305,17 +367,29 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
   };
 
   const getTaskRecipientUser = (t: Task) => {
+    if (!activeUsers || activeUsers.length === 0) return null;
+
+    // 1. Try to match by tags (case-insensitive username or name/fullName)
     if (t.tags) {
+      const cleanTag = String(t.tags).trim().toLowerCase();
       const match = activeUsers.find(
-        u => (u.username?.toLowerCase() === t.tags.toLowerCase() ||
-              u.name?.toLowerCase() === t.tags.toLowerCase())
+        u => (String(u.username).trim().toLowerCase() === cleanTag ||
+              String(u.name).trim().toLowerCase() === cleanTag)
       );
       if (match) return match;
     }
+
+    // 2. Try to match by owner (case-insensitive id, username or name)
     if (t.owner) {
-      const match = activeUsers.find(u => u.id === t.owner);
+      const cleanOwner = String(t.owner).trim().toLowerCase();
+      const match = activeUsers.find(
+        u => (String(u.id).trim().toLowerCase() === cleanOwner ||
+              String(u.username).trim().toLowerCase() === cleanOwner ||
+              String(u.name).trim().toLowerCase() === cleanOwner)
+      );
       if (match) return match;
     }
+
     return null;
   };
 
@@ -324,13 +398,24 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     const defaultPhone = recipient?.contactNumber || "";
     const doerName = recipient?.name || t.tags || "Team Member";
 
-    const phoneInput = window.prompt(
-      `Send auto task notification via WhatsApp?\n\nRecipient: ${doerName}\n\nEnter Phone Number with country code (e.g. 919876543210):`,
-      defaultPhone
-    );
+    let phoneVal = defaultPhone.trim().replace(/[+\s-]/g, "");
 
-    if (phoneInput === null) return;
-    const phoneVal = phoneInput.trim().replace(/[+\s-]/g, "");
+    // If we have a phone number on file, present a direct click-to-confirm dialog instead of asking to type
+    if (phoneVal) {
+      const confirmSend = window.confirm(
+        `Send auto WhatsApp task notification for [${t.id}] to ${doerName} at ${phoneVal}?`
+      );
+      if (!confirmSend) return;
+    } else {
+      // Prompt for phone number only if not available on file
+      const phoneInput = window.prompt(
+        `Send auto task notification via WhatsApp?\n\nRecipient: ${doerName}\n\nEnter Phone Number with country code (e.g. 919876543210):`,
+        ""
+      );
+      if (phoneInput === null) return;
+      phoneVal = phoneInput.trim().replace(/[+\s-]/g, "");
+    }
+
     if (!phoneVal) {
       alert("Error: Mobile phone number is required to trigger WhatsApp.");
       return;
@@ -541,6 +626,11 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 label: "Update Milestone",
                 icon: <Edit size={13} className="text-amber-500" />,
                 onClick: () => handleEditClick(t)
+              },
+              {
+                label: "Link Dependency",
+                icon: <Link size={13} className="text-indigo-500" />,
+                onClick: () => openDependencyModal(t)
               },
               {
                 label: "Send WhatsApp",
@@ -865,6 +955,11 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                                   onClick: () => handleEditClick(t)
                                 },
                                 {
+                                  label: "Link Dependency",
+                                  icon: <Link size={14} className="text-indigo-500" />,
+                                  onClick: () => openDependencyModal(t)
+                                },
+                                {
                                   label: "Send Auto WhatsApp",
                                   icon: <MessageCircle size={14} className="text-emerald-500" />,
                                   onClick: () => handleSendWhatsApp(t)
@@ -954,6 +1049,11 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                                       label: "Update Milestone",
                                       icon: <Edit size={12} className="text-amber-500" />,
                                       onClick: () => handleEditClick(c)
+                                    },
+                                    {
+                                      label: "Link Dependency",
+                                      icon: <Link size={12} className="text-indigo-500" />,
+                                      onClick: () => openDependencyModal(c)
                                     },
                                     {
                                       label: "Send Auto WhatsApp",
@@ -1418,6 +1518,113 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 Close
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* QUICK DEPENDENCY MODAL */}
+      {showDependencyModal && dependencyTargetTask && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-slate-800 w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-slate-700 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-700/65 flex justify-between items-center bg-slate-900/50">
+              <div className="space-y-1">
+                <h3 className="text-lg font-display font-medium text-slate-200">Establish Task Dependency</h3>
+                <p className="text-[11px] text-slate-400">
+                  Setting predecessor blocking constraints for <span className="font-semibold text-blue-400 font-mono">{dependencyTargetTask.id}</span>
+                </p>
+              </div>
+              <button 
+                type="button" 
+                onClick={() => setShowDependencyModal(false)} 
+                className="text-slate-400 hover:text-slate-100 text-sm font-semibold cursor-pointer"
+              >
+                ✕
+              </button>
+            </div>
+            <form onSubmit={handleDependencySubmit}>
+              <div className="p-6 space-y-4 max-h-[65vh] overflow-y-auto">
+                {/* Target Info Read Only */}
+                <div className="bg-slate-900/40 border border-slate-700/40 rounded-xl p-3.5 space-y-2">
+                  <div className="flex justify-between items-center text-xs text-slate-400">
+                    <span>Target Dependent Task:</span>
+                    <span className="font-bold text-slate-350 bg-slate-800 px-1.5 py-0.5 rounded font-mono">{dependencyTargetTask.id}</span>
+                  </div>
+                  <h4 className="text-sm font-semibold text-slate-200">{dependencyTargetTask.name}</h4>
+                  <div className="text-xs text-slate-400 font-medium">Department: <span className="text-slate-300">{dependencyTargetTask.department}</span></div>
+                </div>
+
+                {/* Predecessor Select */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">
+                    Predecessor (Depends On)
+                  </label>
+                  <select
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    value={dependencyForm.dependsOn}
+                    onChange={(e) => setDependencyForm({ ...dependencyForm, dependsOn: e.target.value })}
+                    required
+                  >
+                    <option value="">Select Predecessor Task</option>
+                    {tasks
+                      .filter((tk) => tk.id !== dependencyTargetTask.id)
+                      .map((tk) => (
+                        <option key={tk.id} value={tk.id}>
+                          [{tk.id}] {tk.name} ({tk.department})
+                        </option>
+                      ))}
+                  </select>
+                </div>
+
+                {/* Constraint Type Selector */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">
+                    Constraint Type
+                  </label>
+                  <select
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    value={dependencyForm.type}
+                    onChange={(e) => setDependencyForm({ ...dependencyForm, type: e.target.value })}
+                    required
+                  >
+                    <option value="Finish to Start">Finish to Start (FS)</option>
+                    <option value="Start to Start">Start to Start (SS)</option>
+                    <option value="Finish to Finish">Finish to Finish (FF)</option>
+                    <option value="Start to Finish">Start to Finish (SF)</option>
+                  </select>
+                </div>
+
+                {/* Predecessor Notes */}
+                <div className="space-y-1.5">
+                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                    Predecessor Notes
+                  </label>
+                  <textarea
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                    placeholder="Provide context regarding pre-requisite actions..."
+                    rows={2}
+                    value={dependencyForm.notes}
+                    onChange={(e) => setDependencyForm({ ...dependencyForm, notes: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="px-6 py-4 border-t border-slate-700/60 bg-slate-900/50 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowDependencyModal(false)}
+                  className="px-4 py-2 text-sm text-slate-400 hover:text-slate-100 font-medium cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={dependencySubmitting}
+                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-medium text-slate-100 text-sm shadow-md cursor-pointer transition-all flex items-center gap-1.5"
+                >
+                  {dependencySubmitting && <Loader2 size={14} className="animate-spin" />}
+                  Create Dependency
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
