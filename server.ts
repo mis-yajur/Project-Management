@@ -366,6 +366,7 @@ async function executeAction(action: string, args: any[]): Promise<any> {
         if (updates.completion !== undefined) task.completion = Number(updates.completion);
         if (updates.priority !== undefined) task.priority = updates.priority;
         if (updates.dependency !== undefined) task.dependency = updates.dependency;
+        if (updates.group !== undefined) task.group = updates.group;
         if (updates.owner !== undefined) {
           const oldOwner = task.owner;
           task.owner = updates.owner;

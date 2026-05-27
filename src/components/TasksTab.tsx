@@ -14,6 +14,18 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [layoutMode, setLayoutMode] = useState<"table" | "board-status" | "board-group">("table");
+  const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
+  const [dragOverColumn, setDragOverColumn] = useState<string | null>(null);
+  const [customTaskOrder, setCustomTaskOrder] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem("project_task_custom_order");
+      return stored ? JSON.parse(stored) : [];
+    } catch (_) {
+      return [];
+    }
+  });
   
   // Filtering states
   const [filterType, setFilterType] = useState(overrideFilter || "All Task");
@@ -349,6 +361,253 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     }
   };
 
+  const sortTasksByCustomOrder = (taskList: Task[]) => {
+    return [...taskList].sort((a, b) => {
+      const idxA = customTaskOrder.indexOf(a.id);
+      const idxB = customTaskOrder.indexOf(b.id);
+      
+      if (idxA !== -1 && idxB !== -1) {
+        return idxA - idxB;
+      }
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+      return a.id.localeCompare(b.id);
+    });
+  };
+
+  const handleDragStart = (e: React.DragEvent, taskId: string) => {
+    setDraggedTaskId(taskId);
+    e.dataTransfer.setData("text/plain", taskId);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragEnd = () => {
+    setDraggedTaskId(null);
+    setDragOverColumn(null);
+  };
+
+  const handleDragOver = (e: React.DragEvent, colId: string) => {
+    e.preventDefault();
+    if (dragOverColumn !== colId) {
+      setDragOverColumn(colId);
+    }
+  };
+
+  const handleCardDropOnCard = (e: React.DragEvent, targetId: string) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setDragOverColumn(null);
+
+    const activeId = e.dataTransfer.getData("text/plain") || draggedTaskId;
+    if (!activeId || activeId === targetId) return;
+
+    const draggedTask = tasks.find(t => t.id === activeId);
+    const targetTask = tasks.find(t => t.id === targetId);
+    if (!draggedTask || !targetTask) return;
+
+    const isStatusBoard = layoutMode === "board-status";
+    const statusUpdate = isStatusBoard ? { status: targetTask.status } : { group: targetTask.group };
+
+    // Optimistically update
+    setTasks(prev => prev.map(t => t.id === activeId ? { ...t, ...statusUpdate } : t));
+
+    setCustomTaskOrder(prev => {
+      const filtered = prev.filter(id => id !== activeId);
+      const targetIdx = filtered.indexOf(targetId);
+      
+      let newOrder = [...filtered];
+      if (targetIdx !== -1) {
+        newOrder.splice(targetIdx, 0, activeId);
+      } else {
+        newOrder.push(activeId);
+      }
+      localStorage.setItem("project_task_custom_order", JSON.stringify(newOrder));
+      return newOrder;
+    });
+
+    api.updateTask(activeId, statusUpdate).then((res) => {
+      if (!res.success) {
+        alert("Failed to update task sequence/status: " + res.message);
+        loadData();
+      } else {
+        loadData();
+      }
+    });
+  };
+
+  const handleColumnDrop = async (e: React.DragEvent, targetColId: string, groupMode: "status" | "group") => {
+    e.preventDefault();
+    setDragOverColumn(null);
+    const taskId = e.dataTransfer.getData("text/plain") || draggedTaskId;
+    if (!taskId) return;
+
+    const taskToMove = tasks.find(t => t.id === taskId);
+    if (!taskToMove) return;
+
+    if (groupMode === "status") {
+      if (taskToMove.status === targetColId) return;
+
+      // Optimistic locally
+      setTasks(prev => prev.map(t => t.id === taskId ? { ...t, status: targetColId } : t));
+
+      setCustomTaskOrder(prev => {
+        const filtered = prev.filter(id => id !== taskId);
+        filtered.push(taskId);
+        localStorage.setItem("project_task_custom_order", JSON.stringify(filtered));
+        return filtered;
+      });
+
+      try {
+        const res = await api.updateTask(taskId, { status: targetColId });
+        if (!res.success) {
+          alert("Failed to update status: " + res.message);
+          loadData();
+        } else {
+          loadData();
+        }
+      } catch (err: any) {
+        alert("Error: " + err.message);
+        loadData();
+      }
+    } else {
+      const targetGroup = targetColId === "__none__" ? "" : targetColId;
+      if (taskToMove.group === targetGroup) return;
+
+      // Optimistic locally
+      setTasks(prev => prev.map(t => t.id === taskId ? { ...t, group: targetGroup } : t));
+
+      setCustomTaskOrder(prev => {
+        const filtered = prev.filter(id => id !== taskId);
+        filtered.push(taskId);
+        localStorage.setItem("project_task_custom_order", JSON.stringify(filtered));
+        return filtered;
+      });
+
+      try {
+        const res = await api.updateTask(taskId, { group: targetGroup });
+        if (!res.success) {
+          alert("Failed to update group: " + res.message);
+          loadData();
+        } else {
+          loadData();
+        }
+      } catch (err: any) {
+        alert("Error: " + err.message);
+        loadData();
+      }
+    }
+  };
+
+  const renderKanbanCard = (t: Task) => {
+    const dlimit = calculateDaysLeft(t.dueDate, t.status);
+    const recipient = getTaskRecipientUser(t);
+    const doerName = recipient?.name || t.tags || "Team";
+    const parentName = t.parentTaskId ? tasks.find(p => p.id === t.parentTaskId)?.name : null;
+
+    return (
+      <div
+        key={t.id}
+        draggable="true"
+        onDragStart={(e) => handleDragStart(e, t.id)}
+        onDragEnd={handleDragEnd}
+        onDragOver={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onDrop={(e) => handleCardDropOnCard(e, t.id)}
+        className={`bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs hover:shadow-md cursor-grab active:cursor-grabbing transition-all ${
+          draggedTaskId === t.id ? "opacity-30 scale-95 border-blue-450" : ""
+        }`}
+      >
+        <div className="flex items-start justify-between gap-1 mb-2">
+          <span className="text-[10px] font-mono font-bold text-slate-450 uppercase tracking-widest flex flex-col">
+            <span>{t.id}</span>
+            {parentName && <span className="text-blue-500 text-[9px] lowercase font-sans font-normal truncate mt-0.5 max-w-[140px]" title={`Parent task: ${parentName}`}>part of: {parentName}</span>}
+          </span>
+          
+          <MaterialPopoverMenu
+            trigger={
+              <button className="p-1 text-slate-400 hover:text-slate-800 hover:bg-slate-50 rounded-lg cursor-pointer transition-colors">
+                <ChevronRight size={13} className="rotate-90" />
+              </button>
+            }
+            items={[
+              {
+                label: "View Details",
+                icon: <Eye size={13} className="text-blue-500" />,
+                onClick: () => viewTaskDetails(t)
+              },
+              {
+                label: "Update Milestone",
+                icon: <Edit size={13} className="text-amber-500" />,
+                onClick: () => handleEditClick(t)
+              },
+              {
+                label: "Send WhatsApp",
+                icon: <MessageCircle size={13} className="text-emerald-500" />,
+                onClick: () => handleSendWhatsApp(t)
+              },
+              {
+                label: "Delete Milestone",
+                icon: <Trash2 size={13} className="text-rose-500" />,
+                onClick: () => handleDelete(t),
+                danger: true,
+                className: (currentUser.role !== "Admin" && currentUser.id !== t.owner) ? "opacity-30 cursor-not-allowed pointer-events-none" : ""
+              }
+            ]}
+            shape="standard"
+          />
+        </div>
+
+        <h4 className="text-sm font-semibold text-slate-800 line-clamp-2 leading-relaxed mb-2 cursor-pointer hover:text-blue-600 transition-colors" onClick={() => viewTaskDetails(t)} title={t.name}>
+          {t.name}
+        </h4>
+
+        {t.description && (
+          <p className="text-[11px] text-slate-450 line-clamp-1 mb-2.5 bg-slate-50/50 p-1 rounded-md px-1.5" title={t.description}>
+            {t.description}
+          </p>
+        )}
+
+        {t.group && (
+          <span className="inline-block bg-slate-100 text-slate-600 text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md mb-2.5 border border-slate-200/50">
+            Folder: {t.group}
+          </span>
+        )}
+
+        <div className="space-y-1 mb-3">
+          <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
+            <span>Target: {t.autoProgress || 0}%</span>
+            <span className="font-bold text-blue-600">Done: {t.completion || 0}%</span>
+          </div>
+          <div className="h-1.5 w-full bg-slate-100 rounded-full relative overflow-hidden">
+            <div
+              className="absolute inset-y-0 left-0 bg-amber-500/20"
+              style={{ width: `${t.autoProgress || 0}%` }}
+            />
+            <div
+              className="absolute inset-y-0 left-0 bg-blue-600 rounded-full"
+              style={{ width: `${t.completion || 0}%` }}
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between gap-2 border-t border-slate-100 pt-2.5 text-[10px]">
+          <div className="flex items-center gap-1.5 text-slate-500 max-w-[100px] truncate" title={`Assignee: ${doerName}`}>
+            <div className="w-5 h-5 bg-gradient-to-tr from-slate-200 to-slate-100 text-slate-700 rounded-full flex items-center justify-center font-semibold border border-white shrink-0 shadow-2xs">
+              {doerName.charAt(0).toUpperCase()}
+            </div>
+            <span className="font-semibold truncate text-[10px]">{doerName}</span>
+          </div>
+
+          <span className={`font-mono font-bold px-1.5 py-0.5 rounded-md ${dlimit.style} border bg-slate-50/20`}>
+            {dlimit.text}
+          </span>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-6">
       {/* Search & Action Panel */}
@@ -367,6 +626,49 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           <Plus size={16} />
           New Task Milestone
         </button>
+      </div>
+
+      {/* Layout Selector tabs/buttons */}
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 bg-white border border-slate-200/60 p-3 rounded-2xl shadow-xs">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-50 border border-slate-100 rounded-xl">
+          <button
+            type="button"
+            onClick={() => setLayoutMode("table")}
+            className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+              layoutMode === "table"
+                ? "bg-slate-900 text-white shadow-sm"
+                : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+            }`}
+          >
+            <span>📋 Table View</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setLayoutMode("board-status")}
+            className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+              layoutMode === "board-status"
+                ? "bg-slate-900 text-white shadow-sm"
+                : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+            }`}
+          >
+            <span>🎯 Status Kanban Board</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setLayoutMode("board-group")}
+            className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+              layoutMode === "board-group"
+                ? "bg-slate-900 text-white shadow-sm"
+                : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+            }`}
+          >
+            <span>🏷️ Task Group Board</span>
+          </button>
+        </div>
+        
+        <div className="text-[11px] font-mono font-medium text-slate-400 bg-slate-50/50 rounded-xl px-3 py-1.5 border border-slate-100 flex items-center gap-1">
+          <span>💡</span> <span>Drag & drop cards to reassign status or groups instantly</span>
+        </div>
       </div>
 
       {/* Ribbon Filters */}
@@ -419,269 +721,372 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         </button>
       </div>
 
-      {/* Task Matrix Ledger */}
-      <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse min-w-[1250px]">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200/85 text-slate-500 text-[11px] font-semibold uppercase tracking-wider font-mono">
-                <th className="py-4 px-6 w-28">Task ID</th>
-                <th className="py-4 px-6">Task Name</th>
-                <th className="py-4 px-6 max-w-xs">Description</th>
-                <th className="py-4 px-6">Department</th>
-                <th className="py-4 px-6">Owner</th>
-                <th className="py-4 px-6">Status</th>
-                <th className="py-4 px-6">Doer (Tags)</th>
-                <th className="py-4 px-6 text-center">Days Limit</th>
-                <th className="py-4 px-6">Priority</th>
-                <th className="py-4 px-6 min-w-[180px]">Double Progress %</th>
-                <th className="py-4 px-6">Group</th>
-                <th className="py-4 px-6">Dependency</th>
-                <th className="py-4 px-6 text-center w-28">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-sm text-slate-750">
-              {loading ? (
-                <tr>
-                  <td colSpan={13} className="py-20 text-center">
-                    <Loader2 size={32} className="animate-spin text-blue-550 mx-auto" />
-                    <p className="text-sm font-sans text-slate-400 mt-2">Connecting to Sheets databases...</p>
-                  </td>
+      {/* Task Matrix Ledger / Board Views */}
+      {layoutMode === "table" && (
+        <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse min-w-[1250px]">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200/85 text-slate-500 text-[11px] font-semibold uppercase tracking-wider font-mono">
+                  <th className="py-4 px-6 w-28">Task ID</th>
+                  <th className="py-4 px-6">Task Name</th>
+                  <th className="py-4 px-6 max-w-xs">Description</th>
+                  <th className="py-4 px-6">Department</th>
+                  <th className="py-4 px-6">Owner</th>
+                  <th className="py-4 px-6">Status</th>
+                  <th className="py-4 px-6">Doer (Tags)</th>
+                  <th className="py-4 px-6 text-center">Days Limit</th>
+                  <th className="py-4 px-6">Priority</th>
+                  <th className="py-4 px-6 min-w-[180px]">Double Progress %</th>
+                  <th className="py-4 px-6">Group</th>
+                  <th className="py-4 px-6">Dependency</th>
+                  <th className="py-4 px-6 text-center w-28">Actions</th>
                 </tr>
-              ) : mainParents.length === 0 ? (
-                <tr>
-                  <td colSpan={13} className="py-20 text-center text-slate-400 font-sans">
-                    No matching task deliverables found in sheets directory.
-                  </td>
-                </tr>
-              ) : (
-                mainParents.map((t) => {
-                  const children = subMap[t.id] || [];
-                  const isExpanded = !!expandedParents[t.id];
-                  const dlimit = calculateDaysLeft(t.dueDate, t.status);
-                  const hasChildren = children.length > 0;
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-sm text-slate-755">
+                {loading ? (
+                  <tr>
+                    <td colSpan={13} className="py-20 text-center">
+                      <Loader2 size={32} className="animate-spin text-blue-550 mx-auto" />
+                      <p className="text-sm font-sans text-slate-400 mt-2">Connecting to Sheets databases...</p>
+                    </td>
+                  </tr>
+                ) : mainParents.length === 0 ? (
+                  <tr>
+                    <td colSpan={13} className="py-20 text-center text-slate-400 font-sans">
+                      No matching task deliverables found in sheets directory.
+                    </td>
+                  </tr>
+                ) : (
+                  mainParents.map((t) => {
+                    const children = subMap[t.id] || [];
+                    const isExpanded = !!expandedParents[t.id];
+                    const dlimit = calculateDaysLeft(t.dueDate, t.status);
+                    const hasChildren = children.length > 0;
 
-                  return (
-                    <React.Fragment key={t.id}>
-                      {/* Parent Row */}
-                      <tr className="hover:bg-slate-50/70 transition-colors group">
-                        <td className="py-4 px-6 flex items-center gap-1.5 font-mono text-xs font-semibold text-slate-500">
-                          {hasChildren ? (
-                            <button
-                              onClick={(e) => toggleParent(t.id, e)}
-                              className="text-blue-500 hover:bg-slate-100 p-0.5 rounded cursor-pointer"
-                            >
-                              {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
-                            </button>
-                          ) : (
-                            <span className="w-5"></span>
-                          )}
-                          {t.dependency === "Yes" ? (
-                            <button
-                              onClick={() => onNavigateTab("dependency", t.id)}
-                              className="text-blue-600 font-bold hover:underline cursor-pointer"
-                            >
-                              {t.id}
-                            </button>
-                          ) : (
-                            <span>{t.id}</span>
-                          )}
-                        </td>
-                        <td className="py-4 px-6 font-semibold text-slate-800">{t.name}</td>
-                        <td className="py-4 px-6 text-slate-500 max-w-xs truncate" title={t.description}>
-                          {t.description || "-"}
-                        </td>
-                        <td className="py-4 px-6 text-slate-500">{t.department}</td>
-                        <td className="py-4 px-6 text-slate-500">{t.owner}</td>
-                        <td className="py-4 px-6">
-                          <span className={`text-[10px] font-bold tracking-wide border font-mono px-2 py-0.5 rounded-full ${getStatusStyle(t.status)}`}>
-                            {t.status}
-                          </span>
-                        </td>
-                        <td className="py-4 px-6 text-slate-500">{t.tags || "-"}</td>
-                        <td className={`py-4 px-6 text-center text-xs font-mono ${dlimit.style}`}>{dlimit.text}</td>
-                        <td className="py-4 px-6">
-                          <span className={`text-[10px] font-bold tracking-wide border font-mono px-2 py-0.5 rounded-full ${getPriorityStyle(t.priority)}`}>
-                            {t.priority}
-                          </span>
-                        </td>
-                        <td className="py-4 px-6">
-                          {/* Double Progress visual rendering */}
-                          <div className="flex flex-col gap-1 w-full font-mono text-[10px] font-semibold text-slate-500">
-                            <div className="flex items-center justify-between">
-                              <span>Manual Done:</span>
-                              <span className="font-bold text-blue-600">{t.completion || 0}%</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span>Auto Target:</span>
-                              <span className="font-bold" style={{ color: getHeatmapColor(t.autoProgress) }}>
-                                {t.autoProgress || 0}%
-                              </span>
-                            </div>
-                            {/* The combined linear bar track */}
-                            <div className="h-2 w-full bg-slate-100 rounded-full relative overflow-hidden" title={`Manual: ${t.completion || 0}%, Auto target: ${t.autoProgress || 0}%`}>
-                              <div
-                                className="absolute inset-y-0 left-0 opacity-25"
-                                style={{
-                                  width: `${t.autoProgress || 0}%`,
-                                  backgroundColor: getHeatmapColor(t.autoProgress)
-                                }}
-                              ></div>
-                              <div
-                                className="absolute inset-y-0 left-0 bg-blue-600 rounded-full"
-                                style={{ width: `${t.completion || 0}%` }}
-                              ></div>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-4 px-6 text-slate-500 font-mono text-xs">{t.group || "-"}</td>
-                        <td className="py-4 px-6">
-                          <select
-                            className="bg-slate-50 border border-slate-200 rounded-md px-1.5 py-1 text-xs text-slate-600 focus:outline-none focus:bg-white"
-                            value={t.dependency}
-                            onChange={(e) => handleDependencyChange(t, e.target.value)}
-                          >
-                            <option value="No">No</option>
-                            <option value="Yes">Yes</option>
-                          </select>
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          <MaterialPopoverMenu
-                            trigger={
-                              <button className="mx-auto px-3 py-1.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-xl text-slate-700 hover:text-slate-800 transition-all flex items-center justify-center gap-1 active:scale-95 cursor-pointer shadow-xs">
-                                Actions <ChevronRight size={12} className="opacity-80 text-slate-400" />
+                    return (
+                      <React.Fragment key={t.id}>
+                        {/* Parent Row */}
+                        <tr className="hover:bg-slate-50/70 transition-colors group">
+                          <td className="py-4 px-6 flex items-center gap-1.5 font-mono text-xs font-semibold text-slate-505">
+                            {hasChildren ? (
+                              <button
+                                onClick={(e) => toggleParent(t.id, e)}
+                                className="text-blue-505 hover:bg-slate-100 p-0.5 rounded cursor-pointer"
+                              >
+                                {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                               </button>
-                            }
-                            items={[
-                              {
-                                label: "View Details",
-                                icon: <Eye size={14} className="text-blue-500" />,
-                                onClick: () => viewTaskDetails(t)
-                              },
-                              {
-                                label: "Update Milestone",
-                                icon: <Edit size={14} className="text-amber-500" />,
-                                onClick: () => handleEditClick(t)
-                              },
-                              {
-                                label: "Send Auto WhatsApp",
-                                icon: <MessageCircle size={14} className="text-emerald-500" />,
-                                onClick: () => handleSendWhatsApp(t)
-                              },
-                              {
-                                label: "Delete Milestone",
-                                icon: <Trash2 size={14} className="text-rose-500" />,
-                                onClick: () => handleDelete(t),
-                                danger: true,
-                                className: (currentUser.role !== "Admin" && currentUser.id !== t.owner) ? "opacity-30 cursor-not-allowed pointer-events-none" : ""
-                              }
-                            ]}
-                            shape="standard"
-                            enableHighlight={true}
-                          />
-                        </td>
-                      </tr>
-
-                      {/* Expanded Subtasks Rows */}
-                      {hasChildren && isExpanded && children.map((c) => {
-                        const childLimit = calculateDaysLeft(c.dueDate, c.status);
-                        return (
-                          <tr key={c.id} className="bg-slate-50/50 hover:bg-blue-50/20 border-l-2 border-blue-500/80 transition-colors group">
-                            <td className="py-3 px-6 pl-10 font-mono text-xs font-semibold text-slate-450">
-                              {c.id}
-                            </td>
-                            <td className="py-3 px-6 text-slate-700">
-                              <span className="text-slate-400 font-sans text-xs mr-1">└─</span>
-                              {c.name}
-                            </td>
-                            <td className="py-3 px-6 text-slate-500 text-xs max-w-xs truncate" title={c.description}>
-                              {c.description || "-"}
-                            </td>
-                            <td className="py-3 px-6 text-slate-500 text-xs">{c.department}</td>
-                            <td className="py-3 px-6 text-slate-500 text-xs">{c.owner}</td>
-                            <td className="py-3 px-6">
-                              <span className={`text-[9px] font-bold tracking-wide border font-mono px-1.5 py-0.5 rounded-full ${getStatusStyle(c.status)}`}>
-                                {c.status}
-                              </span>
-                            </td>
-                            <td className="py-3 px-6 text-slate-500 text-xs">{c.tags || "-"}</td>
-                            <td className={`py-3 px-6 text-center text-xs font-mono ${childLimit.style}`}>{childLimit.text}</td>
-                            <td className="py-3 px-6">
-                              <span className={`text-[9px] font-bold tracking-wide border font-mono px-1.5 py-0.5 rounded-full ${getPriorityStyle(c.priority)}`}>
-                                {c.priority}
-                              </span>
-                            </td>
-                            <td className="py-3 px-6">
-                              <div className="flex flex-col gap-1 w-full max-w-[150px] font-mono text-[9px] font-semibold text-slate-500">
-                                <div className="flex items-center justify-between">
-                                  <span>Manual: {c.completion || 0}%</span>
-                                  <span style={{ color: getHeatmapColor(c.autoProgress) }}>Auto: {c.autoProgress || 0}%</span>
-                                </div>
-                                <div className="h-1.5 w-full bg-slate-100 rounded-full relative overflow-hidden" title={`Manual: ${c.completion || 0}%, Auto target: ${c.autoProgress || 0}%`}>
-                                  <div
-                                    className="absolute inset-y-0 left-0 opacity-25"
-                                    style={{
-                                      width: `${c.autoProgress || 0}%`,
-                                      backgroundColor: getHeatmapColor(c.autoProgress)
-                                    }}
-                                  ></div>
-                                  <div
-                                    className="absolute inset-y-0 left-0 bg-blue-600 rounded-full"
-                                    style={{ width: `${c.completion || 0}%` }}
-                                  ></div>
-                                </div>
+                            ) : (
+                              <span className="w-5"></span>
+                            )}
+                            {t.dependency === "Yes" ? (
+                              <button
+                                onClick={() => onNavigateTab("dependency", t.id)}
+                                className="text-blue-606 font-bold hover:underline cursor-pointer"
+                              >
+                                {t.id}
+                              </button>
+                            ) : (
+                              <span>{t.id}</span>
+                            )}
+                          </td>
+                          <td className="py-4 px-6 font-semibold text-slate-805">{t.name}</td>
+                          <td className="py-4 px-6 text-slate-505 max-w-xs truncate" title={t.description}>
+                            {t.description || "-"}
+                          </td>
+                          <td className="py-4 px-6 text-slate-500">{t.department}</td>
+                          <td className="py-4 px-6 text-slate-500">{t.owner}</td>
+                          <td className="py-4 px-6">
+                            <span className={`text-[10px] font-bold tracking-wide border font-mono px-2 py-0.5 rounded-full ${getStatusStyle(t.status)}`}>
+                              {t.status}
+                            </span>
+                          </td>
+                          <td className="py-4 px-6 text-slate-505">{t.tags || "-"}</td>
+                          <td className={`py-4 px-6 text-center text-xs font-mono ${dlimit.style}`}>{dlimit.text}</td>
+                          <td className="py-4 px-6">
+                            <span className={`text-[10px] font-bold tracking-wide border font-mono px-2 py-0.5 rounded-full ${getPriorityStyle(t.priority)}`}>
+                              {t.priority}
+                            </span>
+                          </td>
+                          <td className="py-4 px-6">
+                            <div className="flex flex-col gap-1 w-full font-mono text-[10px] font-semibold text-slate-505">
+                              <div className="flex items-center justify-between">
+                                <span>Manual Done:</span>
+                                <span className="font-bold text-blue-606">{t.completion || 0}%</span>
                               </div>
-                            </td>
-                            <td className="py-3 px-6 text-slate-500 text-xs font-mono">{c.group || "-"}</td>
-                            <td className="py-3 px-6">
-                              <span className="text-slate-400">-</span>
-                            </td>
-                            <td className="py-3 px-6 text-center">
-                              <MaterialPopoverMenu
-                                trigger={
-                                  <button className="mx-auto px-2 py-1 text-[10px] font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-slate-650 hover:text-slate-850 transition-all flex items-center justify-center gap-1 active:scale-95 cursor-pointer shadow-xs">
-                                    Actions <ChevronRight size={10} className="opacity-80 text-slate-400" />
-                                  </button>
+                              <div className="flex items-center justify-between">
+                                <span>Auto Target:</span>
+                                <span className="font-bold" style={{ color: getHeatmapColor(t.autoProgress) }}>
+                                  {t.autoProgress || 0}%
+                                </span>
+                              </div>
+                              <div className="h-2 w-full bg-slate-100 rounded-full relative overflow-hidden" title={`Manual: ${t.completion || 0}%, Auto target: ${t.autoProgress || 0}%`}>
+                                <div
+                                  className="absolute inset-y-0 left-0 opacity-25"
+                                  style={{
+                                    width: `${t.autoProgress || 0}%`,
+                                    backgroundColor: getHeatmapColor(t.autoProgress)
+                                  }}
+                                ></div>
+                                <div
+                                  className="absolute inset-y-0 left-0 bg-blue-606 rounded-full"
+                                  style={{ width: `${t.completion || 0}%` }}
+                                ></div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="py-4 px-6 text-slate-505 font-mono text-xs">{t.group || "-"}</td>
+                          <td className="py-4 px-6">
+                            <select
+                              className="bg-slate-55 border border-slate-200 rounded-md px-1.5 py-1 text-xs text-slate-606 focus:outline-none focus:bg-white"
+                              value={t.dependency}
+                              onChange={(e) => handleDependencyChange(t, e.target.value)}
+                            >
+                              <option value="No">No</option>
+                              <option value="Yes">Yes</option>
+                            </select>
+                          </td>
+                          <td className="py-4 px-6 text-center">
+                            <MaterialPopoverMenu
+                              trigger={
+                                <button className="mx-auto px-3 py-1.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-xl text-slate-700 hover:text-slate-800 transition-all flex items-center justify-center gap-1 active:scale-95 cursor-pointer shadow-xs">
+                                  Actions <ChevronRight size={12} className="opacity-80 text-slate-400" />
+                                </button>
+                              }
+                              items={[
+                                {
+                                  label: "View Details",
+                                  icon: <Eye size={14} className="text-blue-500" />,
+                                  onClick: () => viewTaskDetails(t)
+                                },
+                                {
+                                  label: "Update Milestone",
+                                  icon: <Edit size={14} className="text-amber-500" />,
+                                  onClick: () => handleEditClick(t)
+                                },
+                                {
+                                  label: "Send Auto WhatsApp",
+                                  icon: <MessageCircle size={14} className="text-emerald-500" />,
+                                  onClick: () => handleSendWhatsApp(t)
+                                },
+                                {
+                                  label: "Delete Milestone",
+                                  icon: <Trash2 size={14} className="text-rose-500" />,
+                                  onClick: () => handleDelete(t),
+                                  danger: true,
+                                  className: (currentUser.role !== "Admin" && currentUser.id !== t.owner) ? "opacity-30 cursor-not-allowed pointer-events-none" : ""
                                 }
-                                items={[
-                                  {
-                                    label: "View Details",
-                                    icon: <Eye size={12} className="text-blue-500" />,
-                                    onClick: () => viewTaskDetails(c)
-                                  },
-                                  {
-                                    label: "Update Milestone",
-                                    icon: <Edit size={12} className="text-amber-500" />,
-                                    onClick: () => handleEditClick(c)
-                                  },
-                                  {
-                                    label: "Send Auto WhatsApp",
-                                    icon: <MessageCircle size={12} className="text-emerald-500" />,
-                                    onClick: () => handleSendWhatsApp(c)
-                                  },
-                                  {
-                                    label: "Delete Milestone",
-                                    icon: <Trash2 size={12} className="text-rose-500" />,
-                                    onClick: () => handleDelete(c),
-                                    danger: true,
-                                    className: (currentUser.role !== "Admin" && currentUser.id !== c.owner) ? "opacity-30 cursor-not-allowed pointer-events-none" : ""
+                              ]}
+                              shape="standard"
+                              enableHighlight={true}
+                            />
+                          </td>
+                        </tr>
+
+                        {/* Expanded Subtasks Rows */}
+                        {hasChildren && isExpanded && children.map((c) => {
+                          const childLimit = calculateDaysLeft(c.dueDate, c.status);
+                          return (
+                            <tr key={c.id} className="bg-slate-50/50 hover:bg-blue-50/20 border-l-2 border-blue-500/80 transition-colors group">
+                              <td className="py-3 px-6 pl-10 font-mono text-xs font-semibold text-slate-450">
+                                {c.id}
+                              </td>
+                              <td className="py-3 px-6 text-slate-700">
+                                <span className="text-slate-400 font-sans text-xs mr-1">└─</span>
+                                {c.name}
+                              </td>
+                              <td className="py-3 px-6 text-slate-500 text-xs max-w-xs truncate" title={c.description}>
+                                {c.description || "-"}
+                              </td>
+                              <td className="py-3 px-6 text-slate-500 text-xs">{c.department}</td>
+                              <td className="py-3 px-6 text-slate-500 text-xs">{c.owner}</td>
+                              <td className="py-3 px-6">
+                                <span className={`text-[9px] font-bold tracking-wide border font-mono px-1.5 py-0.5 rounded-full ${getStatusStyle(c.status)}`}>
+                                  {c.status}
+                                </span>
+                              </td>
+                              <td className="py-3 px-6 text-slate-500 text-xs">{c.tags || "-"}</td>
+                              <td className={`py-3 px-6 text-center text-xs font-mono ${childLimit.style}`}>{childLimit.text}</td>
+                              <td className="py-3 px-6">
+                                <span className={`text-[9px] font-bold tracking-wide border font-mono px-1.5 py-0.5 rounded-full ${getPriorityStyle(c.priority)}`}>
+                                  {c.priority}
+                                </span>
+                              </td>
+                              <td className="py-3 px-6">
+                                <div className="flex flex-col gap-1 w-full max-w-[150px] font-mono text-[9px] font-semibold text-slate-500">
+                                  <div className="flex items-center justify-between">
+                                    <span>Manual: {c.completion || 0}%</span>
+                                    <span style={{ color: getHeatmapColor(c.autoProgress) }}>Auto: {c.autoProgress || 0}%</span>
+                                  </div>
+                                  <div className="h-1.5 w-full bg-slate-100 rounded-full relative overflow-hidden" title={`Manual: ${c.completion || 0}%, Auto target: ${c.autoProgress || 0}%`}>
+                                    <div
+                                      className="absolute inset-y-0 left-0 opacity-25"
+                                      style={{
+                                        width: `${c.autoProgress || 0}%`,
+                                        backgroundColor: getHeatmapColor(c.autoProgress)
+                                      }}
+                                    ></div>
+                                    <div
+                                      className="absolute inset-y-0 left-0 bg-blue-600 rounded-full"
+                                      style={{ width: `${c.completion || 0}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="py-3 px-6 text-slate-500 text-xs font-mono">{c.group || "-"}</td>
+                              <td className="py-3 px-6">
+                                <span className="text-slate-400">-</span>
+                              </td>
+                              <td className="py-3 px-6 text-center">
+                                <MaterialPopoverMenu
+                                  trigger={
+                                    <button className="mx-auto px-2 py-1 text-[10px] font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-slate-650 hover:text-slate-850 transition-all flex items-center justify-center gap-1 active:scale-95 cursor-pointer shadow-xs">
+                                      Actions <ChevronRight size={10} className="opacity-80 text-slate-400" />
+                                    </button>
                                   }
-                                ]}
-                                shape="standard"
-                                enableHighlight={true}
-                              />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </React.Fragment>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+                                  items={[
+                                    {
+                                      label: "View Details",
+                                      icon: <Eye size={12} className="text-blue-500" />,
+                                      onClick: () => viewTaskDetails(c)
+                                    },
+                                    {
+                                      label: "Update Milestone",
+                                      icon: <Edit size={12} className="text-amber-500" />,
+                                      onClick: () => handleEditClick(c)
+                                    },
+                                    {
+                                      label: "Send Auto WhatsApp",
+                                      icon: <MessageCircle size={12} className="text-emerald-500" />,
+                                      onClick: () => handleSendWhatsApp(c)
+                                    },
+                                    {
+                                      label: "Delete Milestone",
+                                      icon: <Trash2 size={12} className="text-rose-500" />,
+                                      onClick: () => handleDelete(c),
+                                      danger: true,
+                                      className: (currentUser.role !== "Admin" && currentUser.id !== c.owner) ? "opacity-30 cursor-not-allowed pointer-events-none" : ""
+                                    }
+                                  ]}
+                                  shape="standard"
+                                  enableHighlight={true}
+                                />
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </React.Fragment>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Interactive Status-Based Kanban Board */}
+      {layoutMode === "board-status" && (
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-5 pb-6 overflow-x-auto min-h-[550px]">
+          {[
+            { id: "Open", title: "Open 📂", color: "border-emerald-250 text-emerald-800 bg-emerald-50/45" },
+            { id: "In Progress", title: "In Progress ⚙️", color: "border-blue-250 text-blue-800 bg-blue-50/45" },
+            { id: "In Review", title: "In Review 👀", color: "border-amber-250 text-amber-850 bg-amber-50/45" },
+            { id: "To Be Tested", title: "To Be Tested 🧪", color: "border-cyan-250 text-cyan-800 bg-cyan-50/45" },
+            { id: "Closed", title: "Closed ✅", color: "border-slate-350 text-slate-700 bg-slate-50/45" }
+          ].map((col) => {
+            const colTasks = sortTasksByCustomOrder(
+              filteredTasks.filter((task) => task.status === col.id)
+            );
+            const isOver = dragOverColumn === col.id;
+
+            return (
+              <div
+                key={col.id}
+                onDragOver={(e) => handleDragOver(e, col.id)}
+                onDragLeave={() => setDragOverColumn(null)}
+                onDrop={(e) => handleColumnDrop(e, col.id, "status")}
+                className={`flex flex-col min-h-[520px] rounded-2xl p-4 border transition-all duration-250 ${
+                  isOver
+                    ? "bg-blue-50/60 border-blue-450 border-dashed ring-4 ring-blue-500/5 scale-[1.01]"
+                    : "bg-slate-50/80 border-slate-200/60"
+                }`}
+              >
+                {/* Column Headline */}
+                <div className="flex items-center justify-between gap-2 mb-4">
+                  <span className={`text-xs font-bold tracking-wide border px-2.5 py-1 rounded-xl ${col.color}`}>
+                    {col.title}
+                  </span>
+                  <span className="font-mono text-[10px] text-slate-500 font-bold bg-white px-2 py-0.5 rounded-lg border border-slate-200/60 shadow-2xs">
+                    {colTasks.length}
+                  </span>
+                </div>
+
+                {/* Column Scroll Container */}
+                <div className="flex-1 space-y-3 overflow-y-auto max-h-[66vh] pr-1.5 scrollbar-thin scrollbar-thumb-slate-200">
+                  {colTasks.length === 0 ? (
+                    <div className="h-28 border border-dashed border-slate-200/50 rounded-xl flex items-center justify-center text-xs text-slate-400 bg-white/40 text-center px-4 font-sans">
+                      No cards here. Drag any task here to reassign status!
+                    </div>
+                  ) : (
+                    colTasks.map((t) => renderKanbanCard(t))
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Interactive FolderGroup-Based Kanban Board */}
+      {layoutMode === "board-group" && (
+        <div className="flex gap-5 pb-6 overflow-x-auto min-h-[550px]">
+          {["__none__", ...groups].map((gId) => {
+            const label = gId === "__none__" ? "Unassigned Folder 📦" : `Folder: ${gId} 📁`;
+            const colTasks = sortTasksByCustomOrder(
+              filteredTasks.filter((task) => (gId === "__none__" ? !task.group : task.group === gId))
+            );
+            const isOver = dragOverColumn === gId;
+
+            return (
+              <div
+                key={gId}
+                onDragOver={(e) => handleDragOver(e, gId)}
+                onDragLeave={() => setDragOverColumn(null)}
+                onDrop={(e) => handleColumnDrop(e, gId, "group")}
+                className={`flex flex-col min-h-[520px] w-80 shrink-0 rounded-2xl p-4 border transition-all duration-250 ${
+                  isOver
+                    ? "bg-blue-50/60 border-blue-450 border-dashed ring-4 ring-blue-500/5 scale-[1.01]"
+                    : "bg-slate-50/80 border-slate-200/60"
+                }`}
+              >
+                {/* Column Headline */}
+                <div className="flex items-center justify-between gap-2 mb-4">
+                  <span className={`text-xs font-bold tracking-wide border px-2.5 py-1 rounded-xl ${
+                    gId === "__none__" ? "border-slate-300 text-slate-700 bg-slate-100" : "border-blue-300 text-blue-800 bg-blue-50/70"
+                  }`}>
+                    {label}
+                  </span>
+                  <span className="font-mono text-[10px] text-slate-500 font-bold bg-white px-2 py-0.5 rounded-lg border border-slate-200/60 shadow-2xs">
+                    {colTasks.length}
+                  </span>
+                </div>
+
+                {/* Column Scroll Container */}
+                <div className="flex-1 space-y-3 overflow-y-auto max-h-[66vh] pr-1.5 scrollbar-thin scrollbar-thumb-slate-200">
+                  {colTasks.length === 0 ? (
+                    <div className="h-28 border border-dashed border-slate-200/50 rounded-xl flex items-center justify-center text-xs text-slate-400 bg-white/40 text-center px-4 font-sans">
+                      Empty folder. Drag tasks here to group!
+                    </div>
+                  ) : (
+                    colTasks.map((t) => renderKanbanCard(t))
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {/* CREATE MODAL */}
       {showCreateModal && (

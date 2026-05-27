@@ -455,6 +455,7 @@ function executeAction(action, args) {
         if (updates.completion !== undefined) task.completion = Number(updates.completion);
         if (updates.priority !== undefined) task.priority = updates.priority;
         if (updates.dependency !== undefined) task.dependency = updates.dependency;
+        if (updates.group !== undefined) task.group = updates.group;
         
         var notifyOnReassign = false;
         var oldOwner = task.owner;
