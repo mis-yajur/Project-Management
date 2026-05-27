@@ -95,6 +95,7 @@ export const api = {
   
   getUsers: (role: string, userId: string) => rpcCall("getUsers", [role, userId]),
   createUser: (userData: any, creatorId: string) => rpcCall("createUser", [userData, creatorId]),
+  updateUser: (userId: string, updates: any) => rpcCall("updateUser", [userId, updates]),
   deleteUser: (userId: string) => rpcCall("deleteUser", [userId]),
   
   getDepartments: (filter: string, userId: string) => rpcCall("getDepartments", [filter, userId]),
