@@ -35,30 +35,30 @@ export default function LoginScreen({ onLoginSuccess }: LoginProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0F19] flex items-center justify-center p-4 selection:bg-blue-600 selection:text-white relative overflow-hidden">
-      {/* Decorative ambient background glows */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div className="min-h-screen bg-[#f1f5f9] flex items-center justify-center p-4 selection:bg-blue-600/10 selection:text-blue-700 relative overflow-hidden">
+      {/* Decorative ambient light background glows */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-      <div className="w-full max-w-md glass-panel rounded-3xl p-8 border border-white/5 shadow-2xl relative z-10 transition-all duration-300 hover:border-blue-500/10">
+      <div className="w-full max-w-md bg-white rounded-3xl p-8 border border-slate-200/80 shadow-xl relative z-10 transition-all duration-300 hover:border-blue-500/10">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 text-white mb-4 border border-white/10 shadow-lg shadow-blue-500/15 animate-pulse-subtle">
-            <Kanban size={30} />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#2c3e50] to-[#3498db] text-white mb-4 border border-white/20 shadow-md shadow-blue-500/5 animate-pulse-subtle">
+            <Kanban size={28} />
           </div>
-          <h2 className="text-3xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-50 via-slate-100 to-slate-200 tracking-tight">Project Yajur</h2>
-          <p className="text-slate-400 text-sm mt-2 font-sans font-medium">Automate to Innovate.</p>
+          <h2 className="text-3xl font-display font-extrabold text-slate-800 tracking-tight">Project Yajur</h2>
+          <p className="text-slate-500 text-sm mt-2 font-sans font-medium">Automate to Innovate.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-300 tracking-wider uppercase block">Username</label>
+            <label className="text-xs font-semibold text-slate-500 tracking-wider uppercase block">Username</label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                 <User size={18} />
               </span>
               <input
                 type="text"
-                className="w-full bg-slate-950/40 border border-slate-800/80 rounded-xl py-3 pl-11 pr-4 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200"
+                className="w-full bg-[#f8fafc] border border-slate-250/70 rounded-xl py-3 pl-11 pr-4 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all duration-200"
                 placeholder="Enter username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -68,14 +68,14 @@ export default function LoginScreen({ onLoginSuccess }: LoginProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-300 tracking-wider uppercase block">Password</label>
+            <label className="text-xs font-semibold text-slate-500 tracking-wider uppercase block">Password</label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
                 <Lock size={18} />
               </span>
               <input
                 type="password"
-                className="w-full bg-slate-950/40 border border-slate-800/80 rounded-xl py-3 pl-11 pr-4 text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200"
+                className="w-full bg-[#f8fafc] border border-slate-250/70 rounded-xl py-3 pl-11 pr-4 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:bg-white focus:ring-1 focus:ring-blue-500 transition-all duration-200"
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -85,8 +85,8 @@ export default function LoginScreen({ onLoginSuccess }: LoginProps) {
           </div>
 
           {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-xs py-3 px-4 rounded-xl flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-red-500 rounded-full shrink-0"></span>
+            <div className="bg-red-500/5 border border-red-500/10 text-red-650 text-xs py-3 px-4 rounded-xl flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-red-550 rounded-full shrink-0"></span>
               <span>{error}</span>
             </div>
           )}
@@ -94,7 +94,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginProps) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 px-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 hover:from-blue-500 hover:to-indigo-500 disabled:from-slate-800 disabled:to-slate-800 disabled:text-slate-500 text-white font-bold rounded-xl shadow-lg hover:shadow-blue-500/15 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer border-t border-white/10"
+            className="w-full py-3.5 px-4 bg-gradient-to-r from-[#2c3e50] via-[#2c3e50] to-[#3498db] hover:from-[#1e2b38] hover:to-[#258cd1] disabled:from-slate-200 disabled:to-slate-200 disabled:text-slate-400 text-white font-bold rounded-xl shadow-lg hover:shadow-blue-500/5 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer border-t border-white/10"
           >
             {loading ? (
               <>
@@ -107,8 +107,8 @@ export default function LoginScreen({ onLoginSuccess }: LoginProps) {
           </button>
         </form>
 
-        <div className="mt-8 pt-6 border-t border-slate-800/80 text-center">
-          <p className="text-xs text-slate-500 font-mono tracking-wider">Professional Project Management System</p>
+        <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+          <p className="text-xs text-slate-400 font-mono tracking-wider">Professional Project Management System</p>
         </div>
       </div>
     </div>
