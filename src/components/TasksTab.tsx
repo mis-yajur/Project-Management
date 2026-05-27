@@ -395,10 +395,13 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
   const handleSendWhatsApp = async (t: Task) => {
     const recipient = getTaskRecipientUser(t);
-    const defaultPhone = recipient?.contactNumber || "";
+    const defaultPhone = recipient?.contactNumber;
     const doerName = recipient?.fullName || t.tags || "Team Member";
 
-    let phoneVal = String(defaultPhone).trim().replace(/[+\s-]/g, "");
+    let phoneVal = "";
+    if (defaultPhone) {
+        phoneVal = String(defaultPhone).trim().replace(/[+\s-]/g, "");
+    }
 
     // If we have a phone number on file, present a direct click-to-confirm dialog instead of asking to type
     if (phoneVal) {
@@ -413,7 +416,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         ""
       );
       if (phoneInput === null) return;
-      phoneVal = phoneInput.trim().replace(/[+\s-]/g, "");
+      phoneVal = String(phoneInput).trim().replace(/[+\s-]/g, "");
     }
 
     if (!phoneVal) {
@@ -437,9 +440,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       );
 
       if (res && res.success) {
-        alert(`Success: Auto WhatsApp template 'tsk_9' sent to ${doerName} at ${phoneVal} successfully!`);
+        alert("Success: Sms Sent Successfully!");
       } else {
-        alert(`Failed to send WhatsApp message:\n\n${res?.message || "Unknown error"}`);
+        alert(`Error: ${res?.message || "Failed to send WhatsApp message"}`);
       }
     } catch (err: any) {
       alert(`API Exception: ${err.message}`);
