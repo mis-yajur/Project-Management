@@ -1,0 +1,6 @@
+{
+  "name": "Project Management Yajur",
+  "description": "Professional project management web app with comprehensive tracking of tasks, subtasks, issues, departments, dependencies, and notification history.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
