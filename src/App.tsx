@@ -127,53 +127,42 @@ export default function App() {
         </div>
       </header>
 
+      {/* Top Horizontal Menu Bar */}
+      <div className="bg-slate-900 border-b border-slate-800/60 px-6 py-3 overflow-x-auto scrollbar-none flex items-center gap-2 whitespace-nowrap">
+        {menuItems.map((item) => {
+          if (item.adminOnly && !isAdmin) return null;
+          const IconComp = item.icon;
+          const isActive = activeTab === item.id;
+
+          return (
+            <button
+              key={item.id}
+              onClick={() => {
+                // Reset payloads unless specified
+                if (item.id !== "tasks") setTaskOverrideFilter("");
+                if (item.id !== "dependency") setDependencyOverrideSearch("");
+                setActiveTab(item.id);
+              }}
+              className={`px-4 py-2 rounded-xl font-medium text-xs flex items-center gap-2 tracking-wide cursor-pointer transition-all duration-150 select-none ${
+                isActive
+                  ? "bg-blue-600 text-slate-100 shadow-md shadow-blue-500/10"
+                  : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/35"
+              }`}
+            >
+              <IconComp
+                size={14}
+                className={`transition-colors duration-150 ${
+                  isActive ? "text-slate-100" : "text-slate-500"
+                }`}
+              />
+              {item.label}
+            </button>
+          );
+        })}
+      </div>
+
       {/* Main Structural layout body */}
-      <div className="flex-1 flex flex-col md:flex-row">
-        
-        {/* Left Side menu drawers */}
-        <aside className="w-full md:w-64 bg-slate-900/25 border-b md:border-b-0 md:border-r border-slate-800/50 p-4 shrink-0 [content-visibility:auto]">
-          <nav className="space-y-1">
-            {menuItems.map((item) => {
-              if (item.adminOnly && !isAdmin) return null;
-              const IconComp = item.icon;
-              const isActive = activeTab === item.id;
-
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    // Reset payloads unless specified
-                    if (item.id !== "tasks") setTaskOverrideFilter("");
-                    if (item.id !== "dependency") setDependencyOverrideSearch("");
-                    setActiveTab(item.id);
-                  }}
-                  className={`w-full text-left px-4 py-2.5 rounded-xl font-medium text-xs flex items-center gap-3 tracking-wide cursor-pointer group transition-all duration-150 ${
-                    isActive
-                      ? "bg-blue-600 text-slate-100 shadow-md shadow-blue-500/10"
-                      : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/30"
-                  }`}
-                >
-                  <IconComp
-                    size={16}
-                    className={`transition-colors duration-150 ${
-                      isActive ? "text-slate-100" : "text-slate-500 group-hover:text-slate-350"
-                    }`}
-                  />
-                  {item.label}
-                </button>
-              );
-            })}
-          </nav>
-          
-          <div className="mt-8 pt-4 border-t border-slate-800/30 px-3 hidden md:block">
-            <span className="text-[10px] text-slate-600 uppercase font-mono tracking-wider block font-semibold">User Context</span>
-            <div className="mt-2 space-y-1 text-[11px] font-sans text-slate-500 leading-tight">
-              <p>Email: <strong className="text-slate-400">{currentUser.email || "mis@yajurfibres.com"}</strong></p>
-              <p>Access Level: <strong className="text-slate-400 capitalize">{currentUser.role}</strong></p>
-            </div>
-          </div>
-        </aside>
-
+      <div className="flex-1 flex flex-col">
         {/* Content canvas */}
         <main className="flex-1 p-6 lg:p-8 overflow-y-auto max-w-full">
           {activeTab === "dashboard" && (
