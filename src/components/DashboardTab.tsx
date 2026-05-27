@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { CheckSquare, AlertTriangle, Play, Check, ArrowRight, Loader2, ListTodo, ShieldAlert } from "lucide-react";
+import { CheckSquare, AlertTriangle, Play, Check, ArrowRight, Loader2, ListTodo, ShieldAlert, Database, Cpu, Layers, Network, Code2 } from "lucide-react";
 import { api } from "../api";
 import { Task, Issue, DashboardCounts, User } from "../types";
 
@@ -13,6 +13,7 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
   const [myTasks, setMyTasks] = useState<Task[]>([]);
   const [myIssues, setMyIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedStack, setSelectedStack] = useState("stack2");
 
   const fetchDashboardData = async () => {
     setLoading(true);
@@ -95,77 +96,93 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Card 1: Open Tasks */}
         <div
-          onClick={() => onNavigateTab("task", "Open Task")}
-          className="bg-white hover:bg-slate-50 border border-slate-200/80 hover:border-blue-500/30 rounded-2xl p-6 shadow-xs transition-all duration-300 cursor-pointer group"
+          onClick={() => onNavigateTab("tasks", "Open Task")}
+          className="bg-white hover:bg-slate-50 border border-slate-200/80 rounded-2xl p-5 shadow-xs transition-all duration-300 cursor-pointer group flex flex-col justify-between"
         >
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-slate-500 group-hover:text-slate-700 transition-colors">Open Tasks</span>
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-105 shadow-inner">
-              <CheckSquare size={20} />
+          <div>
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Open Tasks</span>
+              <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center border border-amber-100 shadow-inner">
+                <CheckSquare size={18} />
+              </div>
+            </div>
+            <div className="mt-3">
+              <span className="text-3xl font-display font-extrabold text-amber-500">{counts.openTasks}</span>
+              <p className="text-[11px] text-slate-500 font-semibold font-sans mt-0.5">Active Milestones</p>
             </div>
           </div>
-          <div className="mt-4">
-            <span className="text-4xl font-display font-extrabold text-slate-800">{counts.openTasks}</span>
-            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1 font-medium">
-              Active milestones listed <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-            </p>
+          <div className="mt-4 bg-gradient-to-r from-amber-500 to-orange-400 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl flex items-center justify-between shadow-sm">
+            <span>Tracking active backlog</span>
+            <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
 
         {/* Card 2: Closed Tasks */}
         <div
-          onClick={() => onNavigateTab("task", "Complete Task")}
-          className="bg-white hover:bg-slate-50 border border-slate-200/80 hover:border-indigo-500/30 rounded-2xl p-6 shadow-xs transition-all duration-300 cursor-pointer group"
+          onClick={() => onNavigateTab("tasks", "Complete Task")}
+          className="bg-white hover:bg-slate-50 border border-slate-200/80 rounded-2xl p-5 shadow-xs transition-all duration-300 cursor-pointer group flex flex-col justify-between"
         >
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-slate-500 group-hover:text-slate-700 transition-colors">Closed Tasks</span>
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-105 shadow-inner">
-              <Check className="stroke-[3]" size={20} />
+          <div>
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Closed Tasks</span>
+              <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-500 flex items-center justify-center border border-emerald-100 shadow-inner">
+                <Check className="stroke-[3]" size={18} />
+              </div>
+            </div>
+            <div className="mt-3">
+              <span className="text-3xl font-display font-extrabold text-emerald-500">{counts.closedTasks}</span>
+              <p className="text-[11px] text-slate-500 font-semibold font-sans mt-0.5">Compliant Deliverables</p>
             </div>
           </div>
-          <div className="mt-4">
-            <span className="text-4xl font-display font-extrabold text-slate-800">{counts.closedTasks}</span>
-            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1 font-medium">
-              Compliant deliverables <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-            </p>
+          <div className="mt-4 bg-gradient-to-r from-emerald-500 to-teal-400 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl flex items-center justify-between shadow-sm">
+            <span>Workorder achievements</span>
+            <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
 
         {/* Card 3: Open Issues */}
         <div
-          onClick={() => onNavigateTab("issue", "Open Issue")}
-          className="bg-white hover:bg-slate-50 border border-slate-200/80 hover:border-amber-500/30 rounded-2xl p-6 shadow-xs transition-all duration-300 cursor-pointer group"
+          onClick={() => onNavigateTab("issues", "Open Issue")}
+          className="bg-white hover:bg-slate-50 border border-slate-200/80 rounded-2xl p-5 shadow-xs transition-all duration-300 cursor-pointer group flex flex-col justify-between"
         >
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-slate-500 group-hover:text-slate-700 transition-colors">Open Issues</span>
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-105 shadow-inner">
-              <AlertTriangle size={20} />
+          <div>
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Open Issues</span>
+              <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center border border-rose-100 shadow-inner">
+                <AlertTriangle size={18} />
+              </div>
+            </div>
+            <div className="mt-3">
+              <span className="text-3xl font-display font-extrabold text-rose-500">{counts.openIssues}</span>
+              <p className="text-[11px] text-slate-500 font-semibold font-sans mt-0.5">Assigned Blockers</p>
             </div>
           </div>
-          <div className="mt-4">
-            <span className="text-4xl font-display font-extrabold text-slate-800">{counts.openIssues}</span>
-            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1 font-medium">
-              Requires attention <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-            </p>
+          <div className="mt-4 bg-gradient-to-r from-rose-500 to-red-400 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl flex items-center justify-between shadow-sm">
+            <span>Requires rapid response</span>
+            <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
 
         {/* Card 4: Closed Issues */}
         <div
-          onClick={() => onNavigateTab("issue", "Closed Issue")}
-          className="bg-white hover:bg-slate-50 border border-slate-200/80 hover:border-emerald-500/30 rounded-2xl p-6 shadow-xs transition-all duration-300 cursor-pointer group"
+          onClick={() => onNavigateTab("issues", "Closed Issue")}
+          className="bg-white hover:bg-slate-50 border border-slate-200/80 rounded-2xl p-5 shadow-xs transition-all duration-300 cursor-pointer group flex flex-col justify-between"
         >
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-slate-500 group-hover:text-slate-700 transition-colors">Closed Issues</span>
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-105 shadow-inner">
-              <ShieldAlert size={20} />
+          <div>
+            <div className="flex justify-between items-center">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Closed Issues</span>
+              <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center border border-blue-105 shadow-inner">
+                <ShieldAlert size={18} />
+              </div>
+            </div>
+            <div className="mt-3">
+              <span className="text-3xl font-display font-extrabold text-blue-500">{counts.closedIssues}</span>
+              <p className="text-[11px] text-slate-500 font-semibold font-sans mt-0.5">Resolved Blockers</p>
             </div>
           </div>
-          <div className="mt-4">
-            <span className="text-4xl font-display font-extrabold text-slate-800">{counts.closedIssues}</span>
-            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1 font-medium">
-              Resolved blocks <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
-            </p>
+          <div className="mt-4 bg-gradient-to-r from-blue-500 to-indigo-400 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl flex items-center justify-between shadow-sm">
+            <span>Stability checkpoints</span>
+            <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
       </div>
@@ -288,6 +305,193 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
                 </div>
               ))
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* Yajur Fibres Multi-Stack Ecosystem Matrix */}
+      <div id="tech-stack-matrix" className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-xs mt-8">
+        <div className="px-6 py-5 border-b border-slate-100 bg-slate-50/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <h3 className="font-display font-bold text-slate-800 tracking-wide flex items-center gap-2 text-md">
+              <Network size={19} className="text-[#3fc2f6] text-blue-500" />
+              System Integration Stacks
+            </h3>
+            <p className="text-xs text-slate-500 mt-1">
+              Multi-pipeline framework layers and engineering toolchains designed for Yajur Fibres operations.
+            </p>
+          </div>
+          <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200/40 gap-1 overflow-x-auto max-w-full">
+            <button
+              id="btn-stack-2"
+              onClick={() => setSelectedStack("stack2")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all duration-150 cursor-pointer flex items-center gap-1.5 ${
+                selectedStack === "stack2"
+                  ? "bg-white text-blue-600 shadow-xs border border-slate-200/20"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <Cpu size={13} />
+              App Engine Stack
+            </button>
+            <button
+              id="btn-stack-1"
+              onClick={() => setSelectedStack("stack1")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all duration-150 cursor-pointer flex items-center gap-1.5 ${
+                selectedStack === "stack1"
+                  ? "bg-white text-blue-600 shadow-xs border border-slate-200/20"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <Database size={13} />
+              Enterprise Data Hub
+            </button>
+            <button
+              id="btn-stack-3"
+              onClick={() => setSelectedStack("stack3")}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-all duration-150 cursor-pointer flex items-center gap-1.5 ${
+                selectedStack === "stack3"
+                  ? "bg-white text-blue-600 shadow-xs border border-slate-200/20"
+                  : "text-slate-500 hover:text-slate-800"
+              }`}
+            >
+              <Layers size={13} />
+              Mobile Admin Hub
+            </button>
+          </div>
+        </div>
+
+        <div className="p-6">
+          {/* Display active stack description */}
+          {selectedStack === "stack2" && (
+            <div id="info-stack-2" className="mb-6 p-4 bg-blue-50/50 rounded-xl border border-blue-100/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
+              <div className="space-y-1">
+                <span className="text-[10px] font-sans font-black text-blue-600 tracking-wider uppercase bg-blue-100/60 px-2 py-0.5 rounded-md">Integrated Core Engine</span>
+                <p className="text-sm font-bold text-slate-800 mt-1">Cloud Ledger App Engine Stack</p>
+                <p className="text-xs text-slate-500">High-performance reactive environment designed for Vite compiling and web application rendering.</p>
+              </div>
+              <div className="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 self-start sm:self-auto shrink-0">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                <span className="text-[10px] font-mono font-bold text-emerald-700 uppercase tracking-wider">Active Compiler</span>
+              </div>
+            </div>
+          )}
+
+          {selectedStack === "stack1" && (
+            <div id="info-stack-1" className="mb-6 p-4 bg-amber-50/50 rounded-xl border border-amber-100/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
+              <div className="space-y-1">
+                <span className="text-[10px] font-sans font-black text-amber-600 tracking-wider uppercase bg-amber-100/60 px-2 py-0.5 rounded-md">Data Gateway Pipeline</span>
+                <p className="text-sm font-bold text-slate-800 mt-1">Enterprise Data Hub Stack</p>
+                <p className="text-xs text-slate-500">Optimized for ledger networking, relational query compilation, and backend database sync.</p>
+              </div>
+              <div className="flex items-center gap-2 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-100 self-start sm:self-auto shrink-0">
+                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                <span className="text-[10px] font-mono font-bold text-blue-700 uppercase tracking-wider">Sync Active</span>
+              </div>
+            </div>
+          )}
+
+          {selectedStack === "stack3" && (
+            <div id="info-stack-3" className="mb-6 p-4 bg-rose-50/50 rounded-xl border border-rose-100/50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
+              <div className="space-y-1">
+                <span className="text-[10px] font-sans font-black text-rose-600 tracking-wider uppercase bg-rose-100/60 px-2 py-0.5 rounded-md">Material Adaptive Framework</span>
+                <p className="text-sm font-bold text-slate-800 mt-1">Mobile & Admin Hub Portal</p>
+                <p className="text-xs text-slate-500">Visual administration framework styled with material structures and reactive transitions.</p>
+              </div>
+              <div className="flex items-center gap-2 bg-purple-50 px-3 py-1.5 rounded-lg border border-purple-100 self-start sm:self-auto shrink-0">
+                <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></div>
+                <span className="text-[10px] font-mono font-bold text-purple-700 uppercase tracking-wider">Hot Standby Node</span>
+              </div>
+            </div>
+          )}
+
+          {/* Grid Layout of Technologies inside the selected stack */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {selectedStack === "stack2" && [
+              { name: "React 18", category: "Core Frontend", status: "Secure", version: "v18.3.1", color: "border-l-4 border-l-blue-500" },
+              { name: "Tailwind CSS", category: "Utility Style", status: "Active Compiler", version: "v4.1.14", color: "border-l-4 border-l-cyan-500" },
+              { name: "TypeScript", category: "Strong Typing", status: "Active", version: "v5.8.2", color: "border-l-4 border-l-sky-500" },
+              { name: "Vite", category: "App Builder", status: "Dev Native", version: "v6.2.3", color: "border-l-4 border-l-indigo-500" },
+              { name: "ApexCharts.js", category: "Dynamic Charts", status: "Interactive", version: "v3.46.0", color: "border-l-4 border-l-emerald-500" },
+              { name: "Flatpickr", category: "Temporal Inputs", status: "Functional", version: "v4.6.13", color: "border-l-4 border-l-yellow-500" },
+              { name: "React-toastify", category: "Alert System", status: "Realtime Alerts", version: "v10.0.4", color: "border-l-4 border-l-orange-500" },
+              { name: "Webpack", category: "Module Bundler", status: "Legacy Bridge", version: "v5.90.3", color: "border-l-4 border-l-slate-400" },
+              { name: "Autoprefixer", category: "Browser Vendor", status: "Style Optimiser", version: "v10.4.18", color: "border-l-4 border-l-purple-500" },
+              { name: "Jsvectormap", category: "Geospatial Maps", status: "Interactive", version: "v1.5.3", color: "border-l-4 border-l-green-500" },
+              { name: "HeadlessUI", category: "Unstyled Inputs", status: "Accessible", version: "v2.0.0", color: "border-l-4 border-l-rose-500" },
+              { name: "Prettier", category: "Code Formatter", status: "Automation", version: "v3.2.5", color: "border-l-4 border-l-zinc-500" },
+              { name: "PostCSS", category: "Style Compiler", status: "Active", version: "v8.4.35", color: "border-l-4 border-l-amber-500" }
+            ].map((tech) => (
+              <div key={tech.name} id={`tech-node-${tech.name.replace(/[^a-zA-Z0-9]/g, '')}`} className={`${tech.color} bg-slate-50/50 hover:bg-slate-50 border border-slate-200/60 hover:border-slate-300 rounded-xl p-4 shadow-3xs transition-all duration-200 flex flex-col justify-between h-28`}>
+                <div className="space-y-1">
+                  <div className="text-[10px] uppercase font-black tracking-wider text-slate-400 flex items-center justify-between">
+                    <span>{tech.category}</span>
+                    <span className="font-mono text-slate-500">{tech.version}</span>
+                  </div>
+                  <h4 className="text-sm font-extrabold text-slate-800">{tech.name}</h4>
+                </div>
+                <div className="flex justify-between items-center text-[10px] border-t border-slate-200/50 pt-2 text-slate-500">
+                  <span className="font-mono font-semibold">Integrator Engine</span>
+                  <span className="bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-black uppercase text-[8px] tracking-wider border border-emerald-100">{tech.status}</span>
+                </div>
+              </div>
+            ))}
+
+            {selectedStack === "stack1" && [
+              { name: "React 18", category: "Core Frontend", status: "Secure", version: "v18.3.1", color: "border-l-4 border-l-blue-500" },
+              { name: "Bootstrap", category: "Layout Grid", status: "Legacy Integrated", version: "v5.3.3", color: "border-l-4 border-l-violet-500" },
+              { name: "TypeScript", category: "Strong Typing", status: "Active", version: "v5.8.2", color: "border-l-4 border-l-sky-500" },
+              { name: "Redux Toolkit", category: "State Sync", status: "Asynchronous", version: "v2.2.1", color: "border-l-4 border-l-indigo-500" },
+              { name: "Axios", category: "Network Agent", status: "Secure Client", version: "v1.6.7", color: "border-l-4 border-l-teal-500" },
+              { name: "Sequelize", category: "ORM Database", status: "Relational Mapping", version: "v6.37.1", color: "border-l-4 border-l-orange-500" },
+              { name: "React-charts", category: "Data Plotter", status: "Client Compiled", version: "v3.0.0", color: "border-l-4 border-l-emerald-500" },
+              { name: "Font-awesome", category: "Vector Icons", status: "Asset Loaded", version: "v6.5.1", color: "border-l-4 border-l-yellow-500" },
+              { name: "ESLint", category: "Linter Tool", status: "Active Guard", version: "v8.57.0", color: "border-l-4 border-l-rose-500" },
+              { name: "GraphQL", category: "API Gateway", status: "Sync Endpoint", version: "v16.8.1", color: "border-l-4 border-l-amber-500" },
+              { name: "PostCSS", category: "Style Compiler", status: "Active", version: "v8.4.35", color: "border-l-4 border-l-[#2c3e50]" }
+            ].map((tech) => (
+              <div key={tech.name} id={`tech-node-${tech.name.replace(/[^a-zA-Z0-9]/g, '')}`} className={`${tech.color} bg-slate-50/50 hover:bg-slate-50 border border-slate-200/60 hover:border-slate-300 rounded-xl p-4 shadow-3xs transition-all duration-200 flex flex-col justify-between h-28`}>
+                <div className="space-y-1">
+                  <div className="text-[10px] uppercase font-black tracking-wider text-slate-400 flex items-center justify-between">
+                    <span>{tech.category}</span>
+                    <span className="font-mono text-slate-500">{tech.version}</span>
+                  </div>
+                  <h4 className="text-sm font-extrabold text-slate-800">{tech.name}</h4>
+                </div>
+                <div className="flex justify-between items-center text-[10px] border-t border-slate-200/50 pt-2 text-slate-500">
+                  <span className="font-mono font-semibold">Database Sync</span>
+                  <span className="bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded font-black uppercase text-[8px] tracking-wider border border-blue-100">{tech.status}</span>
+                </div>
+              </div>
+            ))}
+
+            {selectedStack === "stack3" && [
+              { name: "React 18", category: "Core Frontend", status: "Secure", version: "v18.3.1", color: "border-l-4 border-l-blue-500" },
+              { name: "Material UI", category: "Material Widgets", status: "Active Theme", version: "v5.15.11", color: "border-l-4 border-l-indigo-500" },
+              { name: "JavaScript", category: "Runtime Engine", status: "Native", version: "ESNext", color: "border-l-4 border-l-yellow-500" },
+              { name: "Redux Toolkit", category: "State Sync", status: "Integrated", version: "v2.2.1", color: "border-l-4 border-l-sky-500" },
+              { name: "Framer Motion", category: "Physical Motion", status: "Active Canvas", version: "v11.0.8", color: "border-l-4 border-l-pink-500" },
+              { name: "Formik", category: "Structured Forms", status: "Validation", version: "v2.4.5", color: "border-l-4 border-l-teal-500" },
+              { name: "ApexCharts.js", category: "Visual Charts", status: "Interactive", version: "v3.46.0", color: "border-l-4 border-l-emerald-500" },
+              { name: "React-router", category: "State Router", status: "Active Flow", version: "v6.22.2", color: "border-l-4 border-l-purple-500" },
+              { name: "ESLint", category: "Linter Tool", status: "Active Guard", version: "v8.57.0", color: "border-l-4 border-l-red-500" },
+              { name: "Prettier", category: "Code Formatter", status: "Automation", version: "v3.2.5", color: "border-l-4 border-l-zinc-500" },
+              { name: "Sass", category: "Style Sheet", status: "Active Compiler", version: "v1.71.1", color: "border-l-4 border-l-rose-500" }
+            ].map((tech) => (
+              <div key={tech.name} id={`tech-node-${tech.name.replace(/[^a-zA-Z0-9]/g, '')}`} className={`${tech.color} bg-slate-50/50 hover:bg-slate-50 border border-slate-200/60 hover:border-slate-300 rounded-xl p-4 shadow-3xs transition-all duration-200 flex flex-col justify-between h-28`}>
+                <div className="space-y-1">
+                  <div className="text-[10px] uppercase font-black tracking-wider text-slate-400 flex items-center justify-between">
+                    <span>{tech.category}</span>
+                    <span className="font-mono text-slate-500">{tech.version}</span>
+                  </div>
+                  <h4 className="text-sm font-extrabold text-slate-800">{tech.name}</h4>
+                </div>
+                <div className="flex justify-between items-center text-[10px] border-t border-slate-200/50 pt-2 text-slate-500">
+                  <span className="font-mono font-semibold">Portal System</span>
+                  <span className="bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded font-black uppercase text-[8px] tracking-wider border border-purple-100">{tech.status}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

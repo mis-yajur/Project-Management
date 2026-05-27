@@ -87,37 +87,37 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#f1f5f9] text-slate-800 flex flex-col antialiased selection:bg-blue-600/10 font-sans">
+    <div className="min-h-screen bg-[#f4f7fd] text-slate-800 flex flex-col antialiased selection:bg-blue-600/10 font-sans">
       
       {/* Dynamic top control navbar with horizontal integrated menu */}
-      <header className="sticky top-0 z-40 bg-white border-b border-slate-200/80 px-6 pt-4 pb-0 flex flex-col gap-3 shadow-xs">
+      <header className="sticky top-0 z-40 bg-gradient-to-r from-[#2c6df4] via-[#356efd] to-[#458afc] border-b border-blue-700/20 px-6 pt-4 pb-0 flex flex-col gap-3 shadow-md shadow-blue-500/5 text-white">
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 bg-gradient-to-tr from-[#2c3e50] to-[#3498db] rounded-xl flex items-center justify-center shadow-md shadow-blue-500/5">
-              <Sparkles size={19} className="text-white" />
+            <div className="h-10 w-10 bg-white/15 rounded-xl flex items-center justify-center border border-white/15 shadow-sm">
+              <Sparkles size={19} className="text-white animate-pulse" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-md font-display font-bold text-slate-800 tracking-tight leading-none">
+                <h1 className="text-md font-display font-extrabold text-white tracking-tight leading-none">
                   Project Management Yajur
                 </h1>
-                <span className="text-[9px] bg-blue-50 text-blue-600 border border-blue-100 px-1.5 py-0.5 rounded-full font-mono uppercase font-black">PRO</span>
+                <span className="text-[9px] bg-white/20 text-white border border-white/30 px-1.5 py-0.5 rounded-full font-mono uppercase font-black tracking-wider">PRO</span>
               </div>
-              <span className="text-[10px] text-slate-500 font-mono mt-0.5 block">Sheets Integrated Network Ledger v1.0</span>
+              <span className="text-[10px] text-blue-100/80 font-mono mt-0.5 block">Sheets Integrated Network Ledger v1.0</span>
             </div>
           </div>
 
           {/* User profile & Action capsule */}
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-100">
-              <div className="h-6.5 w-6.5 rounded-full bg-gradient-to-tr from-[#2c3e50] to-[#3498db] text-white font-black text-[10px] flex items-center justify-center font-mono shadow-inner">
+            <div className="flex items-center gap-2.5 bg-white/10 border border-white/15 px-3 py-1.5 rounded-xl">
+              <div className="h-6.5 w-6.5 rounded-full bg-white text-blue-600 font-black text-[10px] flex items-center justify-center font-mono shadow-sm">
                 {currentUser.username.substring(0, 2).toUpperCase()}
               </div>
               <div className="text-left hidden sm:block">
-                <span className="text-xs font-bold text-slate-700 block max-w-[120px] truncate leading-none">
+                <span className="text-xs font-bold text-white block max-w-[120px] truncate leading-none">
                   {currentUser.name}
                 </span>
-                <span className="text-[9px] text-[#3498db] font-extrabold font-mono block uppercase tracking-wider mt-0.5 leading-none">
+                <span className="text-[9px] text-blue-100 font-extrabold font-mono block uppercase tracking-wider mt-0.5 leading-none">
                   {currentUser.role}
                 </span>
               </div>
@@ -125,7 +125,7 @@ export default function App() {
             
             <button
               onClick={handleLogout}
-              className="p-2 bg-slate-50 hover:bg-rose-50 text-slate-500 hover:text-rose-600 border border-slate-100 hover:border-rose-200 rounded-xl cursor-pointer transition-all duration-150"
+              className="p-2 bg-white/10 hover:bg-rose-500/20 hover:border-rose-300 text-blue-100 hover:text-white border border-white/10 rounded-xl cursor-pointer transition-all duration-150"
               title="Log out of active session"
             >
               <LogOut size={15} />
@@ -134,7 +134,7 @@ export default function App() {
         </div>
 
         {/* Horizontal Nav Bar containing all Menu items */}
-        <nav className="flex items-center gap-1 overflow-x-auto pb-0 -mx-6 px-6 scrollbar-none border-t border-slate-100 mt-1">
+        <nav className="flex items-center gap-1 overflow-x-auto pb-0 -mx-6 px-6 scrollbar-none border-t border-white/10 mt-1">
           {menuItems.map((item) => {
             if (item.adminOnly && !isAdmin) return null;
             const IconComp = item.icon;
@@ -150,14 +150,14 @@ export default function App() {
                 }}
                 className={`px-4 py-3 border-b-2 font-medium text-xs flex items-center gap-2 tracking-wide cursor-pointer group transition-all duration-150 shrink-0 ${
                   isActive
-                    ? "border-blue-600 text-blue-600 font-semibold bg-blue-50/40"
-                    : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50/50"
+                    ? "border-white text-white font-semibold bg-white/10"
+                    : "border-transparent text-blue-100/70 hover:text-white hover:bg-white/5"
                 }`}
               >
                 <IconComp
                   size={15}
                   className={`transition-colors duration-150 ${
-                    isActive ? "text-blue-600" : "text-slate-400 group-hover:text-slate-650"
+                    isActive ? "text-white" : "text-blue-100/60 group-hover:text-white"
                   }`}
                 />
                 {item.label}
