@@ -923,7 +923,17 @@ function executeAction(action, args) {
       var users = readSheetData("Users");
       var activeUsers = users
         .filter(function(u) { return u.status === "Active"; })
-        .map(function(u) { return { id: u.id, username: u.username, name: u.fullName, role: u.role, department: u.department }; });
+        .map(function(u) { 
+          return { 
+            id: u.id, 
+            username: u.username, 
+            name: u.fullName, 
+            role: u.role, 
+            department: u.department,
+            email: u.email || "",
+            contactNumber: u.contactNumber || ""
+          }; 
+        });
       return { success: true, data: activeUsers };
     }
 
