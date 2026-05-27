@@ -232,17 +232,17 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
   return (
     <div className="space-y-6">
       {/* Search & Action Panel */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/20 px-6 py-5 rounded-2xl border border-slate-700/35 backdrop-blur">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white px-6 py-5 rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
         <div className="space-y-1">
-          <h2 className="text-xl font-display font-medium text-slate-100 tracking-tight flex items-center gap-2">
-            <BarChart3 size={20} className="text-blue-400" />
+          <h2 className="text-xl font-display font-semibold text-slate-800 tracking-tight flex items-center gap-2">
+            <BarChart3 size={20} className="text-blue-600" />
             Analytical Management Reports
           </h2>
           <p className="text-xs text-slate-400 font-sans">Query performance thresholds, dates, segments, and export standard spreadsheets files.</p>
         </div>
         <button
           onClick={downloadCSV}
-          className="px-5 py-2.5 bg-green-600 hover:bg-green-500 rounded-xl font-medium text-slate-150 flex items-center gap-2 text-sm shadow-lg shadow-green-500/10 hover:shadow-green-500/15 group tracking-wide cursor-pointer transition-all duration-200"
+          className="px-5 py-2.5 bg-green-600 hover:bg-green-700 rounded-xl font-medium text-white flex items-center gap-2 text-sm shadow-md shadow-green-500/10 hover:shadow-lg hover:shadow-green-500/15 group tracking-wide cursor-pointer transition-all duration-200"
         >
           <FileDown size={16} />
           Download CSV Ledger
@@ -250,10 +250,10 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
       </div>
 
       {/* Multipurpose Filter Bento Grid */}
-      <div className="bg-slate-800/10 p-5 rounded-xl border border-slate-700/25 space-y-4">
+      <div className="bg-white p-5 rounded-xl border border-slate-200/65 shadow-sm space-y-4">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
           <select
-            className="bg-slate-900/60 border border-slate-700/60 rounded-lg py-1.5 px-2.5 text-xs text-slate-350 focus:outline-none focus:border-blue-500"
+            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -266,7 +266,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
           </select>
 
           <select
-            className="bg-slate-900/60 border border-slate-700/60 rounded-lg py-1.5 px-2.5 text-xs text-slate-350 focus:outline-none focus:border-blue-500"
+            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
           >
@@ -278,7 +278,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
           </select>
 
           <select
-            className="bg-slate-900/60 border border-slate-700/60 rounded-lg py-1.5 px-2.5 text-xs text-slate-350 focus:outline-none focus:border-blue-500"
+            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
             value={deptFilter}
             onChange={(e) => setDeptFilter(e.target.value)}
           >
@@ -289,7 +289,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
           </select>
 
           <select
-            className="bg-slate-900/60 border border-slate-700/60 rounded-lg py-1.5 px-2.5 text-xs text-slate-350 focus:outline-none focus:border-blue-500"
+            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
             value={groupFilter}
             onChange={(e) => setGroupFilter(e.target.value)}
           >
@@ -300,7 +300,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
           </select>
 
           <select
-            className="bg-slate-900/60 border border-slate-700/60 rounded-lg py-1.5 px-2.5 text-xs text-slate-350 focus:outline-none focus:border-blue-500"
+            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
           >
@@ -310,12 +310,12 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
           </select>
 
           <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-2.5 text-slate-500 pointer-events-none">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-2.5 text-slate-450 pointer-events-none">
               <Search size={14} />
             </span>
             <input
               type="text"
-              className="w-full bg-slate-900/60 border border-slate-700/60 rounded-lg py-1.5 pl-8 pr-7 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg py-1.5 pl-8 pr-7 text-xs text-slate-800 placeholder-slate-450 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
               placeholder="Query search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -324,7 +324,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
               <button
                 type="button"
                 onClick={() => setSearch("")}
-                className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-100 cursor-pointer"
+                className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-705 cursor-pointer"
               >
                 <X size={12} />
               </button>
@@ -334,29 +334,29 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
 
         <div className="flex flex-wrap items-center justify-between gap-4 pt-1 font-mono text-[10px]">
           <div className="flex items-center gap-2">
-            <span className="text-slate-400 font-semibold tracking-wider uppercase">Due Date Range:</span>
+            <span className="text-slate-400 font-bold tracking-wider uppercase">Due Date Range:</span>
             <input
               type="date"
-              className="bg-slate-900 border border-slate-700 rounded p-1 text-slate-350 select-text"
+              className="bg-slate-50 border border-slate-200 rounded p-1 text-slate-700 select-text"
               value={dateFrom}
               onChange={(e) => setDateFrom(e.target.value)}
             />
-            <span className="text-slate-500">to</span>
+            <span className="text-slate-400">to</span>
             <input
               type="date"
-              className="bg-slate-900 border border-slate-700 rounded p-1 text-slate-350 select-text"
+              className="bg-slate-50 border border-slate-200 rounded p-1 text-slate-700 select-text"
               value={dateTo}
               onChange={(e) => setDateTo(e.target.value)}
             />
             <button
               onClick={handleClearFilters}
-              className="bg-slate-800 hover:bg-slate-750 text-[10px] text-slate-300 font-semibold border border-slate-700 rounded px-2.5 py-1 flex items-center gap-1 cursor-pointer transition-all inline-block ml-3"
+              className="bg-slate-100 hover:bg-slate-200 text-[10px] text-slate-600 font-bold border border-slate-200 rounded px-2.5 py-1 flex items-center gap-1 cursor-pointer transition-all inline-block ml-3"
             >
               Reset Filters
             </button>
           </div>
           <span className="text-slate-400 font-medium font-sans text-xs">
-            Showing <strong className="text-blue-400 text-sm font-semibold">{summary.total}</strong> record{summary.total !== 1 ? "s" : ""}
+            Showing <strong className="text-blue-600 text-sm font-semibold">{summary.total}</strong> record{summary.total !== 1 ? "s" : ""}
           </span>
         </div>
       </div>
@@ -364,26 +364,26 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
       {/* KPI Bento Grid */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-3.5">
         {[
-          { label: "Total Rows", val: summary.total, color: "text-blue-400" },
-          { label: "Open Tickets", val: summary.open, color: "text-cyan-400" },
-          { label: "Closed Milestones", val: summary.closed, color: "text-slate-400" },
-          { label: "High Urgency", val: summary.high, color: "text-red-400 animated-pulse" },
-          { label: "Calendar Overdue", val: summary.overdue, color: "text-amber-500" },
-          { label: "Average Complete", val: `${summary.avg}%`, color: "text-green-400" }
+          { label: "Total Rows", val: summary.total, color: "text-blue-600" },
+          { label: "Open Tickets", val: summary.open, color: "text-cyan-600" },
+          { label: "Closed Milestones", val: summary.closed, color: "text-slate-500" },
+          { label: "High Urgency", val: summary.high, color: "text-rose-600 font-extrabold" },
+          { label: "Calendar Overdue", val: summary.overdue, color: "text-amber-600" },
+          { label: "Average Complete", val: `${summary.avg}%`, color: "text-emerald-600" }
         ].map((met, i) => (
-          <div key={i} className="bg-slate-800/25 border border-slate-700/35 rounded-xl p-4 text-center hover:translate-y-[-2px] transition-transform duration-200">
-            <span className={`text-2xl font-display font-semibold block leading-tight ${met.color}`}>{met.val}</span>
-            <span className="text-[10px] text-slate-500 block uppercase font-mono tracking-wider mt-1.5 leading-none">{met.label}</span>
+          <div key={i} className="bg-white border border-slate-200/80 rounded-xl p-4 text-center hover:translate-y-[-2px] transition-transform duration-200 shadow-[0_4px_20px_rgb(0,0,0,0.015)]">
+            <span className={`text-2xl font-display font-bold block leading-tight ${met.color}`}>{met.val}</span>
+            <span className="text-[10px] text-slate-400 block uppercase font-bold font-mono tracking-wider mt-1.5 leading-none">{met.label}</span>
           </div>
         ))}
       </div>
 
       {/* Report Matrix Grid */}
-      <div className="bg-slate-800/30 border border-slate-700/40 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[1400px]">
             <thead>
-              <tr className="bg-slate-800/80 border-b border-slate-700/50 text-[11px] font-semibold uppercase tracking-wider font-mono select-none">
+              <tr className="bg-slate-50 border-b border-slate-200/85 text-[11px] font-semibold uppercase tracking-wider font-mono select-none">
                 {[
                   { key: "id", label: "Task ID" },
                   { key: "type", label: "Type", noSort: true },
@@ -407,7 +407,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
                   <th
                     key={th.key}
                     onClick={() => !th.noSort && toggleSort(th.key)}
-                    className={`py-4 px-4 ${!th.noSort ? "cursor-pointer hover:bg-slate-750 text-slate-350" : "text-slate-450"}`}
+                    className={`py-4 px-4 ${!th.noSort ? "cursor-pointer hover:bg-slate-100 text-slate-650" : "text-slate-450"}`}
                   >
                     <div className="flex items-center gap-1">
                       {th.label}
@@ -421,17 +421,17 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-700/30 text-xs text-slate-300">
+            <tbody className="divide-y divide-slate-100 text-xs text-slate-700">
               {loading ? (
                 <tr>
                   <td colSpan={18} className="py-24 text-center">
-                    <span className="animate-spin inline-block border-2 border-blue-500 border-t-transparent rounded-full w-6 h-6 mr-2"></span>
-                    <span className="font-sans text-slate-500">Compiling ledger reports...</span>
+                    <span className="animate-spin inline-block border-2 border-blue-600 border-t-transparent rounded-full w-6 h-6 mr-2"></span>
+                    <span className="font-sans text-slate-400">Compiling ledger reports...</span>
                   </td>
                 </tr>
               ) : filteredTasks.length === 0 ? (
                 <tr>
-                  <td colSpan={18} className="py-20 text-center text-slate-500 font-sans">
+                  <td colSpan={18} className="py-20 text-center text-slate-400 font-sans">
                     No registry rows match your specified filter criteria.
                   </td>
                 </tr>
@@ -455,71 +455,80 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
                       const days = Math.ceil((due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
                       if (days < 0) {
                         dlimitText = `${Math.abs(days)}d Overdue`;
-                        dlimitStyle = "text-red-400 font-semibold";
+                        dlimitStyle = "text-rose-650 font-semibold";
                       } else if (days <= 3) {
                         dlimitText = `${days}d Left`;
-                        dlimitStyle = "text-amber-400 font-semibold";
+                        dlimitStyle = "text-amber-650 font-semibold";
                       } else {
                         dlimitText = `${days} days`;
-                        dlimitStyle = "text-slate-300";
+                        dlimitStyle = "text-slate-600";
                       }
                     }
                   }
 
                   return (
-                    <tr key={t.id} className={`hover:bg-slate-800/15 transition-colors group ${isSub ? "bg-slate-850/15" : ""}`}>
-                      <td className="py-3.5 px-4 font-mono font-semibold text-slate-400 group-hover:text-blue-450">{t.id}</td>
+                    <tr key={t.id} className={`hover:bg-slate-50/70 transition-colors group ${isSub ? "bg-slate-50/40" : ""}`}>
+                      <td className="py-3.5 px-4 font-mono font-bold text-slate-505">{t.id}</td>
                       <td className="py-3.5 px-4">
-                        <span className={`text-[9px] font-medium px-2 py-0.5 rounded font-mono border ${
-                          isSub ? "bg-slate-700/20 text-slate-400 border-slate-700/25" : "bg-blue-500/10 text-blue-400 border-blue-500/15"
+                        <span className={`text-[9px] font-bold px-2 py-0.5 rounded font-mono border ${
+                          isSub ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-blue-50 text-blue-700 border-blue-200"
                         }`}>
                           {typeLabel}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 font-medium text-slate-150 truncate max-w-[150px]" title={t.name}>{t.name}</td>
-                      <td className="py-3.5 px-4 text-slate-400 max-w-[170px] truncate" title={t.description}>{t.description || "-"}</td>
-                      <td className="py-3.5 px-4 text-slate-400 truncate max-w-[120px]" title={t.department}>{t.department}</td>
-                      <td className="py-3.5 px-4 text-slate-450 truncate" title={t.owner}>{t.owner}</td>
-                      <td className="py-3.5 px-4 text-slate-450 truncate font-mono text-xs">{t.tags || "-"}</td>
+                      <td className="py-3.5 px-4 font-semibold text-slate-800 truncate max-w-[150px]" title={t.name}>{t.name}</td>
+                      <td className="py-3.5 px-4 text-slate-505 max-w-[170px] truncate" title={t.description}>{t.description || "-"}</td>
+                      <td className="py-3.5 px-4 text-slate-505 truncate max-w-[120px]" title={t.department}>{t.department}</td>
+                      <td className="py-3.5 px-4 text-slate-505 truncate" title={t.owner}>{t.owner}</td>
+                      <td className="py-3.5 px-4 text-slate-505 truncate font-mono text-xs">{t.tags || "-"}</td>
                       <td className="py-3.5 px-4">
-                        <span className={`text-[10px] font-mono px-2 py-0.5 rounded border inline-block ${
-                          t.status === "Closed" ? "bg-slate-500/10 text-slate-400 border-slate-500/10" : "bg-blue-500/10 text-blue-400 border-blue-500/15"
+                        <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded border inline-block ${
+                          t.status === "Closed" ? "bg-slate-100 text-slate-650 border-slate-200" : "bg-blue-50 text-blue-700 border-blue-200"
                         }`}>
                           {t.status}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 font-mono">{t.priority}</td>
-                      <td className="py-3.5 px-4 text-slate-450 font-mono text-xs truncate max-w-[100px]">{t.group || "-"}</td>
-                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-450">{t.startDate ? t.startDate.slice(0,10) : "-"}</td>
-                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-450">{t.dueDate ? t.dueDate.slice(0,10) : "-"}</td>
-                      <td className={`py-3.5 px-4 font-mono font-medium ${dlimitStyle}`}>{dlimitText}</td>
-                      <td className="py-3.5 px-4 text-slate-350">
+                      <td className="py-3.5 px-4 font-mono select-none">
+                        <span className={`text-[9px] font-bold font-mono px-1.5 py-0.5 rounded border ${
+                          t.priority.toLowerCase() === "high" ? "bg-rose-50 text-rose-700 border-rose-200" : 
+                          t.priority.toLowerCase() === "medium" ? "bg-amber-50 text-amber-700 border-amber-200" :
+                          t.priority.toLowerCase() === "low" ? "bg-green-50 text-green-700 border-green-200" :
+                          "bg-slate-50 text-slate-500 border-slate-200"
+                        }`}>
+                          {t.priority}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4 text-slate-505 font-mono text-xs truncate max-w-[100px]">{t.group || "-"}</td>
+                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-505">{t.startDate ? t.startDate.slice(0,10) : "-"}</td>
+                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-505">{t.dueDate ? t.dueDate.slice(0,10) : "-"}</td>
+                      <td className={`py-3.5 px-4 font-mono font-semibold ${dlimitStyle}`}>{dlimitText}</td>
+                      <td className="py-3.5 px-4 text-slate-600">
                         {/* Manual progress indicator */}
                         <div className="flex items-center gap-2">
-                          <div className="w-12 bg-slate-700/60 h-1.5 rounded-full overflow-hidden relative">
-                            <div className="absolute inset-y-0 left-0 bg-blue-500 rounded-full" style={{ width: `${pctM}%` }}></div>
+                          <div className="w-12 bg-slate-100 h-1.5 rounded-full overflow-hidden relative">
+                            <div className="absolute inset-y-0 left-0 bg-blue-600 rounded-full" style={{ width: `${pctM}%` }}></div>
                           </div>
-                          <span className="font-semibold text-blue-400 font-mono">{pctM}%</span>
+                          <span className="font-bold text-blue-600 font-mono">{pctM}%</span>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-350">
+                      <td className="py-3.5 px-4 text-slate-600">
                         {/* Auto progress timeline indicator */}
                         <div className="flex items-center gap-2">
-                          <div className="w-12 bg-slate-700/60 h-1.5 rounded-full overflow-hidden relative">
-                            <div className="absolute inset-y-0 left-0 rounded-full opacity-65" style={{ width: `${pctA}%`, backgroundColor: getHeatmapColor(pctA) }}></div>
+                          <div className="w-12 bg-slate-100 h-1.5 rounded-full overflow-hidden relative">
+                            <div className="absolute inset-y-0 left-0 rounded-full opacity-35" style={{ width: `${pctA}%`, backgroundColor: getHeatmapColor(pctA) }}></div>
                           </div>
-                          <span className="font-semibold font-mono" style={{ color: getHeatmapColor(pctA) }}>{pctA}%</span>
+                          <span className="font-bold font-mono" style={{ color: getHeatmapColor(pctA) }}>{pctA}%</span>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 font-mono text-slate-450 text-[10px]">{t.parentTaskId || "-"}</td>
+                      <td className="py-3.5 px-4 font-mono text-slate-505 text-[10px]">{t.parentTaskId || "-"}</td>
                       <td className="py-3.5 px-4">
-                        <span className={`text-[9px] font-mono px-1.5 py-0.5 rounded inline-block ${
-                          t.dependency === "Yes" ? "bg-indigo-500/10 text-indigo-400 border border-indigo-500/15" : "text-slate-500"
+                        <span className={`text-[9px] font-bold font-mono px-1.5 py-0.5 rounded inline-block ${
+                          t.dependency === "Yes" ? "bg-indigo-50 text-indigo-700 border border-indigo-200" : "text-slate-400"
                         }`}>
                           {t.dependency}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-450">{t.createdDate ? t.createdDate.slice(0,10) : "-"}</td>
+                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-505">{t.createdDate ? t.createdDate.slice(0,10) : "-"}</td>
                     </tr>
                   );
                 })

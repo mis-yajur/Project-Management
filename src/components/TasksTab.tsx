@@ -242,26 +242,26 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
   const getStatusStyle = (status: string) => {
     const s = status.toLowerCase();
-    if (s.includes("progress")) return "bg-blue-500/10 text-blue-400 border-blue-500/15";
-    if (s.includes("review")) return "bg-amber-500/10 text-amber-400 border-amber-500/15";
-    if (s.includes("test")) return "bg-cyan-500/10 text-cyan-400 border-cyan-500/15";
-    if (s.includes("closed")) return "bg-slate-500/10 text-slate-400 border-slate-500/10";
-    return "bg-green-500/10 text-green-400 border-green-500/15";
+    if (s.includes("progress")) return "bg-blue-50 text-blue-700 border-blue-200";
+    if (s.includes("review")) return "bg-amber-50 text-amber-700 border-amber-200";
+    if (s.includes("test")) return "bg-cyan-50 text-cyan-750 border-cyan-200";
+    if (s.includes("closed")) return "bg-slate-100 text-slate-600 border-slate-200";
+    return "bg-green-50 text-green-700 border-green-200";
   };
 
   const getPriorityStyle = (priority: string) => {
     const p = (priority || "").toLowerCase();
-    if (p.includes("high")) return "bg-rose-500/10 text-rose-400 border-rose-500/15";
-    if (p.includes("low")) return "bg-green-500/10 text-green-400 border-green-500/15";
-    if (p.includes("medium")) return "bg-amber-500/10 text-amber-400 border-amber-500/15";
-    return "bg-slate-500/10 text-slate-400 border-slate-500/15";
+    if (p.includes("high")) return "bg-rose-50 text-rose-750 border-rose-200";
+    if (p.includes("low")) return "bg-green-50 text-green-700 border-green-200";
+    if (p.includes("medium")) return "bg-amber-50 text-amber-700 border-amber-200";
+    return "bg-slate-100 text-slate-600 border-slate-200";
   };
 
   const getHeatmapColor = (pct: number) => {
     if (pct <= 25) return "#ef4444"; // red
     if (pct <= 50) return "#f59e0b"; // amber
     if (pct <= 75) return "#f97316"; // orange
-    if (pct <= 90) return "#84cc16"; // lime
+    if (pct <= 90) return "#10b981"; // emerald
     return "#22c55e"; // green
   };
 
@@ -284,27 +284,27 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     const d = Math.ceil((due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     
     if (d < 0) {
-      return { text: `${Math.abs(d)}d overdue`, style: "text-red-400 font-semibold" };
+      return { text: `${Math.abs(d)}d overdue`, style: "text-red-650 font-semibold" };
     } else if (d <= 2) {
-      return { text: `${d}d left`, style: "text-amber-400 font-semibold" };
+      return { text: `${d}d left`, style: "text-amber-650 font-semibold" };
     }
-    return { text: `${d} days`, style: "text-slate-350" };
+    return { text: `${d} days`, style: "text-slate-600" };
   };
 
   return (
     <div className="space-y-6">
       {/* Search & Action Panel */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/20 px-6 py-5 rounded-2xl border border-slate-700/35 backdrop-blur">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white px-6 py-5 rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
         <div className="space-y-1">
-          <h2 className="text-xl font-display font-medium text-slate-100 tracking-tight flex items-center gap-2">
-            <ListTodo size={20} className="text-blue-400" />
+          <h2 className="text-xl font-display font-semibold text-slate-800 tracking-tight flex items-center gap-2">
+            <ListTodo size={20} className="text-blue-600" />
             Milestones and Deliverables
           </h2>
           <p className="text-xs text-slate-400 font-sans">Complete backlog directory of project assignments and hierarchy structures.</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-slate-100 flex items-center gap-2 text-sm shadow-lg shadow-blue-500/10 hover:shadow-blue-500/15 group tracking-wide cursor-pointer transition-all duration-200"
+          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-xl font-medium text-white flex items-center gap-2 text-sm shadow-md shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/15 group tracking-wide cursor-pointer transition-all duration-200"
         >
           <Plus size={16} />
           New Task Milestone
@@ -312,10 +312,10 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       </div>
 
       {/* Ribbon Filters */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 bg-slate-800/10 p-4 rounded-xl border border-slate-700/20">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 bg-white p-4 rounded-xl border border-slate-200/65 shadow-sm">
         <div>
           <select
-            className="w-full bg-slate-900/40 border border-slate-700/60 rounded-lg py-2 px-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
           >
@@ -327,7 +327,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         </div>
         <div>
           <select
-            className="w-full bg-slate-900/40 border border-slate-700/60 rounded-lg py-2 px-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
             value={groupFilter}
             onChange={(e) => setGroupFilter(e.target.value)}
           >
@@ -338,12 +338,12 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           </select>
         </div>
         <div className="relative">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 pointer-events-none">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-450 pointer-events-none">
             <Search size={16} />
           </span>
           <input
             type="text"
-            className="w-full bg-slate-900/40 border border-slate-700/60 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-800 placeholder-slate-450 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
             placeholder="Search tasks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -351,7 +351,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         </div>
         <button
           onClick={loadData}
-          className="px-4 py-2 border border-slate-700 hover:bg-slate-800 font-medium text-xs text-slate-300 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-600 transition-all duration-200"
+          className="px-4 py-2 border border-slate-200 hover:bg-slate-50 font-medium text-xs text-slate-755 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-300 transition-all duration-200"
         >
           <RotateCw size={12} />
           Reload List
@@ -359,11 +359,11 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       </div>
 
       {/* Task Matrix Ledger */}
-      <div className="bg-slate-800/30 border border-slate-700/40 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-white border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[1250px]">
             <thead>
-              <tr className="bg-slate-800/80 border-b border-slate-700/50 text-slate-400 text-[11px] font-semibold uppercase tracking-wider font-mono">
+              <tr className="bg-slate-50 border-b border-slate-200/85 text-slate-500 text-[11px] font-semibold uppercase tracking-wider font-mono">
                 <th className="py-4 px-6 w-28">Task ID</th>
                 <th className="py-4 px-6">Task Name</th>
                 <th className="py-4 px-6 max-w-xs">Description</th>
@@ -379,17 +379,17 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 <th className="py-4 px-6 text-center w-28">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-700/30 text-sm text-slate-300">
+            <tbody className="divide-y divide-slate-100 text-sm text-slate-750">
               {loading ? (
                 <tr>
                   <td colSpan={13} className="py-20 text-center">
-                    <Loader2 size={32} className="animate-spin text-blue-400 mx-auto" />
-                    <p className="text-sm font-sans text-slate-500 mt-2">Connecting to Sheets databases...</p>
+                    <Loader2 size={32} className="animate-spin text-blue-550 mx-auto" />
+                    <p className="text-sm font-sans text-slate-400 mt-2">Connecting to Sheets databases...</p>
                   </td>
                 </tr>
               ) : mainParents.length === 0 ? (
                 <tr>
-                  <td colSpan={13} className="py-20 text-center text-slate-500 font-sans">
+                  <td colSpan={13} className="py-20 text-center text-slate-400 font-sans">
                     No matching task deliverables found in sheets directory.
                   </td>
                 </tr>
@@ -401,14 +401,14 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                   const hasChildren = children.length > 0;
 
                   return (
-                    <>
+                    <React.Fragment key={t.id}>
                       {/* Parent Row */}
-                      <tr key={t.id} className="hover:bg-slate-800/15 transition-colors group">
-                        <td className="py-4 px-6 flex items-center gap-1.5 font-mono text-xs font-semibold text-slate-400 group-hover:text-blue-450">
+                      <tr className="hover:bg-slate-50/70 transition-colors group">
+                        <td className="py-4 px-6 flex items-center gap-1.5 font-mono text-xs font-semibold text-slate-500">
                           {hasChildren ? (
                             <button
                               onClick={(e) => toggleParent(t.id, e)}
-                              className="text-blue-400 hover:bg-slate-700/40 p-0.5 rounded cursor-pointer"
+                              className="text-blue-500 hover:bg-slate-100 p-0.5 rounded cursor-pointer"
                             >
                               {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                             </button>
@@ -418,7 +418,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                           {t.dependency === "Yes" ? (
                             <button
                               onClick={() => onNavigateTab("dependency", t.id)}
-                              className="text-blue-400 font-bold hover:underline cursor-pointer"
+                              className="text-blue-600 font-bold hover:underline cursor-pointer"
                             >
                               {t.id}
                             </button>
@@ -426,57 +426,57 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                             <span>{t.id}</span>
                           )}
                         </td>
-                        <td className="py-4 px-6 font-medium text-slate-150">{t.name}</td>
-                        <td className="py-4 px-6 text-slate-400 max-w-xs truncate" title={t.description}>
+                        <td className="py-4 px-6 font-semibold text-slate-800">{t.name}</td>
+                        <td className="py-4 px-6 text-slate-500 max-w-xs truncate" title={t.description}>
                           {t.description || "-"}
                         </td>
-                        <td className="py-4 px-6 text-slate-400">{t.department}</td>
-                        <td className="py-4 px-6 text-slate-400">{t.owner}</td>
+                        <td className="py-4 px-6 text-slate-500">{t.department}</td>
+                        <td className="py-4 px-6 text-slate-500">{t.owner}</td>
                         <td className="py-4 px-6">
-                          <span className={`text-[10px] font-medium tracking-wide border font-mono px-2 py-0.5 rounded-full ${getStatusStyle(t.status)}`}>
+                          <span className={`text-[10px] font-bold tracking-wide border font-mono px-2 py-0.5 rounded-full ${getStatusStyle(t.status)}`}>
                             {t.status}
                           </span>
                         </td>
-                        <td className="py-4 px-6 text-slate-400">{t.tags || "-"}</td>
+                        <td className="py-4 px-6 text-slate-500">{t.tags || "-"}</td>
                         <td className={`py-4 px-6 text-center text-xs font-mono ${dlimit.style}`}>{dlimit.text}</td>
                         <td className="py-4 px-6">
-                          <span className={`text-[10px] font-medium tracking-wide border font-mono px-2 py-0.5 rounded-full ${getPriorityStyle(t.priority)}`}>
+                          <span className={`text-[10px] font-bold tracking-wide border font-mono px-2 py-0.5 rounded-full ${getPriorityStyle(t.priority)}`}>
                             {t.priority}
                           </span>
                         </td>
                         <td className="py-4 px-6">
                           {/* Double Progress visual rendering */}
-                          <div className="flex flex-col gap-1 w-full font-mono text-[10px] font-medium text-slate-400">
+                          <div className="flex flex-col gap-1 w-full font-mono text-[10px] font-semibold text-slate-500">
                             <div className="flex items-center justify-between">
                               <span>Manual Done:</span>
-                              <span className="font-semibold text-blue-400">{t.completion || 0}%</span>
+                              <span className="font-bold text-blue-600">{t.completion || 0}%</span>
                             </div>
                             <div className="flex items-center justify-between">
                               <span>Auto Target:</span>
-                              <span className="font-semibold" style={{ color: getHeatmapColor(t.autoProgress) }}>
+                              <span className="font-bold" style={{ color: getHeatmapColor(t.autoProgress) }}>
                                 {t.autoProgress || 0}%
                               </span>
                             </div>
                             {/* The combined linear bar track */}
-                            <div className="h-2 w-full bg-slate-700/60 rounded-full relative overflow-hidden" title={`Manual: ${t.completion || 0}%, Auto target: ${t.autoProgress || 0}%`}>
+                            <div className="h-2 w-full bg-slate-100 rounded-full relative overflow-hidden" title={`Manual: ${t.completion || 0}%, Auto target: ${t.autoProgress || 0}%`}>
                               <div
-                                className="absolute inset-y-0 left-0 opacity-45"
+                                className="absolute inset-y-0 left-0 opacity-25"
                                 style={{
                                   width: `${t.autoProgress || 0}%`,
                                   backgroundColor: getHeatmapColor(t.autoProgress)
                                 }}
                               ></div>
                               <div
-                                className="absolute inset-y-0 left-0 bg-blue-500 rounded-full"
+                                className="absolute inset-y-0 left-0 bg-blue-600 rounded-full"
                                 style={{ width: `${t.completion || 0}%` }}
                               ></div>
                             </div>
                           </div>
                         </td>
-                        <td className="py-4 px-6 text-slate-400 font-mono text-xs">{t.group || "-"}</td>
+                        <td className="py-4 px-6 text-slate-500 font-mono text-xs">{t.group || "-"}</td>
                         <td className="py-4 px-6">
                           <select
-                            className="bg-slate-900 border border-slate-700 rounded-md px-1.5 py-1 text-xs text-slate-350 focus:outline-none"
+                            className="bg-slate-50 border border-slate-200 rounded-md px-1.5 py-1 text-xs text-slate-600 focus:outline-none focus:bg-white"
                             value={t.dependency}
                             onChange={(e) => handleDependencyChange(t, e.target.value)}
                           >
@@ -488,14 +488,14 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                           <div className="flex items-center justify-center gap-1">
                             <button
                               onClick={() => viewTaskDetails(t)}
-                              className="p-1 px-1.5 text-slate-500 hover:text-slate-100 rounded hover:bg-slate-700/50 cursor-pointer"
+                              className="p-1 px-1.5 text-slate-400 hover:text-slate-850 rounded hover:bg-slate-100 cursor-pointer"
                               title="View Details"
                             >
                               <Eye size={14} />
                             </button>
                             <button
                               onClick={() => handleEditClick(t)}
-                              className="p-1 px-1.5 text-slate-500 hover:text-blue-400 rounded hover:bg-slate-700/50 cursor-pointer"
+                              className="p-1 px-1.5 text-slate-400 hover:text-blue-600 rounded hover:bg-slate-100 cursor-pointer"
                               title="Update Task"
                             >
                               <Edit size={14} />
@@ -503,7 +503,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                             <button
                               onClick={() => handleDelete(t)}
                               disabled={currentUser.role !== "Admin" && currentUser.id !== t.owner}
-                              className="p-1 px-1.5 text-slate-500 hover:text-red-400 disabled:opacity-20 rounded hover:bg-slate-700/50 cursor-pointer"
+                              className="p-1 px-1.5 text-slate-400 hover:text-red-500 disabled:opacity-20 rounded hover:bg-slate-100 cursor-pointer"
                               title="Delete Task"
                             >
                               <Trash2 size={14} />
@@ -516,74 +516,74 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                       {hasChildren && isExpanded && children.map((c) => {
                         const childLimit = calculateDaysLeft(c.dueDate, c.status);
                         return (
-                          <tr key={c.id} className="bg-slate-800/10 hover:bg-slate-800/15 border-l-2 border-blue-500/50 transition-colors group">
-                            <td className="py-3 px-6 pl-10 font-mono text-xs font-semibold text-slate-500">
+                          <tr key={c.id} className="bg-slate-50/50 hover:bg-blue-50/20 border-l-2 border-blue-500/80 transition-colors group">
+                            <td className="py-3 px-6 pl-10 font-mono text-xs font-semibold text-slate-450">
                               {c.id}
                             </td>
-                            <td className="py-3 px-6 text-slate-300">
-                              <span className="text-slate-500 font-sans text-xs mr-1">└─</span>
+                            <td className="py-3 px-6 text-slate-700">
+                              <span className="text-slate-400 font-sans text-xs mr-1">└─</span>
                               {c.name}
                             </td>
-                            <td className="py-3 px-6 text-slate-450 text-xs max-w-xs truncate" title={c.description}>
+                            <td className="py-3 px-6 text-slate-500 text-xs max-w-xs truncate" title={c.description}>
                               {c.description || "-"}
                             </td>
-                            <td className="py-3 px-6 text-slate-450 text-xs">{c.department}</td>
-                            <td className="py-3 px-6 text-slate-450 text-xs">{c.owner}</td>
+                            <td className="py-3 px-6 text-slate-500 text-xs">{c.department}</td>
+                            <td className="py-3 px-6 text-slate-500 text-xs">{c.owner}</td>
                             <td className="py-3 px-6">
-                              <span className={`text-[9px] font-medium tracking-wide border font-mono px-1.5 py-0.5 rounded-full ${getStatusStyle(c.status)}`}>
+                              <span className={`text-[9px] font-bold tracking-wide border font-mono px-1.5 py-0.5 rounded-full ${getStatusStyle(c.status)}`}>
                                 {c.status}
                               </span>
                             </td>
-                            <td className="py-3 px-6 text-slate-450 text-xs">{c.tags || "-"}</td>
+                            <td className="py-3 px-6 text-slate-500 text-xs">{c.tags || "-"}</td>
                             <td className={`py-3 px-6 text-center text-xs font-mono ${childLimit.style}`}>{childLimit.text}</td>
                             <td className="py-3 px-6">
-                              <span className={`text-[9px] font-medium tracking-wide border font-mono px-1.5 py-0.5 rounded-full ${getPriorityStyle(c.priority)}`}>
+                              <span className={`text-[9px] font-bold tracking-wide border font-mono px-1.5 py-0.5 rounded-full ${getPriorityStyle(c.priority)}`}>
                                 {c.priority}
                               </span>
                             </td>
                             <td className="py-3 px-6">
-                              <div className="flex flex-col gap-1 w-full max-w-[150px] font-mono text-[9px] font-medium text-slate-500">
+                              <div className="flex flex-col gap-1 w-full max-w-[150px] font-mono text-[9px] font-semibold text-slate-500">
                                 <div className="flex items-center justify-between">
                                   <span>Manual: {c.completion || 0}%</span>
                                   <span style={{ color: getHeatmapColor(c.autoProgress) }}>Auto: {c.autoProgress || 0}%</span>
                                 </div>
-                                <div className="h-1.5 w-full bg-slate-700/60 rounded-full relative overflow-hidden" title={`Manual: ${c.completion || 0}%, Auto target: ${c.autoProgress || 0}%`}>
+                                <div className="h-1.5 w-full bg-slate-100 rounded-full relative overflow-hidden" title={`Manual: ${c.completion || 0}%, Auto target: ${c.autoProgress || 0}%`}>
                                   <div
-                                    className="absolute inset-y-0 left-0 opacity-45"
+                                    className="absolute inset-y-0 left-0 opacity-25"
                                     style={{
                                       width: `${c.autoProgress || 0}%`,
                                       backgroundColor: getHeatmapColor(c.autoProgress)
                                     }}
                                   ></div>
                                   <div
-                                    className="absolute inset-y-0 left-0 bg-blue-500 rounded-full"
+                                    className="absolute inset-y-0 left-0 bg-blue-600 rounded-full"
                                     style={{ width: `${c.completion || 0}%` }}
                                   ></div>
                                 </div>
                               </div>
                             </td>
-                            <td className="py-3 px-6 text-slate-450 text-xs font-mono">{c.group || "-"}</td>
+                            <td className="py-3 px-6 text-slate-500 text-xs font-mono">{c.group || "-"}</td>
                             <td className="py-3 px-6">
-                              <span className="text-slate-500">-</span>
+                              <span className="text-slate-400">-</span>
                             </td>
                             <td className="py-3 px-6 text-center">
                               <div className="flex items-center justify-center gap-1">
                                 <button
                                   onClick={() => viewTaskDetails(c)}
-                                  className="p-1 text-slate-500 hover:text-slate-100 rounded hover:bg-slate-700/50 cursor-pointer"
+                                  className="p-1 text-slate-400 hover:text-slate-800 rounded hover:bg-slate-100 cursor-pointer"
                                 >
                                   <Eye size={12} />
                                 </button>
                                 <button
                                   onClick={() => handleEditClick(c)}
-                                  className="p-1 text-slate-500 hover:text-blue-400 rounded hover:bg-slate-700/50 cursor-pointer"
+                                  className="p-1 text-slate-400 hover:text-blue-600 rounded hover:bg-slate-100 cursor-pointer"
                                 >
                                   <Edit size={12} />
                                 </button>
                                 <button
                                   onClick={() => handleDelete(c)}
                                   disabled={currentUser.role !== "Admin" && currentUser.id !== c.owner}
-                                  className="p-1 text-slate-500 hover:text-red-400 disabled:opacity-20 rounded hover:bg-slate-700/50 cursor-pointer"
+                                  className="p-1 text-slate-400 hover:text-red-500 disabled:opacity-20 rounded hover:bg-slate-100 cursor-pointer"
                                 >
                                   <Trash2 size={12} />
                                 </button>
@@ -592,7 +592,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                           </tr>
                         );
                       })}
-                    </>
+                    </React.Fragment>
                   );
                 })
               )}

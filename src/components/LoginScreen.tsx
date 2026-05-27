@@ -35,18 +35,18 @@ export default function LoginScreen({ onLoginSuccess }: LoginProps) {
   };
 
   return (
-    <div className="min-h-screen bg-[#f1f5f9] flex items-center justify-center p-4 selection:bg-blue-600/10 selection:text-blue-700 relative overflow-hidden">
+    <div className="min-h-screen bg-[#f8fafd] flex items-center justify-center p-4 selection:bg-blue-600/10 selection:text-blue-700 relative overflow-hidden">
       {/* Decorative ambient light background glows */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-      <div className="w-full max-w-md bg-white rounded-3xl p-8 border border-slate-200/80 shadow-xl relative z-10 transition-all duration-300 hover:border-blue-500/10">
+      <div className="w-full max-w-md bg-white rounded-3xl p-8 border border-slate-200/50 shadow-xl relative z-10 transition-all duration-300 hover:border-blue-500/20">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#2c3e50] to-[#3498db] text-white mb-4 border border-white/20 shadow-md shadow-blue-500/5 animate-pulse-subtle">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 mb-4 border border-blue-105 shadow-sm">
             <Kanban size={28} />
           </div>
-          <h2 className="text-3xl font-display font-extrabold text-slate-800 tracking-tight">Project Yajur</h2>
-          <p className="text-slate-500 text-sm mt-2 font-sans font-medium">Automate to Innovate.</p>
+          <h2 className="text-3xl font-display font-extrabold text-slate-900 tracking-tight">Project Yajur</h2>
+          <p className="text-slate-550 text-sm mt-2 font-sans font-medium">Automate to Innovate.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -85,8 +85,8 @@ export default function LoginScreen({ onLoginSuccess }: LoginProps) {
           </div>
 
           {error && (
-            <div className="bg-red-500/5 border border-red-500/10 text-red-650 text-xs py-3 px-4 rounded-xl flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-red-550 rounded-full shrink-0"></span>
+            <div className="bg-red-50 border border-red-200 text-red-700 text-xs py-3 px-4 rounded-xl flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-red-600 rounded-full shrink-0"></span>
               <span>{error}</span>
             </div>
           )}
@@ -94,7 +94,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginProps) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3.5 px-4 bg-gradient-to-r from-[#2c3e50] via-[#2c3e50] to-[#3498db] hover:from-[#1e2b38] hover:to-[#258cd1] disabled:from-slate-200 disabled:to-slate-200 disabled:text-slate-400 text-white font-bold rounded-xl shadow-lg hover:shadow-blue-500/5 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer border-t border-white/10"
+            className="w-full py-3.5 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-200 disabled:text-slate-400 text-white font-bold rounded-xl shadow-md shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/15 transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
           >
             {loading ? (
               <>
