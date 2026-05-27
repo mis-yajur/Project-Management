@@ -294,7 +294,10 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
   const getTaskRecipientUser = (t: Task) => {
     if (t.tags) {
-      const match = activeUsers.find(u => u.username?.toLowerCase() === t.tags.toLowerCase());
+      const match = activeUsers.find(
+        u => (u.username?.toLowerCase() === t.tags.toLowerCase() ||
+              u.name?.toLowerCase() === t.tags.toLowerCase())
+      );
       if (match) return match;
     }
     if (t.owner) {
