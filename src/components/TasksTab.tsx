@@ -374,7 +374,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       const cleanTag = String(t.tags).trim().toLowerCase();
       const match = activeUsers.find(
         u => (String(u.username).trim().toLowerCase() === cleanTag ||
-              String(u.name).trim().toLowerCase() === cleanTag)
+              String(u.fullName).trim().toLowerCase() === cleanTag)
       );
       if (match) return match;
     }
