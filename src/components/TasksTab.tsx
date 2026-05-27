@@ -319,14 +319,14 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     const s = status.toLowerCase();
     if (s.includes("progress")) return "bg-blue-50 text-blue-700 border-blue-200";
     if (s.includes("review")) return "bg-amber-50 text-amber-700 border-amber-200";
-    if (s.includes("test")) return "bg-cyan-50 text-cyan-750 border-cyan-200";
+    if (s.includes("test")) return "bg-cyan-50 text-cyan-700 border-cyan-200";
     if (s.includes("closed")) return "bg-slate-100 text-slate-600 border-slate-200";
     return "bg-green-50 text-green-700 border-green-200";
   };
 
   const getPriorityStyle = (priority: string) => {
     const p = (priority || "").toLowerCase();
-    if (p.includes("high")) return "bg-rose-50 text-rose-750 border-rose-200";
+    if (p.includes("high")) return "bg-rose-50 text-rose-700 border-rose-200";
     if (p.includes("low")) return "bg-green-50 text-green-700 border-green-200";
     if (p.includes("medium")) return "bg-amber-50 text-amber-700 border-amber-200";
     return "bg-slate-100 text-slate-600 border-slate-200";
@@ -359,9 +359,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     const d = Math.ceil((due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
     
     if (d < 0) {
-      return { text: `${Math.abs(d)}d overdue`, style: "text-red-650 font-semibold" };
+      return { text: `${Math.abs(d)}d overdue`, style: "text-red-600 font-semibold" };
     } else if (d <= 2) {
-      return { text: `${d}d left`, style: "text-amber-650 font-semibold" };
+      return { text: `${d}d left`, style: "text-amber-600 font-semibold" };
     }
     return { text: `${d} days`, style: "text-slate-600" };
   };
@@ -385,7 +385,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       const match = activeUsers.find(
         u => (String(u.id).trim().toLowerCase() === cleanOwner ||
               String(u.username).trim().toLowerCase() === cleanOwner ||
-              String(u.name).trim().toLowerCase() === cleanOwner)
+              String(u.fullName).trim().toLowerCase() === cleanOwner)
       );
       if (match) return match;
     }
@@ -396,9 +396,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
   const handleSendWhatsApp = async (t: Task) => {
     const recipient = getTaskRecipientUser(t);
     const defaultPhone = recipient?.contactNumber || "";
-    const doerName = recipient?.name || t.tags || "Team Member";
+    const doerName = recipient?.fullName || t.tags || "Team Member";
 
-    let phoneVal = defaultPhone.trim().replace(/[+\s-]/g, "");
+    let phoneVal = String(defaultPhone).trim().replace(/[+\s-]/g, "");
 
     // If we have a phone number on file, present a direct click-to-confirm dialog instead of asking to type
     if (phoneVal) {
@@ -601,11 +601,11 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         }}
         onDrop={(e) => handleCardDropOnCard(e, t.id)}
         className={`bg-white p-4 rounded-xl border border-slate-200/90 shadow-xs hover:shadow-md cursor-grab active:cursor-grabbing transition-all ${
-          draggedTaskId === t.id ? "opacity-30 scale-95 border-blue-450" : ""
+          draggedTaskId === t.id ? "opacity-30 scale-95 border-blue-500" : ""
         }`}
       >
         <div className="flex items-start justify-between gap-1 mb-2">
-          <span className="text-[10px] font-mono font-bold text-slate-450 uppercase tracking-widest flex flex-col">
+          <span className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest flex flex-col">
             <span>{t.id}</span>
             {parentName && <span className="text-blue-500 text-[9px] lowercase font-sans font-normal truncate mt-0.5 max-w-[140px]" title={`Parent task: ${parentName}`}>part of: {parentName}</span>}
           </span>
@@ -654,7 +654,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         </h4>
 
         {t.description && (
-          <p className="text-[11px] text-slate-450 line-clamp-1 mb-2.5 bg-slate-50/50 p-1 rounded-md px-1.5" title={t.description}>
+          <p className="text-[11px] text-slate-500 line-clamp-1 mb-2.5 bg-slate-50/50 p-1 rounded-md px-1.5" title={t.description}>
             {t.description}
           </p>
         )}
@@ -788,12 +788,12 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           </select>
         </div>
         <div className="relative">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-450 pointer-events-none">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 pointer-events-none">
             <Search size={16} />
           </span>
           <input
             type="text"
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-800 placeholder-slate-450 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
             placeholder="Search tasks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -804,7 +804,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
             api.clearCache();
             loadData();
           }}
-          className="px-4 py-2 border border-slate-200 hover:bg-slate-50 font-medium text-xs text-slate-755 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-300 transition-all duration-200"
+          className="px-4 py-2 border border-slate-200 hover:bg-slate-50 font-medium text-xs text-slate-700 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-300 transition-all duration-200"
         >
           <RotateCw size={12} />
           Reload List
@@ -833,7 +833,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                   <th className="py-4 px-6 text-center w-28">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 text-sm text-slate-755">
+              <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
                 {loading ? (
                   <tr>
                     <td colSpan={13} className="py-20 text-center">
@@ -858,11 +858,11 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                       <React.Fragment key={t.id}>
                         {/* Parent Row */}
                         <tr className="hover:bg-slate-50/70 transition-colors group">
-                          <td className="py-4 px-6 flex items-center gap-1.5 font-mono text-xs font-semibold text-slate-505">
+                          <td className="py-4 px-6 flex items-center gap-1.5 font-mono text-xs font-semibold text-slate-500">
                             {hasChildren ? (
                               <button
                                 onClick={(e) => toggleParent(t.id, e)}
-                                className="text-blue-505 hover:bg-slate-100 p-0.5 rounded cursor-pointer"
+                                className="text-blue-500 hover:bg-slate-100 p-0.5 rounded cursor-pointer"
                               >
                                 {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                               </button>
@@ -881,7 +881,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                             )}
                           </td>
                           <td className="py-4 px-6 font-semibold text-slate-805">{t.name}</td>
-                          <td className="py-4 px-6 text-slate-505 max-w-xs truncate" title={t.description}>
+                          <td className="py-4 px-6 text-slate-500 max-w-xs truncate" title={t.description}>
                             {t.description || "-"}
                           </td>
                           <td className="py-4 px-6 text-slate-500">{t.department}</td>
@@ -891,7 +891,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                               {t.status}
                             </span>
                           </td>
-                          <td className="py-4 px-6 text-slate-505">{t.tags || "-"}</td>
+                          <td className="py-4 px-6 text-slate-500">{t.tags || "-"}</td>
                           <td className={`py-4 px-6 text-center text-xs font-mono ${dlimit.style}`}>{dlimit.text}</td>
                           <td className="py-4 px-6">
                             <span className={`text-[10px] font-bold tracking-wide border font-mono px-2 py-0.5 rounded-full ${getPriorityStyle(t.priority)}`}>
@@ -899,7 +899,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                             </span>
                           </td>
                           <td className="py-4 px-6">
-                            <div className="flex flex-col gap-1 w-full font-mono text-[10px] font-semibold text-slate-505">
+                            <div className="flex flex-col gap-1 w-full font-mono text-[10px] font-semibold text-slate-500">
                               <div className="flex items-center justify-between">
                                 <span>Manual Done:</span>
                                 <span className="font-bold text-blue-606">{t.completion || 0}%</span>
@@ -925,7 +925,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                               </div>
                             </div>
                           </td>
-                          <td className="py-4 px-6 text-slate-505 font-mono text-xs">{t.group || "-"}</td>
+                          <td className="py-4 px-6 text-slate-500 font-mono text-xs">{t.group || "-"}</td>
                           <td className="py-4 px-6">
                             <select
                               className="bg-slate-55 border border-slate-200 rounded-md px-1.5 py-1 text-xs text-slate-606 focus:outline-none focus:bg-white"
@@ -983,7 +983,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                           const childLimit = calculateDaysLeft(c.dueDate, c.status);
                           return (
                             <tr key={c.id} className="bg-slate-50/50 hover:bg-blue-50/20 border-l-2 border-blue-500/80 transition-colors group">
-                              <td className="py-3 px-6 pl-10 font-mono text-xs font-semibold text-slate-450">
+                              <td className="py-3 px-6 pl-10 font-mono text-xs font-semibold text-slate-500">
                                 {c.id}
                               </td>
                               <td className="py-3 px-6 text-slate-700">
@@ -1035,7 +1035,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                               <td className="py-3 px-6 text-center">
                                 <MaterialPopoverMenu
                                   trigger={
-                                    <button className="mx-auto px-2 py-1 text-[10px] font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-slate-650 hover:text-slate-850 transition-all flex items-center justify-center gap-1 active:scale-95 cursor-pointer shadow-xs">
+                                    <button className="mx-auto px-2 py-1 text-[10px] font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-slate-600 hover:text-slate-800 transition-all flex items-center justify-center gap-1 active:scale-95 cursor-pointer shadow-xs">
                                       Actions <ChevronRight size={10} className="opacity-80 text-slate-400" />
                                     </button>
                                   }
@@ -1091,9 +1091,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           {[
             { id: "Open", title: "Open 📂", color: "border-emerald-250 text-emerald-800 bg-emerald-50/45" },
             { id: "In Progress", title: "In Progress ⚙️", color: "border-blue-250 text-blue-800 bg-blue-50/45" },
-            { id: "In Review", title: "In Review 👀", color: "border-amber-250 text-amber-850 bg-amber-50/45" },
+            { id: "In Review", title: "In Review 👀", color: "border-amber-250 text-amber-800 bg-amber-50/45" },
             { id: "To Be Tested", title: "To Be Tested 🧪", color: "border-cyan-250 text-cyan-800 bg-cyan-50/45" },
-            { id: "Closed", title: "Closed ✅", color: "border-slate-350 text-slate-700 bg-slate-50/45" }
+            { id: "Closed", title: "Closed ✅", color: "border-slate-400 text-slate-700 bg-slate-50/45" }
           ].map((col) => {
             const colTasks = sortTasksByCustomOrder(
               filteredTasks.filter((task) => task.status === col.id)
@@ -1108,7 +1108,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 onDrop={(e) => handleColumnDrop(e, col.id, "status")}
                 className={`flex flex-col min-h-[520px] rounded-2xl p-4 border transition-all duration-250 ${
                   isOver
-                    ? "bg-blue-50/60 border-blue-450 border-dashed ring-4 ring-blue-500/5 scale-[1.01]"
+                    ? "bg-blue-50/60 border-blue-500 border-dashed ring-4 ring-blue-500/5 scale-[1.01]"
                     : "bg-slate-50/80 border-slate-200/60"
                 }`}
               >
@@ -1156,7 +1156,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 onDrop={(e) => handleColumnDrop(e, gId, "group")}
                 className={`flex flex-col min-h-[520px] w-80 shrink-0 rounded-2xl p-4 border transition-all duration-250 ${
                   isOver
-                    ? "bg-blue-50/60 border-blue-450 border-dashed ring-4 ring-blue-500/5 scale-[1.01]"
+                    ? "bg-blue-50/60 border-blue-500 border-dashed ring-4 ring-blue-500/5 scale-[1.01]"
                     : "bg-slate-50/80 border-slate-200/60"
                 }`}
               >
@@ -1191,8 +1191,8 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       {/* CREATE MODAL */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border border-slate-700 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-700/65 flex justify-between items-center bg-slate-900/50">
+          <div className="bg-white w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border border-slate-200 shadow-xl animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-200 shadow-xl/65 flex justify-between items-center bg-slate-900/50">
               <h3 className="text-lg font-display font-medium text-slate-200">Create Task Deliverable</h3>
               <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-100 text-sm font-semibold cursor-pointer">✕</button>
             </div>
@@ -1203,7 +1203,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Task Name</label>
                     <input
                       type="text"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. Conduct compliance checks"
                       value={createForm.name}
                       onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
@@ -1213,7 +1213,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Department Segment</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                       value={createForm.department}
                       onChange={(e) => setCreateForm({ ...createForm, department: e.target.value })}
                       required
@@ -1229,7 +1229,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Description</label>
                   <textarea
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
                     placeholder="Enter detailed instructions or bullet items..."
                     rows={3}
                     value={createForm.description}
@@ -1242,7 +1242,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Start Date</label>
                     <input
                       type="date"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                       value={createForm.startDate}
                       onChange={(e) => setCreateForm({ ...createForm, startDate: e.target.value })}
                       required
@@ -1252,7 +1252,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Due Date</label>
                     <input
                       type="date"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                       value={createForm.dueDate}
                       onChange={(e) => setCreateForm({ ...createForm, dueDate: e.target.value })}
                       required
@@ -1264,7 +1264,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Priority</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                       value={createForm.priority}
                       onChange={(e) => setCreateForm({ ...createForm, priority: e.target.value })}
                     >
@@ -1277,7 +1277,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Doer (Assignee Tags)</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                       value={createForm.tags}
                       onChange={(e) => setCreateForm({ ...createForm, tags: e.target.value })}
                     >
@@ -1294,7 +1294,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Group Index</label>
                     <input
                       type="text"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. Phase-1, Project-Alpha"
                       value={createForm.group || ""}
                       onChange={(e) => setCreateForm({ ...createForm, group: e.target.value })}
@@ -1303,7 +1303,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Milestone Owner</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                       value={createForm.owner}
                       onChange={(e) => setCreateForm({ ...createForm, owner: e.target.value })}
                     >
@@ -1320,7 +1320,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     <input
                       type="checkbox"
                       id="createIsSubtask"
-                      className="w-4 h-4 text-blue-600 bg-slate-900 border-slate-700 rounded focus:ring-blue-500 focus:ring-1"
+                      className="w-4 h-4 text-blue-600 bg-slate-900 border-slate-200 shadow-xl rounded focus:ring-blue-500 focus:ring-1"
                       checked={isSubtask}
                       onChange={(e) => setIsSubtask(e.target.checked)}
                     />
@@ -1332,7 +1332,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                   <div className="space-y-1.5 transition-all">
                     <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Select Parent Miletone</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                       value={createForm.parentTaskId}
                       onChange={(e) => setCreateForm({ ...createForm, parentTaskId: e.target.value })}
                       required
@@ -1346,7 +1346,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 )}
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-700/60 bg-slate-900/50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-200 shadow-xl/60 bg-slate-900/50 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
@@ -1371,8 +1371,8 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       {/* UPDATE MODAL */}
       {showEditModal && selectedTask && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-700 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-700/65 flex justify-between items-center bg-slate-900/50">
+          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-200 shadow-xl animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-200 shadow-xl/65 flex justify-between items-center bg-slate-900/50">
               <h3 className="text-lg font-display font-medium text-slate-200">Update Deliverable details: {selectedTask.id}</h3>
               <button onClick={() => setShowEditModal(false)} className="text-slate-400 hover:text-slate-100 text-sm font-semibold cursor-pointer">✕</button>
             </div>
@@ -1381,7 +1381,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Status</label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                     value={editForm.status}
                     onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
                   >
@@ -1413,7 +1413,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Priority</label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                     value={editForm.priority}
                     onChange={(e) => setEditForm({ ...editForm, priority: e.target.value })}
                   >
@@ -1427,7 +1427,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Milestone Owner</label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                     value={editForm.owner}
                     onChange={(e) => setEditForm({ ...editForm, owner: e.target.value })}
                   >
@@ -1439,7 +1439,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-700/60 bg-slate-900/50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-200 shadow-xl/60 bg-slate-900/50 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
@@ -1464,13 +1464,13 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       {/* VIEW MODAL */}
       {showViewModal && selectedTask && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-slate-700 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-700/65 flex justify-between items-center bg-slate-900/50">
+          <div className="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-slate-200 shadow-xl animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-200 shadow-xl/65 flex justify-between items-center bg-slate-900/50">
               <h3 className="text-lg font-display font-medium text-slate-200">Milestone Details & Ledger</h3>
               <button onClick={() => setShowViewModal(false)} className="text-slate-400 hover:text-slate-100 text-sm font-semibold cursor-pointer">✕</button>
             </div>
             <div className="p-6 overflow-y-auto max-h-[70vh]">
-              <table className="w-full text-slate-350 border-collapse divide-y divide-slate-750 font-sans text-sm">
+              <table className="w-full text-slate-400 border-collapse divide-y divide-slate-200/60 font-sans text-sm">
                 <tbody>
                   {[
                     { label: "Task ID", val: selectedTask.id },
@@ -1490,7 +1490,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     { label: "Dependency Factor", val: selectedTask.dependency || "No" },
                     { label: "Created Date", val: selectedTask.createdDate ? new Date(selectedTask.createdDate).toLocaleString() : "-" }
                   ].map((row, i) => (
-                    <tr key={i} className="py-2.5 flex justify-between items-start border-b border-slate-700/40">
+                    <tr key={i} className="py-2.5 flex justify-between items-start border-b border-slate-200 shadow-xl/40">
                       <td className="font-medium text-slate-400 uppercase text-[10px] tracking-wider py-2 font-mono w-44">{row.label}</td>
                       <td className="text-slate-200 text-right font-medium max-w-xs break-words py-2 font-sans">{row.val}</td>
                     </tr>
@@ -1498,7 +1498,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </tbody>
               </table>
             </div>
-            <div className="px-6 py-4 border-t border-slate-700/60 bg-slate-900/50 flex justify-end gap-3">
+            <div className="px-6 py-4 border-t border-slate-200 shadow-xl/60 bg-slate-900/50 flex justify-end gap-3">
               <button
                 type="button"
                 onClick={() => {
@@ -1524,8 +1524,8 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       {/* QUICK DEPENDENCY MODAL */}
       {showDependencyModal && dependencyTargetTask && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-slate-700 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-700/65 flex justify-between items-center bg-slate-900/50">
+          <div className="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-slate-200 shadow-xl animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-200 shadow-xl/65 flex justify-between items-center bg-slate-900/50">
               <div className="space-y-1">
                 <h3 className="text-lg font-display font-medium text-slate-200">Establish Task Dependency</h3>
                 <p className="text-[11px] text-slate-400">
@@ -1543,10 +1543,10 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
             <form onSubmit={handleDependencySubmit}>
               <div className="p-6 space-y-4 max-h-[65vh] overflow-y-auto">
                 {/* Target Info Read Only */}
-                <div className="bg-slate-900/40 border border-slate-700/40 rounded-xl p-3.5 space-y-2">
+                <div className="bg-slate-900/40 border border-slate-200 shadow-xl/40 rounded-xl p-3.5 space-y-2">
                   <div className="flex justify-between items-center text-xs text-slate-400">
                     <span>Target Dependent Task:</span>
-                    <span className="font-bold text-slate-350 bg-slate-800 px-1.5 py-0.5 rounded font-mono">{dependencyTargetTask.id}</span>
+                    <span className="font-bold text-slate-400 bg-white px-1.5 py-0.5 rounded font-mono">{dependencyTargetTask.id}</span>
                   </div>
                   <h4 className="text-sm font-semibold text-slate-200">{dependencyTargetTask.name}</h4>
                   <div className="text-xs text-slate-400 font-medium">Department: <span className="text-slate-300">{dependencyTargetTask.department}</span></div>
@@ -1558,7 +1558,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     Predecessor (Depends On)
                   </label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                     value={dependencyForm.dependsOn}
                     onChange={(e) => setDependencyForm({ ...dependencyForm, dependsOn: e.target.value })}
                     required
@@ -1580,7 +1580,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     Constraint Type
                   </label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
                     value={dependencyForm.type}
                     onChange={(e) => setDependencyForm({ ...dependencyForm, type: e.target.value })}
                     required
@@ -1598,7 +1598,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     Predecessor Notes
                   </label>
                   <textarea
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
                     placeholder="Provide context regarding pre-requisite actions..."
                     rows={2}
                     value={dependencyForm.notes}
@@ -1607,7 +1607,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-700/60 bg-slate-900/50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-200 shadow-xl/60 bg-slate-900/50 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowDependencyModal(false)}
