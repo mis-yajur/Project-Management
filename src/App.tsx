@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LayoutDashboard, ListTodo, AlertCircle, Link, Users, Building2, Bell, LogOut, Loader2, Sparkles } from "lucide-react";
+import { LayoutDashboard, ListTodo, AlertCircle, Link, Users, Building2, Bell, LogOut, Loader2, Sparkles, BarChart3 } from "lucide-react";
 import LoginScreen from "./components/LoginScreen";
 import DashboardTab from "./components/DashboardTab";
 import TasksTab from "./components/TasksTab";
@@ -8,6 +8,7 @@ import DependenciesTab from "./components/DependenciesTab";
 import UsersTab from "./components/UsersTab";
 import DepartmentsTab from "./components/DepartmentsTab";
 import NotificationsTab from "./components/NotificationsTab";
+import ReportTab from "./components/ReportTab";
 import { User } from "./types";
 import { api } from "./api";
 
@@ -79,6 +80,7 @@ export default function App() {
     { id: "tasks", label: "Milestones Backlog", icon: ListTodo },
     { id: "issues", label: "Blockers & Issues", icon: AlertCircle },
     { id: "dependency", label: "Predecessor Links", icon: Link },
+    { id: "reports", label: "Ledger Reports", icon: BarChart3 },
     { id: "users", label: "Team Members", icon: Users, adminOnly: true },
     { id: "departments", label: "Segment Departments", icon: Building2, adminOnly: true },
     { id: "notifications", label: "System Alerts", icon: Bell },
@@ -193,6 +195,12 @@ export default function App() {
 
           {activeTab === "issues" && (
             <IssuesTab
+              currentUser={currentUser}
+            />
+          )}
+
+          {activeTab === "reports" && (
+            <ReportTab
               currentUser={currentUser}
             />
           )}
