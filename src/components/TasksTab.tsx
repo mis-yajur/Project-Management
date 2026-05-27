@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ListTodo, Plus, Search, RotateCw, Edit, Trash2, Eye, Loader2, ChevronDown, ChevronRight, HelpCircle, MessageCircle } from "lucide-react";
 import { api } from "../api";
 import { Task, User } from "../types";
+import MaterialPopoverMenu from "./MaterialPopoverMenu";
 
 interface TasksTabProps {
   currentUser: User;
@@ -404,7 +405,10 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           />
         </div>
         <button
-          onClick={loadData}
+          onClick={() => {
+            api.clearCache();
+            loadData();
+          }}
           className="px-4 py-2 border border-slate-200 hover:bg-slate-50 font-medium text-xs text-slate-755 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-300 transition-all duration-200"
         >
           <RotateCw size={12} />
@@ -539,37 +543,39 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                           </select>
                         </td>
                         <td className="py-4 px-6 text-center">
-                          <div className="flex items-center justify-center gap-1">
-                            <button
-                              onClick={() => handleSendWhatsApp(t)}
-                              className="p-1 px-1.5 text-green-600 hover:text-green-700 hover:bg-green-50 rounded cursor-pointer transition-colors"
-                              title="Send Template via WhatsApp"
-                            >
-                              <MessageCircle size={14} className="fill-current opacity-90" />
-                            </button>
-                            <button
-                              onClick={() => viewTaskDetails(t)}
-                              className="p-1 px-1.5 text-slate-400 hover:text-slate-850 rounded hover:bg-slate-100 cursor-pointer"
-                              title="View Details"
-                            >
-                              <Eye size={14} />
-                            </button>
-                            <button
-                              onClick={() => handleEditClick(t)}
-                              className="p-1 px-1.5 text-slate-400 hover:text-blue-600 rounded hover:bg-slate-100 cursor-pointer"
-                              title="Update Task"
-                            >
-                              <Edit size={14} />
-                            </button>
-                            <button
-                              onClick={() => handleDelete(t)}
-                              disabled={currentUser.role !== "Admin" && currentUser.id !== t.owner}
-                              className="p-1 px-1.5 text-slate-400 hover:text-red-500 disabled:opacity-20 rounded hover:bg-slate-100 cursor-pointer"
-                              title="Delete Task"
-                            >
-                              <Trash2 size={14} />
-                            </button>
-                          </div>
+                          <MaterialPopoverMenu
+                            trigger={
+                              <button className="mx-auto px-3 py-1.5 text-xs font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-xl text-slate-700 hover:text-slate-800 transition-all flex items-center justify-center gap-1 active:scale-95 cursor-pointer shadow-xs">
+                                Actions <ChevronRight size={12} className="opacity-80 text-slate-400" />
+                              </button>
+                            }
+                            items={[
+                              {
+                                label: "View Details",
+                                icon: <Eye size={14} className="text-blue-500" />,
+                                onClick: () => viewTaskDetails(t)
+                              },
+                              {
+                                label: "Update Milestone",
+                                icon: <Edit size={14} className="text-amber-500" />,
+                                onClick: () => handleEditClick(t)
+                              },
+                              {
+                                label: "Send Auto WhatsApp",
+                                icon: <MessageCircle size={14} className="text-emerald-500" />,
+                                onClick: () => handleSendWhatsApp(t)
+                              },
+                              {
+                                label: "Delete Milestone",
+                                icon: <Trash2 size={14} className="text-rose-500" />,
+                                onClick: () => handleDelete(t),
+                                danger: true,
+                                className: (currentUser.role !== "Admin" && currentUser.id !== t.owner) ? "opacity-30 cursor-not-allowed pointer-events-none" : ""
+                              }
+                            ]}
+                            shape="standard"
+                            enableHighlight={true}
+                          />
                         </td>
                       </tr>
 
@@ -628,34 +634,39 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                               <span className="text-slate-400">-</span>
                             </td>
                             <td className="py-3 px-6 text-center">
-                              <div className="flex items-center justify-center gap-1">
-                                <button
-                                  onClick={() => handleSendWhatsApp(c)}
-                                  className="p-1 text-green-600 hover:text-green-700 hover:bg-green-50 rounded cursor-pointer transition-colors"
-                                  title="Send Template via WhatsApp"
-                                >
-                                  <MessageCircle size={12} className="fill-current opacity-90" />
-                                </button>
-                                <button
-                                  onClick={() => viewTaskDetails(c)}
-                                  className="p-1 text-slate-400 hover:text-slate-800 rounded hover:bg-slate-100 cursor-pointer"
-                                >
-                                  <Eye size={12} />
-                                </button>
-                                <button
-                                  onClick={() => handleEditClick(c)}
-                                  className="p-1 text-slate-400 hover:text-blue-600 rounded hover:bg-slate-100 cursor-pointer"
-                                >
-                                  <Edit size={12} />
-                                </button>
-                                <button
-                                  onClick={() => handleDelete(c)}
-                                  disabled={currentUser.role !== "Admin" && currentUser.id !== c.owner}
-                                  className="p-1 text-slate-400 hover:text-red-500 disabled:opacity-20 rounded hover:bg-slate-100 cursor-pointer"
-                                >
-                                  <Trash2 size={12} />
-                                </button>
-                              </div>
+                              <MaterialPopoverMenu
+                                trigger={
+                                  <button className="mx-auto px-2 py-1 text-[10px] font-bold bg-slate-50 hover:bg-slate-100 border border-slate-200/80 rounded-lg text-slate-650 hover:text-slate-850 transition-all flex items-center justify-center gap-1 active:scale-95 cursor-pointer shadow-xs">
+                                    Actions <ChevronRight size={10} className="opacity-80 text-slate-400" />
+                                  </button>
+                                }
+                                items={[
+                                  {
+                                    label: "View Details",
+                                    icon: <Eye size={12} className="text-blue-500" />,
+                                    onClick: () => viewTaskDetails(c)
+                                  },
+                                  {
+                                    label: "Update Milestone",
+                                    icon: <Edit size={12} className="text-amber-500" />,
+                                    onClick: () => handleEditClick(c)
+                                  },
+                                  {
+                                    label: "Send Auto WhatsApp",
+                                    icon: <MessageCircle size={12} className="text-emerald-500" />,
+                                    onClick: () => handleSendWhatsApp(c)
+                                  },
+                                  {
+                                    label: "Delete Milestone",
+                                    icon: <Trash2 size={12} className="text-rose-500" />,
+                                    onClick: () => handleDelete(c),
+                                    danger: true,
+                                    className: (currentUser.role !== "Admin" && currentUser.id !== c.owner) ? "opacity-30 cursor-not-allowed pointer-events-none" : ""
+                                  }
+                                ]}
+                                shape="standard"
+                                enableHighlight={true}
+                              />
                             </td>
                           </tr>
                         );

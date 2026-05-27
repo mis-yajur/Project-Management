@@ -266,7 +266,10 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
           />
         </div>
         <button
-          onClick={loadData}
+          onClick={() => {
+            api.clearCache();
+            loadData();
+          }}
           className="px-4 py-2 border border-slate-700 hover:bg-slate-800 font-medium text-xs text-slate-300 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-600 transition-all duration-200"
         >
           <RotateCw size={12} />

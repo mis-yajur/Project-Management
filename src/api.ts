@@ -1,6 +1,35 @@
 // Client-side API caller to communicate with Express backend which proxies to local DB or Google Sheets.
 
+const clientCache = new Map<string, { data: any; timestamp: number }>();
+const CLIENT_CACHE_TTL_MS = 15000; // 15 seconds cache TTL
+
+function clearClientCache() {
+  clientCache.clear();
+  console.log("🧼 Client-side RAM cache flushed cleanly.");
+}
+
 export async function rpcCall(action: string, args: any[] = []): Promise<any> {
+  const isWrite = action.startsWith("create") || 
+                  action.startsWith("update") || 
+                  action.startsWith("delete") || 
+                  action.startsWith("save") || 
+                  action.startsWith("trigger") || 
+                  action.startsWith("login") ||
+                  action.startsWith("sendWhatsApp") ||
+                  action.startsWith("clear");
+
+  if (isWrite) {
+    clearClientCache();
+  } else {
+    // Check local client-side memory cache for super-fast offline-first responses
+    const cacheKey = `${action}::${JSON.stringify(args || [])}`;
+    const cachedEntry = clientCache.get(cacheKey);
+    if (cachedEntry && (Date.now() - cachedEntry.timestamp < CLIENT_CACHE_TTL_MS)) {
+      console.log(`⚡ [Client RAM Cache Hit] Auto-serving action [${action}] instantly`);
+      return cachedEntry.data;
+    }
+  }
+
   try {
     const isGitHubPages = window.location.hostname.endsWith(".github.io");
     const appsScriptUrl = "https://script.google.com/macros/s/AKfycbx8LMHDMa6ziSH5Vzv5C1E_C45LhXyfiaTqNXShesT8BAxZTsduoOBEdtB5nPU6Q5lqAg/exec";
@@ -26,7 +55,18 @@ export async function rpcCall(action: string, args: any[] = []): Promise<any> {
     }
 
     const textResult = await response.text();
-    return JSON.parse(textResult);
+    const resultJson = JSON.parse(textResult);
+
+    // If it is a read query and succeeded, save to client-side memory cache
+    if (!isWrite && resultJson && resultJson.success !== false) {
+      const cacheKey = `${action}::${JSON.stringify(args || [])}`;
+      clientCache.set(cacheKey, {
+        data: resultJson,
+        timestamp: Date.now()
+      });
+    }
+
+    return resultJson;
   } catch (error: any) {
     console.error(`RPC Exception for ${action}:`, error);
     return { success: false, message: error.message || String(error) };
@@ -35,6 +75,7 @@ export async function rpcCall(action: string, args: any[] = []): Promise<any> {
 
 // Named exports for clarity
 export const api = {
+  clearCache: () => clearClientCache(),
   login: (username: string, password: string) => rpcCall("loginUser", [username, password]),
   getDashboardCounts: (userId: string, role: string) => rpcCall("getDashboardCounts", [userId, role]),
   getTasks: (filter: string, userId: string, role: string) => rpcCall("getTasks", [filter, userId, role]),
