@@ -87,33 +87,36 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col antialiased selection:bg-blue-600/30 font-sans">
+    <div className="min-h-screen bg-[#0B0F19] text-slate-100 flex flex-col antialiased selection:bg-blue-600/30 font-sans">
       
       {/* Dynamic top control navbar */}
-      <header className="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/60 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="h-9 w-9 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md shadow-blue-500/10">
-            <Sparkles size={18} className="text-white animate-pulse" />
+      <header className="sticky top-0 z-40 bg-[#0F172A]/70 backdrop-blur-xl border-b border-slate-800/80 px-6 py-4 flex items-center justify-between shadow-xl shadow-black/20">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 bg-gradient-to-tr from-blue-500 via-indigo-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/10 border border-white/10 animate-pulse-subtle">
+            <Sparkles size={19} className="text-white" />
           </div>
           <div>
-            <h1 className="text-md font-display font-medium text-slate-100 tracking-tight leading-none">
-              Project Management Yajur
-            </h1>
-            <span className="text-[10px] text-slate-500 font-mono mt-1 block">Sheets Integrated Network Ledger v1.0</span>
+            <div className="flex items-center gap-2">
+              <h1 className="text-md font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-50 via-slate-100 to-slate-200 tracking-tight leading-none">
+                Project Management Yajur
+              </h1>
+              <span className="text-[9px] bg-blue-500/10 text-blue-400 border border-blue-500/20 px-1.5 py-0.5 rounded-full font-mono uppercase font-black">PRO</span>
+            </div>
+            <span className="text-[10px] text-slate-400 font-mono mt-1 block">Sheets Integrated Network Ledger v1.0</span>
           </div>
         </div>
 
         {/* User profile & Action capsule */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-3 bg-slate-800/30 px-3.5 py-1.5 rounded-full border border-slate-800">
-            <div className="h-6 w-6 rounded-full bg-blue-500/15 text-blue-400 font-bold border border-blue-500/20 text-xs flex items-center justify-center font-mono">
+          <div className="flex items-center gap-3 bg-slate-900/50 px-4 py-1.5 rounded-2xl border border-slate-800/80">
+            <div className="h-7 w-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-black border border-white/10 text-xs flex items-center justify-center font-mono shadow-inner shadow-white/25">
               {currentUser.username.substring(0, 2).toUpperCase()}
             </div>
             <div className="text-left hidden sm:block">
-              <span className="text-xs font-semibold text-slate-200 block max-w-[100px] truncate leading-none">
+              <span className="text-xs font-bold text-slate-200 block max-w-[130px] truncate leading-none">
                 {currentUser.name}
               </span>
-              <span className="text-[9px] text-blue-400 font-semibold font-mono block uppercase tracking-wider mt-0.5 leading-none">
+              <span className="text-[9px] text-indigo-400 font-semibold font-mono block uppercase tracking-wider mt-0.5 leading-none">
                 {currentUser.role}
               </span>
             </div>
@@ -121,10 +124,10 @@ export default function App() {
           
           <button
             onClick={handleLogout}
-            className="p-2 bg-slate-800/30 hover:bg-rose-500/10 text-slate-400 hover:text-rose-400 border border-slate-800 hover:border-rose-500/15 rounded-full cursor-pointer transition-all duration-150"
+            className="p-2 bg-slate-900/50 hover:bg-rose-500/10 text-slate-400 hover:text-rose-400 border border-slate-800 hover:border-rose-500/30 rounded-xl cursor-pointer transition-all duration-150"
             title="Log out of active session"
           >
-            <LogOut size={15} />
+            <LogOut size={16} />
           </button>
         </div>
       </header>
@@ -133,8 +136,8 @@ export default function App() {
       <div className="flex-1 flex flex-col md:flex-row">
         
         {/* Left Side menu drawers */}
-        <aside className="w-full md:w-64 bg-slate-900/25 border-b md:border-b-0 md:border-r border-slate-800/50 p-4 shrink-0 [content-visibility:auto]">
-          <nav className="space-y-1">
+        <aside className="w-full md:w-64 bg-[#0F172A]/20 border-b md:border-b-0 md:border-r border-slate-800/60 p-5 shrink-0 [content-visibility:auto]">
+          <nav className="space-y-1.5">
             {menuItems.map((item) => {
               if (item.adminOnly && !isAdmin) return null;
               const IconComp = item.icon;
@@ -149,16 +152,16 @@ export default function App() {
                     if (item.id !== "dependency") setDependencyOverrideSearch("");
                     setActiveTab(item.id);
                   }}
-                  className={`w-full text-left px-4 py-2.5 rounded-xl font-medium text-xs flex items-center gap-3 tracking-wide cursor-pointer group transition-all duration-150 ${
+                  className={`w-full text-left px-4.5 py-3 rounded-xl font-medium text-xs flex items-center gap-3.5 tracking-wide cursor-pointer group transition-all duration-150 ${
                     isActive
-                      ? "bg-blue-600 text-slate-100 shadow-md shadow-blue-500/10"
-                      : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/30"
+                      ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-slate-50 shadow-lg shadow-blue-500/20 border-t border-white/10"
+                      : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/40"
                   }`}
                 >
                   <IconComp
-                    size={16}
+                    size={17}
                     className={`transition-colors duration-150 ${
-                      isActive ? "text-slate-100" : "text-slate-500 group-hover:text-slate-350"
+                      isActive ? "text-slate-50" : "text-slate-500 group-hover:text-slate-300"
                     }`}
                   />
                   {item.label}
@@ -167,11 +170,11 @@ export default function App() {
             })}
           </nav>
           
-          <div className="mt-8 pt-4 border-t border-slate-800/30 px-3 hidden md:block">
-            <span className="text-[10px] text-slate-600 uppercase font-mono tracking-wider block font-semibold">User Context</span>
-            <div className="mt-2 space-y-1 text-[11px] font-sans text-slate-500 leading-tight">
-              <p>Email: <strong className="text-slate-400">{currentUser.email || "mis@yajurfibres.com"}</strong></p>
-              <p>Access Level: <strong className="text-slate-400 capitalize">{currentUser.role}</strong></p>
+          <div className="mt-8 pt-4 border-t border-slate-800/40 px-3 hidden md:block">
+            <span className="text-[10px] text-slate-500 uppercase font-mono tracking-wider block font-semibold">User Context</span>
+            <div className="mt-2 space-y-1 text-[11px] font-sans text-slate-400 leading-tight">
+              <p>Email: <strong className="text-slate-200">{currentUser.email || "mis@yajurfibres.com"}</strong></p>
+              <p>Access Level: <strong className="text-indigo-400 capitalize">{currentUser.role}</strong></p>
             </div>
           </div>
         </aside>

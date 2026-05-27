@@ -96,17 +96,17 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
         {/* Card 1: Open Tasks */}
         <div
           onClick={() => onNavigateTab("task", "Open Task")}
-          className="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-blue-500/35 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group"
+          className="bg-slate-900/40 hover:bg-slate-900/60 border border-slate-800/80 hover:border-blue-500/30 rounded-2xl p-6 shadow-md transition-all duration-300 cursor-pointer group hover:shadow-blue-500/5"
         >
           <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors">Open Tasks</span>
-            <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20">
+            <span className="text-sm font-semibold text-slate-400 group-hover:text-slate-350 transition-colors">Open Tasks</span>
+            <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/20 shadow-inner">
               <CheckSquare size={20} />
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-4xl font-display font-bold text-slate-100">{counts.openTasks}</span>
-            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+            <span className="text-4xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-250">{counts.openTasks}</span>
+            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1 font-medium">
               Active milestones listed <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
             </p>
           </div>
@@ -115,17 +115,17 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
         {/* Card 2: Closed Tasks */}
         <div
           onClick={() => onNavigateTab("task", "Complete Task")}
-          className="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-indigo-500/35 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group"
+          className="bg-slate-900/40 hover:bg-slate-900/60 border border-slate-800/80 hover:border-indigo-500/30 rounded-2xl p-6 shadow-md transition-all duration-300 cursor-pointer group hover:shadow-indigo-500/5"
         >
           <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors">Closed Tasks</span>
-            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center border border-indigo-500/20">
+            <span className="text-sm font-semibold text-slate-400 group-hover:text-slate-350 transition-colors">Closed Tasks</span>
+            <div className="w-10 h-10 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center border border-indigo-500/20 shadow-inner">
               <Check className="stroke-[3]" size={20} />
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-4xl font-display font-bold text-slate-100">{counts.closedTasks}</span>
-            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+            <span className="text-4xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-250">{counts.closedTasks}</span>
+            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1 font-medium">
               Compliant deliverables <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
             </p>
           </div>
@@ -134,17 +134,17 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
         {/* Card 3: Open Issues */}
         <div
           onClick={() => onNavigateTab("issue", "Open Issue")}
-          className="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-amber-500/35 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group"
+          className="bg-slate-900/40 hover:bg-slate-900/60 border border-slate-800/80 hover:border-amber-500/30 rounded-2xl p-6 shadow-md transition-all duration-300 cursor-pointer group hover:shadow-amber-500/5"
         >
           <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors">Open Issues</span>
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center border border-amber-500/20">
+            <span className="text-sm font-semibold text-slate-400 group-hover:text-slate-350 transition-colors">Open Issues</span>
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center border border-amber-500/20 shadow-inner">
               <AlertTriangle size={20} />
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-4xl font-display font-bold text-slate-100">{counts.openIssues}</span>
-            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+            <span className="text-4xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-250">{counts.openIssues}</span>
+            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1 font-medium">
               Requires attention <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
             </p>
           </div>
@@ -153,17 +153,17 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
         {/* Card 4: Closed Issues */}
         <div
           onClick={() => onNavigateTab("issue", "Closed Issue")}
-          className="bg-slate-800/50 hover:bg-slate-800 border border-slate-700/50 hover:border-green-500/35 rounded-2xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer group"
+          className="bg-slate-900/40 hover:bg-slate-900/60 border border-slate-800/80 hover:border-emerald-500/30 rounded-2xl p-6 shadow-md transition-all duration-300 cursor-pointer group hover:shadow-emerald-500/5"
         >
           <div className="flex justify-between items-center">
-            <span className="text-sm font-medium text-slate-400 group-hover:text-slate-300 transition-colors">Closed Issues</span>
-            <div className="w-10 h-10 rounded-xl bg-green-500/10 text-green-400 flex items-center justify-center border border-green-500/20">
+            <span className="text-sm font-semibold text-slate-400 group-hover:text-slate-350 transition-colors">Closed Issues</span>
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/20 shadow-inner">
               <ShieldAlert size={20} />
             </div>
           </div>
           <div className="mt-4">
-            <span className="text-4xl font-display font-bold text-slate-100">{counts.closedIssues}</span>
-            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1">
+            <span className="text-4xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-250">{counts.closedIssues}</span>
+            <p className="text-xs text-slate-500 mt-2 flex items-center gap-1 font-medium">
               Resolved blocks <ArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
             </p>
           </div>
