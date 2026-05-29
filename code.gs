@@ -1139,7 +1139,7 @@ function executeAction(action, args) {
       var formattedPhone = String(phone).replace(/[+\s-]/g, "");
 
       try {
-        var baseUrl = "https://bhashsms.com/api/sendmsgutil.php";
+        var baseUrl = "https://script.google.com/macros/s/AKfycbw8bDrCbaRMzcvf8KXtYMiHdz2mnOXjltG6_Y1lWFyoJT0c7FleNUXcLlh7STbt1Gliig/exec";
         
         var paramsValue = (name || "") + "," +
                           (taskId || "") + "," +
@@ -1147,13 +1147,8 @@ function executeAction(action, args) {
                           (priority || "") + "," +
                           (taskUpdateLink || "");
         
-        var qs = "?user=" + encodeURIComponent("YajurFibre_BWAI") +
-                 "&pass=" + encodeURIComponent("123456") +
-                 "&sender=" + encodeURIComponent("BUZWAP") +
-                 "&phone=" + encodeURIComponent(formattedPhone) +
-                 "&text=" + encodeURIComponent("tsk_9") +
-                 "&priority=" + encodeURIComponent("wa") +
-                 "&stype=" + encodeURIComponent("normal") +
+        // Pass parameters to the new endpoint
+        var qs = "?phone=" + encodeURIComponent(formattedPhone) +
                  "&Params=" + encodeURIComponent(paramsValue);
                  
         var url = baseUrl + qs;
