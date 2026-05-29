@@ -18,7 +18,8 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
     auto_notify_task_create: "true",
     auto_notify_task_assign: "true",
     auto_notify_issue_assign: "false",
-    email_from_name: "Project Management Yajur"
+    email_from_name: "Project Management Yajur",
+    wa_template_name: "project_mangment"
   });
   const [savingSettings, setSavingSettings] = useState(false);
 
@@ -281,6 +282,27 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
                   checked={settings.auto_notify_issue_assign === "true"}
                   onChange={(e) => setSettings({ ...settings, auto_notify_issue_assign: e.target.checked ? "true" : "false" })}
                 />
+              </div>
+            </div>
+
+            <hr className="border-slate-100 my-1" />
+
+            <div className="space-y-3">
+              <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-slate-400 block">WhatsApp Template Integration</span>
+              <div className="space-y-1.5">
+                <label className="text-xs text-slate-700 font-semibold block" htmlFor="wa_template_name">WhatsApp SMS Template ID / Name</label>
+                <input
+                  type="text"
+                  id="wa_template_name"
+                  disabled={currentUser.role === "User"}
+                  placeholder="project_mangment"
+                  className="w-full bg-slate-55 border border-slate-200/85 rounded-xl px-4 py-2 text-xs text-slate-800 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff]"
+                  value={settings.wa_template_name || "project_mangment"}
+                  onChange={(e) => setSettings({ ...settings, wa_template_name: e.target.value })}
+                />
+                <p className="text-[10px] text-slate-400 font-sans leading-normal">
+                  The active template registered on BhashSMS (e.g. <code>project_mangment</code> or <code>new_task_assigned</code>).
+                </p>
               </div>
             </div>
           </div>

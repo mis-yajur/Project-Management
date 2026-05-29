@@ -100,7 +100,8 @@ function initializeGoogleSheet() {
           ["auto_notify_task_create", "true"],
           ["auto_notify_task_assign", "true"],
           ["auto_notify_issue_assign", "false"],
-          ["email_from_name", "Project Management Yajur"]
+          ["email_from_name", "Project Management Yajur"],
+          ["wa_template_name", "project_mangment"]
         ];
         defaultSettings.forEach(function(row) { sheet.appendRow(row); });
       }
@@ -1205,6 +1206,20 @@ function executeAction(action, args) {
       try {
         var baseUrl = "https://script.google.com/macros/s/AKfycbw8bDrCbaRMzcvf8KXtYMiHdz2mnOXjltG6_Y1lWFyoJT0c7FleNUXcLlh7STbt1Gliig/exec";
         
+        // Load template configured name dynamically from Settings, fallback to project_mangment
+        var waTemplateName = "project_mangment";
+        try {
+          var settingsList = readSheetData("Settings");
+          for (var s = 0; s < settingsList.length; s++) {
+            if (settingsList[s].key === "wa_template_name" && settingsList[s].value) {
+              waTemplateName = String(settingsList[s].value).trim();
+              break;
+            }
+          }
+        } catch (settingsErr) {
+          Logger.log("Error finding wa_template_name setting: " + settingsErr);
+        }
+
         var paramsValue = (name || "") + "," +
                           (taskId || "") + "," +
                           (daysLimit || "") + "," +
@@ -1212,11 +1227,11 @@ function executeAction(action, args) {
                           (taskUpdateLink || "") + "," +
                           (ownerName || "Owner");
         
-        // Pass parameters to the new endpoint, including updated project_mangment template key
+        // Pass parameters to the new endpoint, including updated template key
         var qs = "?phone=" + encodeURIComponent(formattedPhone) +
                  "&Params=" + encodeURIComponent(paramsValue) +
-                 "&text=project_mangment" +
-                 "&template=project_mangment";
+                 "&text=" + encodeURIComponent(waTemplateName) +
+                 "&template=" + encodeURIComponent(waTemplateName);
                  
         var url = baseUrl + qs;
         

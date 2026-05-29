@@ -64,7 +64,8 @@ function initializeLocalDatabase() {
         auto_notify_task_create: "true",
         auto_notify_task_assign: "true",
         auto_notify_issue_assign: "false",
-        email_from_name: "Project Management Yajur"
+        email_from_name: "Project Management Yajur",
+        wa_template_name: "project_mangment"
       }
     };
     fs.writeFileSync(DB_PATH, JSON.stringify(defaultDb, null, 2), "utf8");
@@ -900,7 +901,7 @@ async function executeAction(action: string, args: any[]): Promise<any> {
       }
 
       const formattedPhone = String(phone).replace(/[+\s-]/g, "");
-      const waTemplate = process.env.WA_TEMPLATE || "project_mangment";
+      const waTemplate = db.settings?.wa_template_name || process.env.WA_TEMPLATE || "project_mangment";
 
       try {
         const url = new URL("https://bhashsms.com/api/sendmsgutil.php");

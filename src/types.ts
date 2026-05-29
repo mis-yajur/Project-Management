@@ -94,6 +94,7 @@ export interface AppSettings {
   auto_notify_task_assign: string;
   auto_notify_issue_assign: string;
   email_from_name: string;
+  wa_template_name?: string;
 }
 
 export interface DashboardCounts {

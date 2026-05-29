@@ -480,7 +480,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           isOpen: true,
           type: "success",
           title: "Sms Sent Successfully!",
-          message: `The WhatsApp automated message has been successfully dispatched to ${doer} (${phone}).`
+          message: `The WhatsApp automated message has been successfully dispatched to ${doer} (${phone}).\n\nLog response: ${res?.message || "Success"}`
         });
       } else {
         setWaModal({
