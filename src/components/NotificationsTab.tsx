@@ -212,42 +212,42 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
       {/* Grid: Settings and Manual Trigger Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Card 1: Email Configuration */}
-        <div className="bg-slate-50 border-b border-slate-200/60 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
-          <div className="px-6 py-5 border-b border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex items-center gap-2 bg-white/10">
-            <Mail size={18} className="text-blue-400" />
-            <span className="font-display font-medium text-slate-700 tracking-wide">Automated Email System API</span>
+        <div className="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden flex flex-col justify-between">
+          <div className="px-6 py-5 border-b border-slate-100 flex items-center gap-2 bg-white">
+            <Mail size={18} className="text-blue-500" />
+            <span className="font-display font-medium text-slate-900 tracking-wide">Automated Email System API</span>
           </div>
           <div className="p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <label className="text-sm font-semibold text-slate-700 tracking-wide" htmlFor="email_enabled">Enable Email Notifications</label>
+                <label className="text-sm font-semibold text-slate-900 tracking-wide" htmlFor="email_enabled">Enable Email Notifications</label>
                 <p className="text-xs text-slate-500 font-sans">Dispatches logs directly via standard SMTP/MailApp services.</p>
               </div>
               <input
                 type="checkbox"
                 id="email_enabled"
                 disabled={currentUser.role === "User"}
-                className="w-5 h-5 text-blue-600 bg-white border-slate-200 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                className="w-5 h-5 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
                 checked={settings.email_enabled === "true"}
                 onChange={(e) => setSettings({ ...settings, email_enabled: e.target.checked ? "true" : "false" })}
               />
             </div>
             
-            <hr className="border-slate-200/45 my-2" />
+            <hr className="border-slate-100 my-2" />
 
             <div className="space-y-3">
               <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-slate-500">Auto-trigger Event Rules</span>
               
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-xs text-slate-600" htmlFor="auto_notify_task_create">On New Task Creation</label>
+                  <label className="text-xs text-slate-700" htmlFor="auto_notify_task_create">On New Task Creation</label>
                   <p className="text-[10px] text-slate-500 font-sans">Alerts the assignee only when task is created by another team member.</p>
                 </div>
                 <input
                   type="checkbox"
                   id="auto_notify_task_create"
                   disabled={currentUser.role === "User"}
-                  className="w-4 h-4 text-blue-600 bg-white border-slate-200 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                  className="w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
                   checked={settings.auto_notify_task_create === "true"}
                   onChange={(e) => setSettings({ ...settings, auto_notify_task_create: e.target.checked ? "true" : "false" })}
                 />
@@ -255,14 +255,14 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
 
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-xs text-slate-600" htmlFor="auto_notify_task_assign">On Task Reassignment Change</label>
+                  <label className="text-xs text-slate-700" htmlFor="auto_notify_task_assign">On Task Reassignment Change</label>
                   <p className="text-[10px] text-slate-500 font-sans">Triggers instant notification specifically when a leader reallocates task owner.</p>
                 </div>
                 <input
                   type="checkbox"
                   id="auto_notify_task_assign"
                   disabled={currentUser.role === "User"}
-                  className="w-4 h-4 text-blue-600 bg-white border-slate-200 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                  className="w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
                   checked={settings.auto_notify_task_assign === "true"}
                   onChange={(e) => setSettings({ ...settings, auto_notify_task_assign: e.target.checked ? "true" : "false" })}
                 />
@@ -270,21 +270,21 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
 
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-xs text-slate-600" htmlFor="auto_notify_issue_assign">On Issue Assignment Change</label>
+                  <label className="text-xs text-slate-700" htmlFor="auto_notify_issue_assign">On Issue Assignment Change</label>
                   <p className="text-[10px] text-slate-500 font-sans">Alerts assigned developer profile that a new blocker contains their tag.</p>
                 </div>
                 <input
                   type="checkbox"
                   id="auto_notify_issue_assign"
                   disabled={currentUser.role === "User"}
-                  className="w-4 h-4 text-blue-600 bg-white border-slate-200 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                  className="w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
                   checked={settings.auto_notify_issue_assign === "true"}
                   onChange={(e) => setSettings({ ...settings, auto_notify_issue_assign: e.target.checked ? "true" : "false" })}
                 />
               </div>
             </div>
           </div>
-          <div className="p-4 px-6 border-t border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] bg-white/20">
+          <div className="p-4 px-6 border-t border-slate-100 bg-white">
             <button
               onClick={handleSaveSettings}
               disabled={savingSettings || currentUser.role === "User"}
@@ -297,16 +297,16 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
         </div>
 
         {/* Card 2: Manual Notification Dispatcher */}
-        <div className="bg-slate-50 border-b border-slate-200/60 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
-          <div className="px-6 py-5 border-b border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex items-center gap-2 bg-white/10">
-            <Send size={18} className="text-indigo-400" />
-            <span className="font-display font-medium text-slate-700 tracking-wide">Manual Mail Dispatcher Terminal</span>
+        <div className="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden flex flex-col justify-between">
+          <div className="px-6 py-5 border-b border-slate-100 flex items-center gap-2 bg-white">
+            <Send size={18} className="text-indigo-500" />
+            <span className="font-display font-medium text-slate-900 tracking-wide">Manual Mail Dispatcher Terminal</span>
           </div>
           <div className="p-6 space-y-4">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Scope Category</label>
               <select
-                className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                 value={manualType}
                 onChange={(e) => setManualType(e.target.value as "task" | "issue")}
               >
@@ -318,7 +318,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Select Target deliverable</label>
               <select
-                className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                 value={selectedTarget}
                 onChange={(e) => setSelectedTarget(e.target.value)}
               >
@@ -331,11 +331,11 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
               </select>
             </div>
 
-            <div className="bg-blue-600/5 border border-blue-500/10 p-3.5 rounded-xl text-xs text-slate-500 font-sans leading-relaxed">
+            <div className="bg-blue-50 border border-blue-100 p-3.5 rounded-xl text-xs text-slate-700 font-sans leading-relaxed">
               <strong>💡 Mechanism:</strong> Resolves the recipient address associated with the target’s owner profile tag dynamically, drafts a structured email complete with priority variables, logs the outcome, and attempts to send SMTP mail safely.
             </div>
           </div>
-          <div className="p-4 px-6 border-t border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] bg-white/20">
+          <div className="p-4 px-6 border-t border-slate-100 bg-white">
             <button
               onClick={handleSendManual}
               disabled={sendingEmail || !selectedTarget}

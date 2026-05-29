@@ -322,11 +322,11 @@ export default function UsersTab({ currentUser }: UsersTabProps) {
 
       {/* Creation Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white w-full max-w-xl rounded-2xl overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-              <h3 className="text-lg font-display font-medium text-slate-700">Deprovision / Register Security User</h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-500 hover:text-slate-800 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-xl rounded-2xl overflow-hidden shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white">
+              <h3 className="text-lg font-display font-medium text-slate-900">Deprovision / Register Security User</h3>
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 text-sm font-semibold cursor-pointer">✕</button>
             </div>
             <form onSubmit={handleCreateUserSubmit}>
               <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
@@ -335,7 +335,7 @@ export default function UsersTab({ currentUser }: UsersTabProps) {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Username</label>
                     <input
                       type="text"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. jdoe"
                       value={formData.username}
                       onChange={(e) => setFormData({ ...formData, username: e.target.value })}
@@ -346,7 +346,7 @@ export default function UsersTab({ currentUser }: UsersTabProps) {
                     <label className={`text-xs font-semibold text-slate-500 uppercase tracking-wider block ${modalMode === "create" ? "required" : ""}`}>Password {modalMode === "edit" ? "(Leave blank to keep)" : ""}</label>
                     <input
                       type="password"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder={modalMode === "edit" ? "•••••••• (unchanged)" : "••••••••"}
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -360,7 +360,7 @@ export default function UsersTab({ currentUser }: UsersTabProps) {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Full Name</label>
                     <input
                       type="text"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. John Doe"
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
@@ -371,7 +371,7 @@ export default function UsersTab({ currentUser }: UsersTabProps) {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Email Address</label>
                     <input
                       type="email"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. jdoe@yajur.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -384,7 +384,7 @@ export default function UsersTab({ currentUser }: UsersTabProps) {
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Role</label>
                     <select
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                       value={formData.role}
                       onChange={(e) => setFormData({ ...formData, role: e.target.value })}
                       required
@@ -398,7 +398,7 @@ export default function UsersTab({ currentUser }: UsersTabProps) {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Contact Number</label>
                     <input
                       type="tel"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder="+91 XXXXX XXXXX"
                       value={formData.contactNumber}
                       onChange={(e) => setFormData({ ...formData, contactNumber: e.target.value })}
@@ -410,7 +410,7 @@ export default function UsersTab({ currentUser }: UsersTabProps) {
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Dept Segment</label>
                     <select
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                       value={formData.department}
                       onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                       required
@@ -425,7 +425,7 @@ export default function UsersTab({ currentUser }: UsersTabProps) {
                     <div className="space-y-1.5">
                       <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Direct Line Manager</label>
                       <select
-                        className="w-full bg-white border border-slate-705 border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                        className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                         value={formData.managerId}
                         onChange={(e) => setFormData({ ...formData, managerId: e.target.value })}
                       >
@@ -438,7 +438,7 @@ export default function UsersTab({ currentUser }: UsersTabProps) {
                   )}
                 </div>
               </div>
-              <div className="px-6 py-4 border-t border-slate-200/60 bg-slate-50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-100 bg-white flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
