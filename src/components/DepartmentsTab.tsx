@@ -231,11 +231,11 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
 
       {/* Creation Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-              <h3 className="text-lg font-display font-medium text-slate-700">Register New Segment</h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-500 hover:text-slate-800 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white">
+              <h3 className="text-lg font-display font-medium text-slate-900">Register New Segment</h3>
+              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-600 text-sm font-semibold cursor-pointer">✕</button>
             </div>
             <form onSubmit={handleCreateDept}>
               <div className="p-6 space-y-4">
@@ -243,7 +243,7 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Segment Name</label>
                   <input
                     type="text"
-                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                     placeholder="e.g. Quality Engineering"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -254,7 +254,7 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Description</label>
                   <textarea
-                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                     placeholder="Brief description of responsibilities"
                     rows={3}
                     value={formData.description}
@@ -265,7 +265,7 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Managing Director / Owner</label>
                   <select
-                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                     value={formData.owner}
                     onChange={(e) => setFormData({ ...formData, owner: e.target.value })}
                   >
@@ -277,7 +277,7 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-200/60 bg-slate-50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
