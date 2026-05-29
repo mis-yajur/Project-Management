@@ -398,9 +398,11 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     const defaultPhone = recipient?.contactNumber;
     const doerName = recipient?.fullName || t.tags || "Team Member";
 
+    console.log("handleSendWhatsApp called for task", t.id, "recipient", recipient);
+
     let phoneVal = "";
     if (defaultPhone) {
-        phoneVal = String(defaultPhone).trim().replace(/[+\s-]/g, "");
+        phoneVal = String(defaultPhone || "").trim().replace(/[+\s-]/g, "");
     }
 
     // If we have a phone number on file, present a direct click-to-confirm dialog instead of asking to type
@@ -416,7 +418,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         ""
       );
       if (phoneInput === null) return;
-      phoneVal = String(phoneInput).trim().replace(/[+\s-]/g, "");
+      phoneVal = String(phoneInput || "").trim().replace(/[+\s-]/g, "");
     }
 
     if (!phoneVal) {
@@ -429,6 +431,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     const priorityStr = t.priority || "Medium";
     const formattedLink = `${window.location.origin}/?tab=tasks&search=${t.id}`;
 
+    console.log("Attempting to call api.sendWhatsApp");
     try {
       const res = await api.sendWhatsApp(
         phoneVal,
@@ -439,12 +442,15 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         formattedLink
       );
 
+      console.log("WhatsApp response:", res);
+
       if (res && res.success) {
         alert("Success: Sms Sent Successfully!");
       } else {
         alert(`Error: ${res?.message || "Failed to send WhatsApp message"}`);
       }
     } catch (err: any) {
+      console.error("WhatsApp API Exception:", err);
       alert(`API Exception: ${err.message}`);
     }
   };
