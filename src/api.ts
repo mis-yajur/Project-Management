@@ -32,7 +32,7 @@ export async function rpcCall(action: string, args: any[] = []): Promise<any> {
 
   try {
     const isGitHubPages = window.location.hostname.endsWith(".github.io");
-    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbxAxOGVWrjJWpPVPZd9Vf0ADgKCMSYvVeiPrksCwMqI_2BehdMxD7tkjOphb1TAEOg9bA/exec";
+    const appsScriptUrl = "https://script.google.com/macros/s/AKfycbxceKJ9JaobB749XbNB020Gq3P9mgAnEzKeIJCfmFvqhDvwnf8eDMe6W3TaWC5eHEO09g/exec";
 
     const fetchUrl = isGitHubPages ? appsScriptUrl : "/api/rpc";
     const fetchHeaders: Record<string, string> = {

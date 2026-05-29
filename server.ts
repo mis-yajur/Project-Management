@@ -16,7 +16,7 @@ const DB_DIR = path.join(process.cwd(), "data");
 const DB_PATH = path.join(DB_DIR, "database.json");
 
 // Google Apps Script Proxy setup
-const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbxAxOGVWrjJWpPVPZd9Vf0ADgKCMSYvVeiPrksCwMqI_2BehdMxD7tkjOphb1TAEOg9bA/exec";
+const APPS_SCRIPT_URL = process.env.APPS_SCRIPT_URL || "https://script.google.com/macros/s/AKfycbxceKJ9JaobB749XbNB020Gq3P9mgAnEzKeIJCfmFvqhDvwnf8eDMe6W3TaWC5eHEO09g/exec";
 
 // Ensure database folders and defaults exist
 function initializeLocalDatabase() {

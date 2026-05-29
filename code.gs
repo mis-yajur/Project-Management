@@ -1251,7 +1251,15 @@ function executeAction(action, args) {
       var formattedPhone = String(phone).replace(/[+\s-]/g, "");
 
       try {
-        var baseUrl = "https://script.google.com/macros/s/AKfycbw8bDrCbaRMzcvf8KXtYMiHdz2mnOXjltG6_Y1lWFyoJT0c7FleNUXcLlh7STbt1Gliig/exec";
+        var baseUrl = "";
+        try {
+          baseUrl = ScriptApp.getService().getUrl();
+        } catch (e) {
+          Logger.log("getService getUrl failed: " + e);
+        }
+        if (!baseUrl) {
+          baseUrl = "https://script.google.com/macros/s/AKfycbxceKJ9JaobB749XbNB020Gq3P9mgAnEzKeIJCfmFvqhDvwnf8eDMe6W3TaWC5eHEO09g/exec";
+        }
         
         // Load template configured name dynamically from Settings, fallback to project_mangment and default credentials
         var waTemplateName = "project_mangment";
@@ -1308,13 +1316,25 @@ function executeAction(action, args) {
 
           if (responseText) {
             var trimmedRes = responseText.trim();
-            if (trimmedRes && trimmedRes.indexOf("{") !== 0) {
+            if (trimmedRes) {
               var lowerRes = trimmedRes.toLowerCase();
               if (trimmedRes.indexOf("S-") > -1 || 
                   trimmedRes.indexOf("S.") > -1 || 
                   lowerRes.indexOf("success") > -1 ||
-                  /^[Ss][.-]?\d+/.test(trimmedRes)) {
+                  lowerRes.indexOf("sent") > -1 ||
+                  lowerRes.indexOf("submitted") > -1 ||
+                  /^[Ss][.-]?\d+/.test(trimmedRes) ||
+                  /^\d+$/.test(trimmedRes)) {
                 directSuccess = true;
+              } else if (trimmedRes.indexOf("{") === 0) {
+                try {
+                  var resJson = JSON.parse(trimmedRes);
+                  if (resJson.success || resJson.status === "success" || resJson.msg === "success") {
+                    directSuccess = true;
+                  }
+                } catch (jsonErr) {
+                  // ignore
+                }
               }
             }
           }
@@ -1341,14 +1361,27 @@ function executeAction(action, args) {
           
           if (fallbackText) {
             var trimmedFallback = fallbackText.trim();
-            if (trimmedFallback && trimmedFallback.indexOf("{") !== 0 && !trimmedFallback.includes("operational")) {
+            if (trimmedFallback && !trimmedFallback.includes("operational")) {
               var lowerFallback = trimmedFallback.toLowerCase();
               if (trimmedFallback.indexOf("S-") > -1 || 
                   trimmedFallback.indexOf("S.") > -1 || 
                   lowerFallback.indexOf("success") > -1 ||
-                  /^[Ss][.-]?\d+/.test(trimmedFallback)) {
+                  lowerFallback.indexOf("sent") > -1 ||
+                  lowerFallback.indexOf("submitted") > -1 ||
+                  /^[Ss][.-]?\d+/.test(trimmedFallback) ||
+                  /^\d+$/.test(trimmedFallback)) {
                 directSuccess = true;
                 responseText = trimmedFallback;
+              } else if (trimmedFallback.indexOf("{") === 0) {
+                try {
+                  var fallbackJson = JSON.parse(trimmedFallback);
+                  if (fallbackJson.success || fallbackJson.status === "success" || fallbackJson.msg === "success") {
+                    directSuccess = true;
+                    responseText = trimmedFallback;
+                  }
+                } catch (jsonErr) {
+                  // ignore
+                }
               }
             }
           }
