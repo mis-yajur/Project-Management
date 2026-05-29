@@ -409,11 +409,11 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
 
       {/* CREATE MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-              <h3 className="text-lg font-display font-medium text-slate-700">Open Blocker / Ticket</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-500 hover:text-slate-800 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white">
+              <h3 className="text-lg font-display font-medium text-slate-900">Open Blocker / Ticket</h3>
+              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-600 text-sm font-semibold cursor-pointer">✕</button>
             </div>
             <form onSubmit={handleCreateSubmit}>
               <div className="p-6 space-y-4">
@@ -422,7 +422,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Issue Title</label>
                     <input
                       type="text"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. Broken links on department portals"
                       value={createForm.name}
                       onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
@@ -432,7 +432,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Associated Segment</label>
                     <select
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                       value={createForm.department}
                       onChange={(e) => setCreateForm({ ...createForm, department: e.target.value })}
                       required
@@ -448,7 +448,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Detailed explanation</label>
                   <textarea
-                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                     placeholder="Enter thorough details so the assignee has full context..."
                     rows={3}
                     value={createForm.description}
@@ -460,7 +460,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Severity Level</label>
                     <select
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                       value={createForm.severity}
                       onChange={(e) => setCreateForm({ ...createForm, severity: e.target.value })}
                       required
@@ -474,7 +474,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block font-mono">Due Date Limit</label>
                     <input
                       type="date"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                       value={createForm.dueDate}
                       onChange={(e) => setCreateForm({ ...createForm, dueDate: e.target.value })}
                     />
@@ -486,7 +486,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Classification</label>
                     <input
                       type="text"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. Bug, Improvement, Task"
                       value={createForm.classification}
                       onChange={(e) => setCreateForm({ ...createForm, classification: e.target.value })}
@@ -496,7 +496,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Metadata Tags</label>
                     <input
                       type="text"
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. visual, logic, blocker"
                       value={createForm.tags}
                       onChange={(e) => setCreateForm({ ...createForm, tags: e.target.value })}
@@ -508,7 +508,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Priority Flags</label>
                     <select
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                       value={createForm.flag}
                       onChange={(e) => setCreateForm({ ...createForm, flag: e.target.value })}
                     >
@@ -520,7 +520,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                   <div className="space-y-1.5">
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Assignee Target</label>
                     <select
-                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                       value={createForm.assignee}
                       onChange={(e) => setCreateForm({ ...createForm, assignee: e.target.value })}
                     >
@@ -533,7 +533,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-200/60 bg-slate-50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
@@ -557,18 +557,18 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
 
       {/* EDIT MODAL */}
       {showEditModal && selectedIssue && (
-        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
-              <h3 className="text-lg font-display font-medium text-slate-700">Update Issue Ticket: {selectedIssue.id}</h3>
-              <button onClick={() => setShowEditModal(false)} className="text-slate-500 hover:text-slate-800 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white">
+              <h3 className="text-lg font-display font-medium text-slate-900">Update Issue Ticket: {selectedIssue.id}</h3>
+              <button onClick={() => setShowEditModal(false)} className="text-slate-400 hover:text-slate-600 text-sm font-semibold cursor-pointer">✕</button>
             </div>
             <form onSubmit={handleEditSubmit}>
               <div className="p-6 space-y-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Status</label>
                   <select
-                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                     value={editForm.status}
                     onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
                   >
@@ -580,11 +580,11 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 <div className="space-y-1.5">
                   <div className="flex justify-between items-center">
                     <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Completion percentage</label>
-                    <span className="font-mono text-sm text-blue-400 font-bold">{editForm.completion}%</span>
+                    <span className="font-mono text-sm text-blue-600 font-bold">{editForm.completion}%</span>
                   </div>
                   <input
                     type="range"
-                    className="w-full h-2 bg-white rounded-lg appearance-none cursor-pointer accent-blue-500 focus:outline-none"
+                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600 focus:outline-none"
                     min="0"
                     max="100"
                     step="5"
@@ -596,7 +596,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Severity Level</label>
                   <select
-                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                     value={editForm.severity}
                     onChange={(e) => setEditForm({ ...editForm, severity: e.target.value })}
                   >
@@ -609,7 +609,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Assignee Target</label>
                   <select
-                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                     value={editForm.assignee}
                     onChange={(e) => setEditForm({ ...editForm, assignee: e.target.value })}
                   >
@@ -624,7 +624,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Classification</label>
                   <input
                     type="text"
-                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                     value={editForm.classification}
                     onChange={(e) => setEditForm({ ...editForm, classification: e.target.value })}
                   />
@@ -633,7 +633,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Priority Flag</label>
                   <select
-                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                     value={editForm.flag}
                     onChange={(e) => setEditForm({ ...editForm, flag: e.target.value })}
                   >
@@ -644,7 +644,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-200/60 bg-slate-50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
