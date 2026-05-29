@@ -1199,20 +1199,20 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
       {/* CREATE MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white">
-              <h3 className="text-lg font-display font-medium text-slate-900">Create Task Deliverable</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-600 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border border-slate-200/80 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+              <h3 className="text-lg font-display font-bold text-slate-800">Create Task Deliverable</h3>
+              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-600 text-base font-bold cursor-pointer">✕</button>
             </div>
             <form onSubmit={handleCreateSubmit}>
               <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Task Name</label>
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block required">Task Name</label>
                     <input
                       type="text"
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-850 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                       placeholder="e.g. Conduct compliance checks"
                       value={createForm.name}
                       onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
@@ -1220,9 +1220,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Department Segment</label>
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block required">Department Segment</label>
                     <select
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-850 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                       value={createForm.department}
                       onChange={(e) => setCreateForm({ ...createForm, department: e.target.value })}
                       required
@@ -1236,9 +1236,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Description</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Description</label>
                   <textarea
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-850 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     placeholder="Enter detailed instructions or bullet items..."
                     rows={3}
                     value={createForm.description}
@@ -1248,20 +1248,20 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Start Date</label>
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block required">Start Date</label>
                     <input
                       type="date"
-                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-850 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                       value={createForm.startDate}
                       onChange={(e) => setCreateForm({ ...createForm, startDate: e.target.value })}
                       required
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Due Date</label>
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block required">Due Date</label>
                     <input
                       type="date"
-                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-850 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                       value={createForm.dueDate}
                       onChange={(e) => setCreateForm({ ...createForm, dueDate: e.target.value })}
                       required
@@ -1271,9 +1271,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Priority</label>
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Priority</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-855 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                       value={createForm.priority}
                       onChange={(e) => setCreateForm({ ...createForm, priority: e.target.value })}
                     >
@@ -1284,9 +1284,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     </select>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Doer (Assignee Tags)</label>
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Doer (Assignee Tags)</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-855 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                       value={createForm.tags}
                       onChange={(e) => setCreateForm({ ...createForm, tags: e.target.value })}
                     >
@@ -1300,19 +1300,19 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Group Index</label>
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Group Index</label>
                     <input
                       type="text"
-                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-850 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                       placeholder="e.g. Phase-1, Project-Alpha"
                       value={createForm.group || ""}
                       onChange={(e) => setCreateForm({ ...createForm, group: e.target.value })}
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Milestone Owner</label>
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Milestone Owner</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-855 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                       value={createForm.owner}
                       onChange={(e) => setCreateForm({ ...createForm, owner: e.target.value })}
                     >
@@ -1329,44 +1329,44 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     <input
                       type="checkbox"
                       id="createIsSubtask"
-                      className="w-4 h-4 text-blue-600 bg-slate-900 border-slate-200 shadow-xl rounded focus:ring-blue-500 focus:ring-1"
+                      className="w-4 h-4 text-indigo-650 bg-white border-slate-300 rounded focus:ring-indigo-500"
                       checked={isSubtask}
                       onChange={(e) => setIsSubtask(e.target.checked)}
                     />
-                    <label htmlFor="createIsSubtask" className="text-sm font-medium text-slate-200 cursor-pointer">This is a subtask</label>
+                    <label htmlFor="createIsSubtask" className="text-sm font-semibold text-slate-700 cursor-pointer">This is a subtask</label>
                   </div>
                 </div>
 
                 {isSubtask && (
                   <div className="space-y-1.5 transition-all">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Select Parent Miletone</label>
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block required">Select Parent Milestone</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-855 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                       value={createForm.parentTaskId}
                       onChange={(e) => setCreateForm({ ...createForm, parentTaskId: e.target.value })}
                       required
                     >
                       <option value="">Select Parent Task</option>
                       {parentTasks.map(p => (
-                        <option key={p.id} value={p.id}>{p.id} — {p.name}</option>
+                        <option key={p.id} value={p.id}>[{p.id}] {p.name}</option>
                       ))}
                     </select>
                   </div>
                 )}
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-200 shadow-xl/60 bg-slate-900/50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-100 bg-[#fbfbfc] flex justify-end gap-3 rounded-b-2xl">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 text-sm text-slate-400 hover:text-slate-100 font-medium cursor-pointer"
+                  className="px-4 py-2 text-sm text-slate-505 hover:text-slate-800 hover:bg-slate-100 rounded-xl font-medium cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-slate-100 text-sm shadow-md cursor-pointer transition-all flex items-center gap-1.5"
+                  className="px-5 py-2 bg-[#5f27cd] hover:bg-[#5f27cd]/90 rounded-xl font-semibold text-white text-sm shadow-md shadow-indigo-500/10 cursor-pointer transition-all flex items-center gap-1.5"
                 >
                   {submitting && <Loader2 size={14} className="animate-spin" />}
                   Register Task
@@ -1379,18 +1379,18 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
       {/* UPDATE MODAL */}
       {showEditModal && selectedTask && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white">
-              <h3 className="text-lg font-display font-medium text-slate-900">Update Deliverable details: {selectedTask.id}</h3>
-              <button onClick={() => setShowEditModal(false)} className="text-slate-400 hover:text-slate-600 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-200/80 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+              <h3 className="text-lg font-display font-bold text-slate-800">Update Deliverable details: {selectedTask.id}</h3>
+              <button onClick={() => setShowEditModal(false)} className="text-slate-400 hover:text-slate-600 text-base font-bold cursor-pointer">✕</button>
             </div>
             <form onSubmit={handleEditSubmit}>
               <div className="p-6 space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Status</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Status</label>
                   <select
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-850 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     value={editForm.status}
                     onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
                   >
@@ -1404,12 +1404,12 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
                 <div className="space-y-1.5">
                   <div className="flex justify-between items-center">
-                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Manual Completion %</label>
-                    <span className="font-mono text-sm text-blue-600 font-bold">{editForm.completion}%</span>
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Manual Completion %</label>
+                    <span className="font-mono text-sm text-indigo-650 font-bold">{editForm.completion}%</span>
                   </div>
                   <input
                     type="range"
-                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600 focus:outline-none"
+                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600 focus:outline-none"
                     min="0"
                     max="100"
                     step="5"
@@ -1420,9 +1420,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Priority</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Priority</label>
                   <select
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-855 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     value={editForm.priority}
                     onChange={(e) => setEditForm({ ...editForm, priority: e.target.value })}
                   >
@@ -1434,9 +1434,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Milestone Owner</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Milestone Owner</label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-855 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     value={editForm.owner}
                     onChange={(e) => setEditForm({ ...editForm, owner: e.target.value })}
                   >
@@ -1448,18 +1448,18 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-200 shadow-xl/60 bg-slate-900/50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-100 bg-[#fbfbfc] flex justify-end gap-3 rounded-b-2xl">
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
-                  className="px-4 py-2 text-sm text-slate-400 hover:text-slate-100 font-medium cursor-pointer"
+                  className="px-4 py-2 text-sm text-slate-505 hover:text-slate-800 hover:bg-slate-100 rounded-xl font-medium cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-slate-100 text-sm shadow-md cursor-pointer transition-all flex items-center gap-1.5"
+                  className="px-5 py-2 bg-[#5f27cd] hover:bg-[#5f27cd]/90 rounded-xl font-semibold text-white text-sm shadow-md shadow-indigo-500/10 cursor-pointer transition-all flex items-center gap-1.5"
                 >
                   {submitting && <Loader2 size={14} className="animate-spin" />}
                   Save Changes
@@ -1472,14 +1472,14 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
       {/* VIEW MODAL */}
       {showViewModal && selectedTask && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-slate-200 shadow-xl animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-200 shadow-xl/65 flex justify-between items-center bg-slate-900/50">
-              <h3 className="text-lg font-display font-medium text-slate-200">Milestone Details & Ledger</h3>
-              <button onClick={() => setShowViewModal(false)} className="text-slate-400 hover:text-slate-100 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
+              <h3 className="text-lg font-display font-bold text-slate-800">Milestone Details & Ledger</h3>
+              <button onClick={() => setShowViewModal(false)} className="text-slate-400 hover:text-slate-600 text-base font-bold cursor-pointer">✕</button>
             </div>
-            <div className="p-6 overflow-y-auto max-h-[70vh]">
-              <table className="w-full text-slate-400 border-collapse divide-y divide-slate-200/60 font-sans text-sm">
+            <div className="p-6 overflow-y-auto max-h-[70vh] bg-white">
+              <table className="w-full text-slate-600 border-collapse divide-y divide-slate-100 font-sans text-sm">
                 <tbody>
                   {[
                     { label: "Task ID", val: selectedTask.id },
@@ -1499,22 +1499,22 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     { label: "Dependency Factor", val: selectedTask.dependency || "No" },
                     { label: "Created Date", val: selectedTask.createdDate ? new Date(selectedTask.createdDate).toLocaleString() : "-" }
                   ].map((row, i) => (
-                    <tr key={i} className="py-2.5 flex justify-between items-start border-b border-slate-200 shadow-xl/40">
-                      <td className="font-medium text-slate-400 uppercase text-[10px] tracking-wider py-2 font-mono w-44">{row.label}</td>
-                      <td className="text-slate-200 text-right font-medium max-w-xs break-words py-2 font-sans">{row.val}</td>
+                    <tr key={i} className="py-2.5 flex justify-between items-start border-b border-slate-100">
+                      <td className="font-bold text-slate-500 uppercase text-[10px] tracking-wider py-2 font-mono w-44">{row.label}</td>
+                      <td className="text-slate-800 text-right font-medium max-w-xs break-words py-2 font-sans">{row.val}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className="px-6 py-4 border-t border-slate-200 shadow-xl/60 bg-slate-900/50 flex justify-end gap-3">
+            <div className="px-6 py-4 border-t border-slate-100 bg-[#fbfbfc] flex justify-end gap-3 rounded-b-2xl">
               <button
                 type="button"
                 onClick={() => {
                   setShowViewModal(false);
                   handleSendWhatsApp(selectedTask);
                 }}
-                className="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-semibold flex items-center gap-1.5 cursor-pointer transition-all"
+                className="px-5 py-2.5 bg-[#25D366] hover:bg-[#20ba56] text-white rounded-xl text-sm font-bold flex items-center gap-1.5 cursor-pointer transition-all shadow-md shadow-emerald-500/10"
               >
                 <MessageCircle size={15} />
                 Send via WhatsApp
@@ -1522,7 +1522,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
               <button
                 type="button"
                 onClick={() => setShowViewModal(false)}
-                className="px-5 py-2 bg-slate-700 hover:bg-slate-600 rounded-xl text-slate-200 text-sm font-semibold cursor-pointer transition-all"
+                className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-slate-700 text-sm font-bold cursor-pointer transition-all border border-slate-200/50"
               >
                 Close
               </button>
@@ -1532,42 +1532,42 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       )}
       {/* QUICK DEPENDENCY MODAL */}
       {showDependencyModal && dependencyTargetTask && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-slate-200 shadow-xl animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-200 shadow-xl/65 flex justify-between items-center bg-slate-900/50">
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-lg rounded-2xl overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
               <div className="space-y-1">
-                <h3 className="text-lg font-display font-medium text-slate-200">Establish Task Dependency</h3>
-                <p className="text-[11px] text-slate-400">
-                  Setting predecessor blocking constraints for <span className="font-semibold text-blue-400 font-mono">{dependencyTargetTask.id}</span>
+                <h3 className="text-lg font-display font-bold text-slate-850">Establish Task Dependency</h3>
+                <p className="text-[11px] text-slate-500 font-semibold">
+                  Setting predecessor blocking constraints for <span className="font-semibold text-indigo-650 font-mono">{dependencyTargetTask.id}</span>
                 </p>
               </div>
               <button 
                 type="button" 
                 onClick={() => setShowDependencyModal(false)} 
-                className="text-slate-400 hover:text-slate-100 text-sm font-semibold cursor-pointer"
+                className="text-slate-400 hover:text-slate-600 text-base font-bold cursor-pointer"
               >
                 ✕
               </button>
             </div>
             <form onSubmit={handleDependencySubmit}>
-              <div className="p-6 space-y-4 max-h-[65vh] overflow-y-auto">
+              <div className="p-6 space-y-4 max-h-[65vh] overflow-y-auto bg-white">
                 {/* Target Info Read Only */}
-                <div className="bg-slate-900/40 border border-slate-200 shadow-xl/40 rounded-xl p-3.5 space-y-2">
-                  <div className="flex justify-between items-center text-xs text-slate-400">
-                    <span>Target Dependent Task:</span>
-                    <span className="font-bold text-slate-400 bg-white px-1.5 py-0.5 rounded font-mono">{dependencyTargetTask.id}</span>
+                <div className="bg-indigo-50/40 border border-indigo-100/80 rounded-xl p-3.5 space-y-2">
+                  <div className="flex justify-between items-center text-xs text-slate-500">
+                    <span className="font-semibold">Target Dependent Task:</span>
+                    <span className="font-bold text-indigo-700 bg-indigo-50 border border-indigo-100 px-1.5 py-0.5 rounded font-mono">{dependencyTargetTask.id}</span>
                   </div>
-                  <h4 className="text-sm font-semibold text-slate-200">{dependencyTargetTask.name}</h4>
-                  <div className="text-xs text-slate-400 font-medium">Department: <span className="text-slate-300">{dependencyTargetTask.department}</span></div>
+                  <h4 className="text-sm font-bold text-slate-800">{dependencyTargetTask.name}</h4>
+                  <div className="text-xs text-slate-550 font-bold">Department Segment: <span className="text-indigo-650 font-extrabold">{dependencyTargetTask.department}</span></div>
                 </div>
 
                 {/* Predecessor Select */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block required">
                     Predecessor (Depends On)
                   </label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-850 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     value={dependencyForm.dependsOn}
                     onChange={(e) => setDependencyForm({ ...dependencyForm, dependsOn: e.target.value })}
                     required
@@ -1585,11 +1585,11 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
                 {/* Constraint Type Selector */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block required">
                     Constraint Type
                   </label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-850 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     value={dependencyForm.type}
                     onChange={(e) => setDependencyForm({ ...dependencyForm, type: e.target.value })}
                     required
@@ -1603,11 +1603,11 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
                 {/* Predecessor Notes */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
+                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
                     Predecessor Notes
                   </label>
                   <textarea
-                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 rounded-xl px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
                     placeholder="Provide context regarding pre-requisite actions..."
                     rows={2}
                     value={dependencyForm.notes}
@@ -1616,18 +1616,18 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-200 shadow-xl/60 bg-slate-900/50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-100 bg-[#fbfbfc] flex justify-end gap-3 rounded-b-2xl">
                 <button
                   type="button"
                   onClick={() => setShowDependencyModal(false)}
-                  className="px-4 py-2 text-sm text-slate-400 hover:text-slate-100 font-medium cursor-pointer"
+                  className="px-4 py-2 text-sm text-slate-505 hover:text-slate-800 hover:bg-slate-100 rounded-xl font-medium cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={dependencySubmitting}
-                  className="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl font-medium text-slate-100 text-sm shadow-md cursor-pointer transition-all flex items-center gap-1.5"
+                  className="px-5 py-2 bg-[#5f27cd] hover:bg-[#5f27cd]/90 rounded-xl font-semibold text-white text-sm shadow-md shadow-indigo-500/10 cursor-pointer transition-all flex items-center gap-1.5"
                 >
                   {dependencySubmitting && <Loader2 size={14} className="animate-spin" />}
                   Create Dependency
