@@ -208,19 +208,19 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Search & Action Panel */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white px-6 py-5 rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] backdrop-blur">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white px-6 py-5 rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(154,85,255,0.02)] backdrop-blur">
         <div className="space-y-1">
-          <h2 className="text-xl font-display font-semibold text-slate-800 tracking-tight flex items-center gap-2">
-            <AlertCircle size={20} className="text-amber-400" />
+          <h2 className="text-xl font-display font-extrabold text-[#343a40] tracking-tight flex items-center gap-2">
+            <AlertCircle size={20} className="text-gradient-primary" />
             Issue Defect Tracker
           </h2>
-          <p className="text-xs text-slate-500 font-sans">Active blockers, improvements, and system logs audit directory.</p>
+          <p className="text-xs text-slate-500 font-bold">Active blockers, improvements, and system logs audit directory.</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-white flex items-center gap-2 text-sm shadow-lg shadow-blue-500/10 hover:shadow-blue-500/15 group tracking-wide cursor-pointer transition-all duration-200"
+          className="px-5 py-2.5 bg-gradient-primary hover:opacity-95 rounded-xl font-bold text-white flex items-center gap-2 text-sm shadow-md shadow-purple-500/10 hover:shadow-lg hover:shadow-purple-500/20 group tracking-wide cursor-pointer transition-all duration-200"
         >
           <Plus size={16} />
           New Issue Ticket
@@ -228,10 +228,10 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
       </div>
 
       {/* Ribbon Filters */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 bg-white/10 p-4 rounded-xl border border-slate-200/20">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 bg-white p-4 rounded-xl border border-slate-200/70 shadow-xs">
         <div>
           <select
-            className="w-full bg-white/40 border border-slate-200/60 rounded-lg py-2 px-3 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
+            className="w-full bg-slate-50 border border-slate-200/80 rounded-lg py-2 px-3 text-sm text-slate-700 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff] transition-all"
             value={filterSel}
             onChange={(e) => setFilterSel(e.target.value)}
           >
@@ -243,7 +243,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
         </div>
         <div>
           <select
-            className="w-full bg-white/40 border border-slate-200/60 rounded-lg py-2 px-3 text-sm text-slate-600 focus:outline-none focus:border-blue-500"
+            className="w-full bg-slate-50 border border-slate-200/80 rounded-lg py-2 px-3 text-sm text-slate-700 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff] transition-all"
             value={deptFilter}
             onChange={(e) => setDeptFilter(e.target.value)}
           >
@@ -254,12 +254,12 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
           </select>
         </div>
         <div className="relative">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 pointer-events-none">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 pointer-events-none">
             <Search size={16} />
           </span>
           <input
             type="text"
-            className="w-full bg-white/40 border border-slate-200/60 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-700 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-slate-50 border border-slate-200/80 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-700 placeholder-slate-400 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff] focus:bg-white transition-all"
             placeholder="Search tickets..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -270,19 +270,19 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
             api.clearCache();
             loadData();
           }}
-          className="px-4 py-2 border border-slate-200 hover:bg-white font-medium text-xs text-slate-600 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-300 transition-all duration-200"
+          className="px-4 py-2 border border-slate-200/80 bg-white hover:bg-slate-50 font-bold text-xs text-slate-600 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-[#9a55ff]/40 hover:text-[#9a55ff] transition-all duration-200"
         >
-          <RotateCw size={12} />
+          <RotateCw size={12} className="text-[#9a55ff]" />
           Reload Ledger
         </button>
       </div>
 
       {/* Issues Table Ledger */}
-      <div className="bg-white/30 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-white border border-slate-200/80 shadow-md shadow-purple-500/5 rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[1200px]">
             <thead>
-              <tr className="bg-white/80 border-b border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-slate-500 text-[11px] font-semibold uppercase tracking-wider font-mono">
+              <tr className="bg-slate-50/50 border-b border-slate-200/85 text-slate-500 text-[11px] font-bold uppercase tracking-wider font-mono">
                 <th className="py-4 px-6">Issue ID</th>
                 <th className="py-4 px-6">Issue Title</th>
                 <th className="py-4 px-6">Description</th>

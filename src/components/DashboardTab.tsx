@@ -72,29 +72,29 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
       {/* Upper header section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-4">
-          <div className="h-11 w-11 bg-indigo-650 shadow-lg shadow-indigo-500/25 text-white rounded-2xl flex items-center justify-center border border-indigo-400/10">
+          <div className="h-11 w-11 bg-gradient-primary shadow-lg shadow-purple-500/25 text-white rounded-2xl flex items-center justify-center">
             <LayoutDashboard size={20} className="stroke-[2.5]" />
           </div>
           <div>
-            <h1 className="text-2xl font-display font-extrabold text-[#2b2b2b] tracking-tight flex items-center gap-2">
-              Dashboard
+            <h1 className="text-2xl font-display font-extrabold text-[#343a40] tracking-tight flex items-center gap-2">
+              Dashboard Overview
             </h1>
-            <p className="text-xs text-slate-500 font-medium tracking-wide">
-              Overview of active operations, deliverables, and log statuses
+            <p className="text-xs text-slate-500 font-bold tracking-wide">
+              Overview of active operations, deliverables, and ledger progress
             </p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 text-slate-500 text-xs font-semibold tracking-wide bg-slate-100/80 hover:bg-slate-200/60 px-3 py-1.5 rounded-lg transition-colors cursor-pointer border border-slate-200/30">
+          <div className="flex items-center gap-1.5 text-slate-500 text-xs font-bold tracking-wide bg-slate-100 hover:bg-slate-200/60 px-3 py-1.5 rounded-lg transition-colors cursor-pointer border border-[#9a55ff]/5">
             <span>Overview</span>
-            <span className="w-4 h-4 bg-slate-200 text-slate-600 rounded-full flex items-center justify-center text-[10px] font-black font-mono">!</span>
+            <span className="w-4 h-4 bg-gradient-primary text-white rounded-full flex items-center justify-center text-[9px] font-black font-mono">i</span>
           </div>
           <button
             onClick={fetchDashboardData}
-            className="px-4 py-2 text-xs bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-medium text-slate-705 flex items-center gap-2 tracking-wide transition-all duration-200 cursor-pointer shadow-sm hover:shadow"
+            className="px-4 py-2 text-xs bg-white hover:bg-purple-50/20 border border-slate-205 hover:border-[#9a55ff]/40 rounded-xl font-bold text-slate-700 flex items-center gap-2 tracking-wide transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md"
           >
             {loading ? (
-              <Loader2 size={14} className="animate-spin text-blue-500" />
+              <Loader2 size={14} className="animate-spin text-[#9a55ff]" />
             ) : (
               "Refresh Analytics"
             )}
@@ -107,7 +107,7 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
         {/* Card 1: Open Tasks */}
         <div
           onClick={() => onNavigateTab("tasks", "Open Task")}
-          className="bg-gradient-to-br from-[#ff8e8a] to-[#ff5077] hover:shadow-2xl hover:shadow-rose-450/25 rounded-3xl p-6 shadow-md transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden text-white min-h-[160px]"
+          className="bg-gradient-danger hover:shadow-[0_15px_30px_rgba(254,112,150,0.32)] rounded-3xl p-6 shadow-md shadow-orange-500/5 transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden text-white min-h-[160px]"
         >
           {/* Overlapping circular abstract shapes */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-6 -mt-6 transition-transform duration-500 group-hover:scale-125"></div>
@@ -115,17 +115,17 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
           
           <div className="relative z-10 w-full">
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#ffffffea]">Open Tasks</span>
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#ffffffea]">Weekly Sales</span>
               <div className="w-10 h-10 rounded-full bg-white/20 select-none text-white flex items-center justify-center backdrop-blur-md transition-transform duration-300 group-hover:rotate-12 border border-white/15">
                 <CheckSquare size={18} />
               </div>
             </div>
             <div className="mt-2 text-left">
               <span className="text-4xl font-display font-extrabold tracking-tight block text-white">{counts.openTasks}</span>
-              <p className="text-xs text-white/80 font-semibold mt-1">Active Milestones</p>
+              <p className="text-xs text-white/80 font-bold mt-1">Active Milestones</p>
             </div>
           </div>
-          <div className="mt-4 flex items-center justify-between text-white/95 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all z-10">
+          <div className="mt-3 flex items-center justify-between text-white/95 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all z-10">
             <span>View Tasks</span>
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </div>
@@ -134,7 +134,7 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
         {/* Card 2: Closed Tasks */}
         <div
           onClick={() => onNavigateTab("tasks", "Complete Task")}
-          className="bg-gradient-to-br from-[#54a0ff] to-[#3867d6] hover:shadow-2xl hover:shadow-blue-500/25 rounded-3xl p-6 shadow-md transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden text-white min-h-[160px]"
+          className="bg-gradient-info hover:shadow-[0_15px_30px_rgba(4,126,223,0.22)] rounded-3xl p-6 shadow-md shadow-blue-500/5 transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden text-white min-h-[160px]"
         >
           {/* Overlapping circular abstract shapes */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-6 -mt-6 transition-transform duration-500 group-hover:scale-125"></div>
@@ -142,17 +142,17 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
           
           <div className="relative z-10 w-full">
             <div className="flex justify-between items-start mb-4">
-              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#ffffffea]">Closed Tasks</span>
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#ffffffea]">Weekly Orders</span>
               <div className="w-10 h-10 rounded-full bg-white/20 select-none text-white flex items-center justify-center backdrop-blur-md transition-transform duration-300 group-hover:rotate-12 border border-white/15">
                 <Check className="stroke-[3]" size={18} />
               </div>
             </div>
             <div className="mt-2 text-left">
               <span className="text-4xl font-display font-extrabold tracking-tight block text-white">{counts.closedTasks}</span>
-              <p className="text-xs text-white/80 font-semibold mt-1">Compliant Deliverables</p>
+              <p className="text-xs text-white/80 font-bold mt-1">Compliant Deliverables</p>
             </div>
           </div>
-          <div className="mt-4 flex items-center justify-between text-white/95 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all z-10">
+          <div className="mt-3 flex items-center justify-between text-white/95 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all z-10">
             <span>View Done</span>
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </div>
@@ -161,7 +161,7 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
         {/* Card 3: Open Issues */}
         <div
           onClick={() => onNavigateTab("issues", "Open Issue")}
-          className="bg-gradient-to-br from-[#1dd1a1] to-[#10ac84] hover:shadow-2xl hover:shadow-emerald-500/25 rounded-3xl p-6 shadow-md transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden text-white min-h-[160px]"
+          className="bg-gradient-success hover:shadow-[0_15px_30px_rgba(7,205,174,0.22)] rounded-3xl p-6 shadow-md shadow-[#07cdae]/5 transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden text-white min-h-[160px]"
         >
           {/* Overlapping circular abstract shapes */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-6 -mt-6 transition-transform duration-500 group-hover:scale-125"></div>
@@ -176,10 +176,10 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
             </div>
             <div className="mt-2 text-left">
               <span className="text-4xl font-display font-extrabold tracking-tight block text-white">{counts.openIssues}</span>
-              <p className="text-xs text-white/80 font-semibold mt-1">Assigned Blockers</p>
+              <p className="text-xs text-white/80 font-bold mt-1">Assigned Blockers</p>
             </div>
           </div>
-          <div className="mt-4 flex items-center justify-between text-white/95 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all z-10">
+          <div className="mt-3 flex items-center justify-between text-white/95 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all z-10">
             <span>View Issues</span>
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </div>
@@ -188,7 +188,7 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
         {/* Card 4: Closed Issues */}
         <div
           onClick={() => onNavigateTab("issues", "Closed Issue")}
-          className="bg-gradient-to-br from-[#a55eea] to-[#8854d0] hover:shadow-2xl hover:shadow-purple-500/25 rounded-3xl p-6 shadow-md transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden text-white min-h-[160px]"
+          className="bg-gradient-primary hover:shadow-[0_15px_30px_rgba(154,85,255,0.32)] rounded-3xl p-6 shadow-md shadow-purple-500/5 transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden text-white min-h-[160px]"
         >
           {/* Overlapping circular abstract shapes */}
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-6 -mt-6 transition-transform duration-500 group-hover:scale-125"></div>
@@ -203,10 +203,10 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
             </div>
             <div className="mt-2 text-left">
               <span className="text-4xl font-display font-extrabold tracking-tight block text-white">{counts.closedIssues}</span>
-              <p className="text-xs text-white/80 font-semibold mt-1">Resolved Blockers</p>
+              <p className="text-xs text-white/80 font-bold mt-1">Resolved Blockers</p>
             </div>
           </div>
-          <div className="mt-4 flex items-center justify-between text-white/95 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all z-10">
+          <div className="mt-3 flex items-center justify-between text-white/95 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all z-10">
             <span>View Closed</span>
             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </div>

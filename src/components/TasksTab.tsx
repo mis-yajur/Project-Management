@@ -708,19 +708,19 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Search & Action Panel */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white px-6 py-5 rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white px-6 py-5 rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(154,85,255,0.02)]">
         <div className="space-y-1">
-          <h2 className="text-xl font-display font-semibold text-slate-800 tracking-tight flex items-center gap-2">
-            <ListTodo size={20} className="text-blue-600" />
+          <h2 className="text-xl font-display font-extrabold text-[#343a40] tracking-tight flex items-center gap-2">
+            <ListTodo size={20} className="text-gradient-primary" />
             Milestones and Deliverables
           </h2>
-          <p className="text-xs text-slate-400 font-sans">Complete backlog directory of project assignments and hierarchy structures.</p>
+          <p className="text-xs text-slate-500 font-bold">Complete backlog directory of project assignments and hierarchy structures.</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 rounded-xl font-medium text-white flex items-center gap-2 text-sm shadow-md shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/15 group tracking-wide cursor-pointer transition-all duration-200"
+          className="px-5 py-2.5 bg-gradient-primary hover:opacity-95 rounded-xl font-bold text-white flex items-center gap-2 text-sm shadow-md shadow-purple-500/10 hover:shadow-lg hover:shadow-purple-500/20 group tracking-wide cursor-pointer transition-all duration-200"
         >
           <Plus size={16} />
           New Task Milestone
@@ -733,9 +733,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           <button
             type="button"
             onClick={() => setLayoutMode("table")}
-            className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-4 py-2 text-xs font-bold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
               layoutMode === "table"
-                ? "bg-slate-900 text-white shadow-sm"
+                ? "bg-gradient-primary text-white shadow-md shadow-purple-500/10 font-extrabold"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
             }`}
           >
@@ -744,9 +744,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           <button
             type="button"
             onClick={() => setLayoutMode("board-status")}
-            className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-4 py-2 text-xs font-bold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
               layoutMode === "board-status"
-                ? "bg-slate-900 text-white shadow-sm"
+                ? "bg-gradient-primary text-white shadow-md shadow-purple-500/10 font-extrabold"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
             }`}
           >
@@ -755,9 +755,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           <button
             type="button"
             onClick={() => setLayoutMode("board-group")}
-            className={`px-4 py-2 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-4 py-2 text-xs font-bold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer ${
               layoutMode === "board-group"
-                ? "bg-slate-900 text-white shadow-sm"
+                ? "bg-gradient-primary text-white shadow-md shadow-purple-500/10 font-extrabold"
                 : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
             }`}
           >
@@ -765,7 +765,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           </button>
         </div>
         
-        <div className="text-[11px] font-mono font-medium text-slate-400 bg-slate-50/50 rounded-xl px-3 py-1.5 border border-slate-100 flex items-center gap-1">
+        <div className="text-[11px] font-semibold text-[#343a40] bg-purple-50 border border-purple-100/40 rounded-xl px-3 py-1.5 flex items-center gap-1">
           <span>💡</span> <span>Drag & drop cards to reassign status or groups instantly</span>
         </div>
       </div>
@@ -774,7 +774,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 bg-white p-4 rounded-xl border border-slate-200/65 shadow-sm">
         <div>
           <select
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-700 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff]"
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
           >
@@ -786,7 +786,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         </div>
         <div>
           <select
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 px-3 text-sm text-slate-700 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff]"
             value={groupFilter}
             onChange={(e) => setGroupFilter(e.target.value)}
           >
@@ -797,12 +797,12 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           </select>
         </div>
         <div className="relative">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 pointer-events-none">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 pointer-events-none">
             <Search size={16} />
           </span>
           <input
             type="text"
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
+            className="w-full bg-slate-50 border border-slate-200 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-700 placeholder-slate-400 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff] focus:bg-white transition-colors"
             placeholder="Search tasks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -813,9 +813,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
             api.clearCache();
             loadData();
           }}
-          className="px-4 py-2 border border-slate-200 hover:bg-slate-50 font-medium text-xs text-slate-700 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-300 transition-all duration-200"
+          className="px-4 py-2 border border-slate-200/80 bg-white hover:bg-slate-50 font-bold text-xs text-slate-600 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-[#9a55ff]/40 hover:text-[#9a55ff] transition-all duration-200"
         >
-          <RotateCw size={12} />
+          <RotateCw size={12} className="text-[#9a55ff]" />
           Reload List
         </button>
       </div>

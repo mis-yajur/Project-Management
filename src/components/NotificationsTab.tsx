@@ -210,24 +210,24 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
       </div>
 
       {/* Grid: Settings and Manual Trigger Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 font-sans">
         {/* Card 1: Email Configuration */}
         <div className="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden flex flex-col justify-between">
           <div className="px-6 py-5 border-b border-slate-100 flex items-center gap-2 bg-white">
-            <Mail size={18} className="text-blue-500" />
-            <span className="font-display font-medium text-slate-900 tracking-wide">Automated Email System API</span>
+            <Mail size={18} className="text-[#9a55ff]" />
+            <span className="font-display font-extrabold text-slate-900 tracking-wide">Automated Email System API</span>
           </div>
           <div className="p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
                 <label className="text-sm font-semibold text-slate-900 tracking-wide" htmlFor="email_enabled">Enable Email Notifications</label>
-                <p className="text-xs text-slate-500 font-sans">Dispatches logs directly via standard SMTP/MailApp services.</p>
+                <p className="text-xs text-slate-500 font-bold">Dispatches logs directly via standard SMTP/MailApp services.</p>
               </div>
               <input
                 type="checkbox"
                 id="email_enabled"
                 disabled={currentUser.role === "User"}
-                className="w-5 h-5 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                className="w-5 h-5 text-purple-600 accent-purple-600 bg-white border-slate-300 rounded focus:ring-[#9a55ff] cursor-pointer disabled:opacity-30"
                 checked={settings.email_enabled === "true"}
                 onChange={(e) => setSettings({ ...settings, email_enabled: e.target.checked ? "true" : "false" })}
               />
@@ -236,7 +236,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
             <hr className="border-slate-100 my-2" />
 
             <div className="space-y-3">
-              <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-slate-500">Auto-trigger Event Rules</span>
+              <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-slate-550">Auto-trigger Event Rules</span>
               
               <div className="flex items-center justify-between">
                 <div>
@@ -247,7 +247,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
                   type="checkbox"
                   id="auto_notify_task_create"
                   disabled={currentUser.role === "User"}
-                  className="w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                  className="w-4 h-4 text-purple-600 accent-purple-600 bg-white border-slate-300 rounded focus:ring-[#9a55ff] cursor-pointer disabled:opacity-30"
                   checked={settings.auto_notify_task_create === "true"}
                   onChange={(e) => setSettings({ ...settings, auto_notify_task_create: e.target.checked ? "true" : "false" })}
                 />
@@ -262,7 +262,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
                   type="checkbox"
                   id="auto_notify_task_assign"
                   disabled={currentUser.role === "User"}
-                  className="w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                  className="w-4 h-4 text-purple-600 accent-purple-600 bg-white border-slate-300 rounded focus:ring-[#9a55ff] cursor-pointer disabled:opacity-30"
                   checked={settings.auto_notify_task_assign === "true"}
                   onChange={(e) => setSettings({ ...settings, auto_notify_task_assign: e.target.checked ? "true" : "false" })}
                 />
@@ -277,7 +277,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
                   type="checkbox"
                   id="auto_notify_issue_assign"
                   disabled={currentUser.role === "User"}
-                  className="w-4 h-4 text-blue-600 bg-white border-slate-300 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                  className="w-4 h-4 text-purple-600 accent-purple-600 bg-white border-slate-300 rounded focus:ring-[#9a55ff] cursor-pointer disabled:opacity-30"
                   checked={settings.auto_notify_issue_assign === "true"}
                   onChange={(e) => setSettings({ ...settings, auto_notify_issue_assign: e.target.checked ? "true" : "false" })}
                 />
@@ -286,27 +286,27 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
           </div>
           <div className="p-4 px-6 border-t border-slate-100 bg-white">
             <button
-              onClick={handleSaveSettings}
-              disabled={savingSettings || currentUser.role === "User"}
-              className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-semibold shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-35"
-            >
-              {savingSettings ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
-              {currentUser.role === "User" ? "Admin / Manager Access only" : "Save Automation Parameters"}
+               onClick={handleSaveSettings}
+               disabled={savingSettings || currentUser.role === "User"}
+               className="w-full py-2.5 bg-gradient-primary hover:opacity-95 text-white font-bold rounded-xl text-sm shadow-md shadow-purple-500/10 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-35 transition-all"
+             >
+               {savingSettings ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
+               {currentUser.role === "User" ? "Admin / Manager Access only" : "Save Automation Parameters"}
             </button>
           </div>
         </div>
 
         {/* Card 2: Manual Notification Dispatcher */}
-        <div className="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden flex flex-col justify-between">
+        <div className="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden flex flex-col justify-between font-sans">
           <div className="px-6 py-5 border-b border-slate-100 flex items-center gap-2 bg-white">
-            <Send size={18} className="text-indigo-500" />
-            <span className="font-display font-medium text-slate-900 tracking-wide">Manual Mail Dispatcher Terminal</span>
+            <Send size={18} className="text-[#9a55ff]" />
+            <span className="font-display font-extrabold text-slate-900 tracking-wide">Manual Mail Dispatcher Terminal</span>
           </div>
           <div className="p-6 space-y-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Scope Category</label>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Scope Category</label>
               <select
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
+                className="w-full bg-slate-50 border border-slate-200/80 rounded-xl px-4 py-2.5 text-sm text-[#343a40] outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff]"
                 value={manualType}
                 onChange={(e) => setManualType(e.target.value as "task" | "issue")}
               >
@@ -316,9 +316,9 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Select Target deliverable</label>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Select Target Deliverable</label>
               <select
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
+                className="w-full bg-slate-50 border border-slate-200/80 rounded-xl px-4 py-2.5 text-sm text-[#343a40] outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff]"
                 value={selectedTarget}
                 onChange={(e) => setSelectedTarget(e.target.value)}
               >
@@ -331,7 +331,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
               </select>
             </div>
 
-            <div className="bg-blue-50 border border-blue-100 p-3.5 rounded-xl text-xs text-slate-700 font-sans leading-relaxed">
+            <div className="bg-purple-50 border border-purple-100/70 p-3.5 rounded-xl text-xs text-[#343a40] font-bold leading-relaxed">
               <strong>💡 Mechanism:</strong> Resolves the recipient address associated with the target’s owner profile tag dynamically, drafts a structured email complete with priority variables, logs the outcome, and attempts to send SMTP mail safely.
             </div>
           </div>
@@ -339,7 +339,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
             <button
               onClick={handleSendManual}
               disabled={sendingEmail || !selectedTarget}
-              className="w-full py-2.5 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white rounded-xl text-sm font-semibold shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40"
+              className="w-full py-2.5 bg-gradient-primary hover:opacity-95 text-white rounded-xl text-sm font-bold shadow-md shadow-purple-500/10 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40 transition-all font-bold"
             >
               {sendingEmail ? <Loader2 size={15} className="animate-spin" /> : <Send size={14} />}
               Send Alert Email Now
@@ -349,16 +349,16 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
       </div>
 
       {/* Notification Log History Section */}
-      <div className="space-y-3">
-        <div className="bg-slate-50/70 border border-slate-200/25 p-4 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="space-y-3 font-sans">
+        <div className="bg-slate-50/70 border border-slate-200/40 p-4 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:max-w-2xl">
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 pointer-events-none">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 pointer-events-none">
                 <Search size={14} />
               </span>
               <input
                 type="text"
-                className="w-full bg-white border border-slate-200 rounded-lg py-1.5 pl-8 pr-3 text-xs text-slate-700 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full bg-white border border-slate-200 rounded-lg py-1.5 pl-8 pr-3 text-xs text-slate-700 placeholder-slate-400 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff] transition-colors"
                 placeholder="Search logs..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -366,7 +366,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
             </div>
             <div>
               <select
-                className="w-full bg-white border border-slate-200 rounded-lg py-1.5 px-3.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500"
+                className="w-full bg-white border border-slate-200 rounded-lg py-1.5 px-3.5 text-xs text-slate-700 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff]"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
@@ -377,7 +377,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
             </div>
             <div>
               <select
-                className="w-full bg-white border border-slate-200 rounded-lg py-1.5 px-3.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500"
+                className="w-full bg-white border border-slate-200 rounded-lg py-1.5 px-3.5 text-xs text-slate-700 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff]"
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
               >

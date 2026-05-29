@@ -7,42 +7,65 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar styled with purple accents */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(241, 245, 249, 1);
+  background: rgba(247, 246, 252, 1);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(59, 130, 246, 0.3);
+  background: rgba(154, 85, 255, 0.25);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(59, 130, 246, 0.5);
+  background: rgba(154, 85, 255, 0.5);
 }
-  
-/* Premium smooth layout & ambient animations */
+
+/* Purple Admin Specific Gradients */
+.bg-gradient-primary {
+  background-image: linear-gradient(135deg, #da8cff 0%, #9a55ff 100%) !important;
+}
+
+.text-gradient-primary {
+  background: linear-gradient(135deg, #da8cff 0%, #9a55ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-gradient-danger {
+  background-image: linear-gradient(135deg, #ffbf96 0%, #fe7096 100%) !important;
+}
+
+.bg-gradient-info {
+  background-image: linear-gradient(135deg, #90caf9 0%, #047edf 100%) !important;
+}
+
+.bg-gradient-success {
+  background-image: linear-gradient(135deg, #84d9d2 0%, #07cdae 100%) !important;
+}
+
+.bg-gradient-warning {
+  background-image: linear-gradient(135deg, #ffd86f 0%, #fda83d 100%) !important;
+}
+
+/* Premium shadows & subtle transitions */
 .glass-panel {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(154, 85, 255, 0.1);
 }
 
-.glow-indigo {
-  box-shadow: 0 0 25px -5px rgba(79, 70, 229, 0.15);
+.glow-purple {
+  box-shadow: 0 8px 25px -5px rgba(154, 85, 255, 0.18);
 }
 
-.glow-blue {
-  box-shadow: 0 0 25px -5px rgba(59, 130, 246, 0.15);
-}
-
-.glow-emerald {
-  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.15);
+.card-shadow {
+  box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.04);
 }
 
 @keyframes pulse-subtle {
@@ -53,3 +76,4 @@
 .animate-pulse-subtle {
   animation: pulse-subtle 4s infinite ease-in-out;
 }
+

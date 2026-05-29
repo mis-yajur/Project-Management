@@ -230,19 +230,19 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Search & Action Panel */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white px-6 py-5 rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white px-6 py-5 rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(154,85,255,0.02)]">
         <div className="space-y-1">
-          <h2 className="text-xl font-display font-semibold text-slate-800 tracking-tight flex items-center gap-2">
-            <BarChart3 size={20} className="text-blue-600" />
-            Analytical Management Reports
+          <h2 className="text-xl font-display font-extrabold text-[#343a40] tracking-tight flex items-center gap-2">
+            <BarChart3 size={20} className="text-gradient-primary" />
+            Control Management Reports
           </h2>
-          <p className="text-xs text-slate-400 font-sans">Query performance thresholds, dates, segments, and export standard spreadsheets files.</p>
+          <p className="text-xs text-slate-500 font-bold">Query performance thresholds, dates, segments, and export standard spreadsheet files.</p>
         </div>
         <button
           onClick={downloadCSV}
-          className="px-5 py-2.5 bg-green-600 hover:bg-green-700 rounded-xl font-medium text-white flex items-center gap-2 text-sm shadow-md shadow-green-500/10 hover:shadow-lg hover:shadow-green-500/15 group tracking-wide cursor-pointer transition-all duration-200"
+          className="px-5 py-2.5 bg-gradient-success hover:opacity-95 rounded-xl font-bold text-white flex items-center gap-2 text-sm shadow-md shadow-emerald-500/10 hover:shadow-lg hover:shadow-emerald-500/20 group tracking-wide cursor-pointer transition-all duration-200"
         >
           <FileDown size={16} />
           Download CSV Ledger
@@ -253,7 +253,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
       <div className="bg-white p-5 rounded-xl border border-slate-200/65 shadow-sm space-y-4">
         <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
           <select
-            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
+            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff] focus:bg-white"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
@@ -266,7 +266,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
           </select>
 
           <select
-            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
+            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff] focus:bg-white"
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
           >
@@ -278,7 +278,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
           </select>
 
           <select
-            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
+            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff] focus:bg-white"
             value={deptFilter}
             onChange={(e) => setDeptFilter(e.target.value)}
           >
@@ -289,7 +289,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
           </select>
 
           <select
-            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
+            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff] focus:bg-white"
             value={groupFilter}
             onChange={(e) => setGroupFilter(e.target.value)}
           >
@@ -300,7 +300,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
           </select>
 
           <select
-            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white"
+            className="bg-slate-50 border border-slate-200 rounded-lg py-1.5 px-2.5 text-xs text-slate-800 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff] focus:bg-white"
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
           >
@@ -310,12 +310,12 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
           </select>
 
           <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-2.5 text-slate-500 pointer-events-none">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-2.5 text-slate-400 pointer-events-none">
               <Search size={14} />
             </span>
             <input
               type="text"
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg py-1.5 pl-8 pr-7 text-xs text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg py-1.5 pl-8 pr-7 text-xs text-slate-800 placeholder-slate-400 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff] focus:bg-white transition-colors"
               placeholder="Query search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
