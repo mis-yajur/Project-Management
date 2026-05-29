@@ -343,14 +343,16 @@ function executeAction(action, args) {
     }
 
     case "createTask": {
-      var taskData = args[0];
-      var creatorId = args[1];
+      var taskData = args[0] || {};
+      var creatorId = String(args[1] || "").trim();
       
       var tasks = readSheetData("Tasks");
       var newId = "";
 
-      if (taskData.parentTaskId) {
-        var parentId = taskData.parentTaskId;
+      var rawParentTaskId = String(taskData.parentTaskId || "").trim();
+
+      if (rawParentTaskId) {
+        var parentId = rawParentTaskId;
         var subtasks = tasks.filter(function(t) { return String(t.id).indexOf(parentId) === 0 && t.id.length > parentId.length; });
         var suffixes = [];
         subtasks.forEach(function(st) {
@@ -377,26 +379,26 @@ function executeAction(action, args) {
         newId = "TASK-" + String(lastNum + 1).padStart(4, "0");
       }
 
-      var startDate = taskData.startDate || new Date().toISOString();
-      var dueDate = taskData.dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      var startDate = String(taskData.startDate || new Date().toISOString()).trim();
+      var dueDate = String(taskData.dueDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()).trim();
       var pct = calculateAutoProgress(startDate, dueDate);
 
       var newTask = {
         id: newId,
-        name: taskData.name,
-        description: taskData.description || "",
-        department: taskData.department,
-        owner: taskData.owner || creatorId,
-        status: taskData.status || "Open",
-        tags: taskData.tags || "",
+        name: String(taskData.name || "").trim(),
+        description: String(taskData.description || "").trim(),
+        department: String(taskData.department || "").trim(),
+        owner: String(taskData.owner || creatorId).trim(),
+        status: String(taskData.status || "Open").trim(),
+        tags: String(taskData.tags || "").trim(),
         startDate: startDate,
         dueDate: dueDate,
-        priority: taskData.priority || "Medium",
+        priority: String(taskData.priority || "Medium").trim(),
         completion: 0,
-        group: taskData.group || "",
+        group: String(taskData.group || "").trim(),
         createdDate: new Date().toISOString(),
         autoProgress: pct,
-        parentTaskId: taskData.parentTaskId || "",
+        parentTaskId: rawParentTaskId,
         calculatedAuto: pct,
         dependency: "No"
       };
@@ -408,11 +410,11 @@ function executeAction(action, args) {
       var settingsList = readSheetData("Settings");
       var settings = {};
       settingsList.forEach(function(s) { settings[s.key] = s.value; });
-      var assignTargetId = taskData.owner || creatorId;
+      var assignTargetId = newTask.owner;
       
       if (settings.auto_notify_task_create === "true" && assignTargetId && assignTargetId !== creatorId) {
         var users = readSheetData("Users");
-        var recipient = users.find(function(u) { return u.id === assignTargetId; });
+        var recipient = users.find(function(u) { return String(u.id).trim() === assignTargetId; });
         if (recipient) {
           var notifications = readSheetData("Notifications");
           var notifId = "NOTIF-" + String(notifications.length + 1).padStart(4, "0");
@@ -425,7 +427,7 @@ function executeAction(action, args) {
             recipientEmail: recipient.email,
             channel: "Email",
             status: "Sent",
-            message: "New Task Assigned: " + taskData.name + ". Priority: " + (taskData.priority || "Medium"),
+            message: "New Task Assigned: " + newTask.name + ". Priority: " + newTask.priority,
             sentDate: new Date().toISOString(),
             triggeredBy: "System"
           });
@@ -437,13 +439,13 @@ function executeAction(action, args) {
     }
 
     case "updateTask": {
-      var taskId = args[0];
-      var updates = args[1];
+      var taskId = String(args[0] || "").trim();
+      var updates = args[1] || {};
       
       var tasks = readSheetData("Tasks");
       var idx = -1;
       for (var i = 0; i < tasks.length; i++) {
-        if (tasks[i].id === taskId) {
+        if (String(tasks[i].id).trim() === taskId) {
           idx = i;
           break;
         }
@@ -451,17 +453,18 @@ function executeAction(action, args) {
       
       if (idx !== -1) {
         var task = tasks[idx];
-        if (updates.status !== undefined) task.status = updates.status;
+        if (updates.status !== undefined) task.status = String(updates.status).trim();
         if (updates.completion !== undefined) task.completion = Number(updates.completion);
-        if (updates.priority !== undefined) task.priority = updates.priority;
-        if (updates.dependency !== undefined) task.dependency = updates.dependency;
-        if (updates.group !== undefined) task.group = updates.group;
+        if (updates.priority !== undefined) task.priority = String(updates.priority).trim();
+        if (updates.dependency !== undefined) task.dependency = String(updates.dependency).trim();
+        if (updates.group !== undefined) task.group = String(updates.group).trim();
         
         var notifyOnReassign = false;
-        var oldOwner = task.owner;
+        var oldOwner = String(task.owner).trim();
         if (updates.owner !== undefined) {
-          task.owner = updates.owner;
-          if (updates.owner !== oldOwner) {
+          var newOwner = String(updates.owner).trim();
+          task.owner = newOwner;
+          if (newOwner !== oldOwner) {
             notifyOnReassign = true;
           }
         }
@@ -479,7 +482,7 @@ function executeAction(action, args) {
           
           if (settings.auto_notify_task_assign === "true") {
             var users = readSheetData("Users");
-            var recipient = users.find(function(u) { return u.id === updates.owner; });
+            var recipient = users.find(function(u) { return String(u.id).trim() === task.owner; });
             if (recipient) {
               var notifications = readSheetData("Notifications");
               var notifId = "NOTIF-" + String(notifications.length + 1).padStart(4, "0");

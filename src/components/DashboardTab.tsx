@@ -96,96 +96,96 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
         {/* Card 1: Open Tasks */}
         <div
           onClick={() => onNavigateTab("tasks", "Open Task")}
-          className="bg-gradient-to-br from-amber-50/40 to-white hover:from-amber-100/40 hover:to-white border border-amber-200/80 rounded-2xl p-5 shadow-sm transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
+          className="bg-white hover:bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
         >
-          <div className="absolute top-0 inset-x-0 h-1 bg-amber-500"></div>
+          <div className="absolute top-0 right-0 w-24 h-24 bg-amber-500/10 rounded-full -mr-6 -mt-6 transition-transform group-hover:scale-125"></div>
           <div>
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Open Tasks</span>
-              <div className="w-9 h-9 rounded-xl bg-amber-100/60 text-amber-600 flex items-center justify-center border border-amber-200 shadow-sm">
-                <CheckSquare size={18} />
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Open Tasks</span>
+              <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-100 shadow-sm">
+                <CheckSquare size={20} />
               </div>
             </div>
-            <div className="mt-3">
-              <span className="text-3xl font-display font-extrabold text-amber-600">{counts.openTasks}</span>
-              <p className="text-[11px] text-slate-500 font-semibold font-sans mt-0.5">Active Milestones</p>
+            <div className="mt-2">
+              <span className="text-4xl font-display font-extrabold text-slate-900 tracking-tight">{counts.openTasks}</span>
+              <p className="text-xs text-slate-500 font-medium mt-1">Active Milestones</p>
             </div>
           </div>
-          <div className="mt-4 bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl flex items-center justify-between shadow-sm">
-            <span>Tracking active backlog</span>
-            <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
+          <div className="mt-6 flex items-center justify-between text-amber-600 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all">
+            <span>View Tasks</span>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
 
         {/* Card 2: Closed Tasks */}
         <div
           onClick={() => onNavigateTab("tasks", "Complete Task")}
-          className="bg-gradient-to-br from-emerald-50/40 to-white hover:from-emerald-100/40 hover:to-white border border-emerald-200/80 rounded-2xl p-5 shadow-sm transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
+          className="bg-white hover:bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
         >
-          <div className="absolute top-0 inset-x-0 h-1 bg-emerald-500"></div>
+          <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full -mr-6 -mt-6 transition-transform group-hover:scale-125"></div>
           <div>
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Closed Tasks</span>
-              <div className="w-9 h-9 rounded-xl bg-emerald-100/60 text-emerald-600 flex items-center justify-center border border-emerald-200 shadow-sm">
-                <Check className="stroke-[3]" size={18} />
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Closed Tasks</span>
+              <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shadow-sm">
+                <Check className="stroke-[3]" size={20} />
               </div>
             </div>
-            <div className="mt-3">
-              <span className="text-3xl font-display font-extrabold text-emerald-600">{counts.closedTasks}</span>
-              <p className="text-[11px] text-slate-500 font-semibold font-sans mt-0.5">Compliant Deliverables</p>
+            <div className="mt-2">
+              <span className="text-4xl font-display font-extrabold text-slate-900 tracking-tight">{counts.closedTasks}</span>
+              <p className="text-xs text-slate-500 font-medium mt-1">Compliant Deliverables</p>
             </div>
           </div>
-          <div className="mt-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl flex items-center justify-between shadow-sm">
-            <span>Workorder achievements</span>
-            <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
+          <div className="mt-6 flex items-center justify-between text-emerald-600 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all">
+            <span>View Done</span>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
 
         {/* Card 3: Open Issues */}
         <div
           onClick={() => onNavigateTab("issues", "Open Issue")}
-          className="bg-gradient-to-br from-rose-50/40 to-white hover:from-rose-100/40 hover:to-white border border-rose-200/80 rounded-2xl p-5 shadow-sm transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
+          className="bg-white hover:bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
         >
-          <div className="absolute top-0 inset-x-0 h-1 bg-rose-550"></div>
+          <div className="absolute top-0 right-0 w-24 h-24 bg-rose-500/10 rounded-full -mr-6 -mt-6 transition-transform group-hover:scale-125"></div>
           <div>
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Open Issues</span>
-              <div className="w-9 h-9 rounded-xl bg-rose-100/60 text-rose-600 flex items-center justify-center border border-rose-200 shadow-sm">
-                <AlertTriangle size={18} />
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Open Issues</span>
+              <div className="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100 shadow-sm">
+                <AlertTriangle size={20} />
               </div>
             </div>
-            <div className="mt-3">
-              <span className="text-3xl font-display font-extrabold text-rose-600">{counts.openIssues}</span>
-              <p className="text-[11px] text-slate-500 font-semibold font-sans mt-0.5">Assigned Blockers</p>
+            <div className="mt-2">
+              <span className="text-4xl font-display font-extrabold text-slate-900 tracking-tight">{counts.openIssues}</span>
+              <p className="text-xs text-slate-500 font-medium mt-1">Assigned Blockers</p>
             </div>
           </div>
-          <div className="mt-4 bg-gradient-to-r from-rose-500 to-red-500 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl flex items-center justify-between shadow-sm">
-            <span>Requires rapid response</span>
-            <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
+          <div className="mt-6 flex items-center justify-between text-rose-600 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all">
+            <span>View Issues</span>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
 
         {/* Card 4: Closed Issues */}
         <div
           onClick={() => onNavigateTab("issues", "Closed Issue")}
-          className="bg-gradient-to-br from-blue-50/40 to-white hover:from-blue-100/40 hover:to-white border border-blue-200/80 rounded-2xl p-5 shadow-sm transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
+          className="bg-white hover:bg-slate-50 border border-slate-200 rounded-3xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col justify-between relative overflow-hidden"
         >
-          <div className="absolute top-0 inset-x-0 h-1 bg-blue-500"></div>
+          <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-full -mr-6 -mt-6 transition-transform group-hover:scale-125"></div>
           <div>
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Closed Issues</span>
-              <div className="w-9 h-9 rounded-xl bg-blue-100/60 text-blue-600 flex items-center justify-center border border-blue-200 shadow-sm">
-                <ShieldAlert size={18} />
+            <div className="flex justify-between items-center mb-4">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Closed Issues</span>
+              <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center border border-blue-100 shadow-sm">
+                <ShieldAlert size={20} />
               </div>
             </div>
-            <div className="mt-3">
-              <span className="text-3xl font-display font-extrabold text-blue-600">{counts.closedIssues}</span>
-              <p className="text-[11px] text-slate-500 font-semibold font-sans mt-0.5">Resolved Blockers</p>
+            <div className="mt-2">
+              <span className="text-4xl font-display font-extrabold text-slate-900 tracking-tight">{counts.closedIssues}</span>
+              <p className="text-xs text-slate-500 font-medium mt-1">Resolved Blockers</p>
             </div>
           </div>
-          <div className="mt-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[11px] font-extrabold px-3 py-1.5 rounded-xl flex items-center justify-between shadow-sm">
-            <span>Stability checkpoints</span>
-            <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
+          <div className="mt-6 flex items-center justify-between text-blue-600 font-bold text-xs uppercase tracking-wider group-hover:gap-2 transition-all">
+            <span>View Closed</span>
+            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
           </div>
         </div>
       </div>
