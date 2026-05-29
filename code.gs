@@ -937,6 +937,29 @@ function executeAction(action, args) {
       return { success: true, data: activeUsers };
     }
 
+    case "updateUser": {
+      var uId = args[0];
+      var updates = args[1];
+      var users = readSheetData("Users");
+      var found = false;
+      for (var i = 0; i < users.length; i++) {
+        if (users[i].id === uId) {
+          for (var k in updates) {
+            if (updates.hasOwnProperty(k)) {
+              users[i][k] = updates[k];
+            }
+          }
+          found = true;
+          break;
+        }
+      }
+      if (found) {
+        writeSheetData("Users", users);
+        return { success: true, message: "User updated successfully" };
+      }
+      return { success: false, message: "User not found" };
+    }
+
     case "deleteUser": {
       var uId = args[0];
       var users = readSheetData("Users");
@@ -1097,6 +1120,56 @@ function executeAction(action, args) {
 
       writeSheetData("Notifications", notifications);
       return { success: true, emailResult: "Sent (Logged to Notification Log)" };
+    }
+    case "sendWhatsApp": {
+      var phone = args[0];
+      var name = args[1];
+      var taskId = args[2];
+      var daysLimit = args[3];
+      var priority = args[4];
+      var taskUpdateLink = args[5];
+      
+      if (!phone) {
+        return { success: false, message: "Recipient phone number is missing." };
+      }
+
+      var formattedPhone = String(phone).replace(/[+\s-]/g, "");
+
+      try {
+        var baseUrl = "https://bhashsms.com/api/sendmsgutil.php";
+        
+        var paramsValue = (name || "") + "," +
+                          (taskId || "") + "," +
+                          (daysLimit || "") + "," +
+                          (priority || "") + "," +
+                          (taskUpdateLink || "");
+        
+        var qs = "?user=" + encodeURIComponent("YajurFibre_BWAI") +
+                 "&pass=" + encodeURIComponent("123456") +
+                 "&sender=" + encodeURIComponent("BUZWAP") +
+                 "&phone=" + encodeURIComponent(formattedPhone) +
+                 "&text=" + encodeURIComponent("tsk_9") +
+                 "&priority=" + encodeURIComponent("wa") +
+                 "&stype=" + encodeURIComponent("normal") +
+                 "&Params=" + encodeURIComponent(paramsValue);
+                 
+        var url = baseUrl + qs;
+        
+        var response = UrlFetchApp.fetch(url, {
+          method: "get",
+          muteHttpExceptions: true
+        });
+
+        var responseText = response.getContentText();
+        
+        if (responseText && responseText.indexOf("S-") > -1 || responseText.indexOf("success") > -1) {
+          return { success: true, message: "WhatsApp message sent successfully via BhashSMS API. Log: " + responseText };
+        } else {
+          return { success: false, message: "SMS API returned failure: " + responseText };
+        }
+      } catch (e) {
+        return { success: false, message: "Exception while sending WhatsApp: " + e.toString() };
+      }
     }
   }
 

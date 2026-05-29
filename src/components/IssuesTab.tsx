@@ -187,7 +187,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
 
   const getStatusStyle = (status: string) => {
     const s = status.toLowerCase();
-    if (s.includes("closed")) return "bg-slate-500/10 text-slate-400 border-slate-500/10";
+    if (s.includes("closed")) return "bg-slate-500/10 text-slate-500 border-slate-500/10";
     return "bg-rose-500/10 text-rose-400 border-rose-500/15";
   };
 
@@ -196,7 +196,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
     if (p.includes("high")) return "bg-red-500/10 text-red-500 border-red-500/15";
     if (p.includes("low")) return "bg-green-500/10 text-green-500 border-green-500/15";
     if (p.includes("medium")) return "bg-amber-500/10 text-amber-500 border-amber-500/15";
-    return "bg-slate-500/10 text-slate-400 border-slate-505/15";
+    return "bg-slate-500/10 text-slate-500 border-slate-500/15";
   };
 
   const getHeatmapColor = (pct: number) => {
@@ -210,17 +210,17 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
   return (
     <div className="space-y-6">
       {/* Search & Action Panel */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/20 px-6 py-5 rounded-2xl border border-slate-700/35 backdrop-blur">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white px-6 py-5 rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] backdrop-blur">
         <div className="space-y-1">
-          <h2 className="text-xl font-display font-medium text-slate-100 tracking-tight flex items-center gap-2">
+          <h2 className="text-xl font-display font-semibold text-slate-800 tracking-tight flex items-center gap-2">
             <AlertCircle size={20} className="text-amber-400" />
             Issue Defect Tracker
           </h2>
-          <p className="text-xs text-slate-400 font-sans">Active blockers, improvements, and system logs audit directory.</p>
+          <p className="text-xs text-slate-500 font-sans">Active blockers, improvements, and system logs audit directory.</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-slate-100 flex items-center gap-2 text-sm shadow-lg shadow-blue-500/10 hover:shadow-blue-500/15 group tracking-wide cursor-pointer transition-all duration-200"
+          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-white flex items-center gap-2 text-sm shadow-lg shadow-blue-500/10 hover:shadow-blue-500/15 group tracking-wide cursor-pointer transition-all duration-200"
         >
           <Plus size={16} />
           New Issue Ticket
@@ -228,10 +228,10 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
       </div>
 
       {/* Ribbon Filters */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 bg-slate-800/10 p-4 rounded-xl border border-slate-700/20">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 bg-white/10 p-4 rounded-xl border border-slate-200/20">
         <div>
           <select
-            className="w-full bg-slate-900/40 border border-slate-700/60 rounded-lg py-2 px-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+            className="w-full bg-white/40 border border-slate-200/60 rounded-lg py-2 px-3 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
             value={filterSel}
             onChange={(e) => setFilterSel(e.target.value)}
           >
@@ -243,7 +243,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
         </div>
         <div>
           <select
-            className="w-full bg-slate-900/40 border border-slate-700/60 rounded-lg py-2 px-3 text-sm text-slate-300 focus:outline-none focus:border-blue-500"
+            className="w-full bg-white/40 border border-slate-200/60 rounded-lg py-2 px-3 text-sm text-slate-600 focus:outline-none focus:border-blue-500"
             value={deptFilter}
             onChange={(e) => setDeptFilter(e.target.value)}
           >
@@ -259,7 +259,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
           </span>
           <input
             type="text"
-            className="w-full bg-slate-900/40 border border-slate-700/60 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-white/40 border border-slate-200/60 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-700 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
             placeholder="Search tickets..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -270,7 +270,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
             api.clearCache();
             loadData();
           }}
-          className="px-4 py-2 border border-slate-700 hover:bg-slate-800 font-medium text-xs text-slate-300 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-600 transition-all duration-200"
+          className="px-4 py-2 border border-slate-200 hover:bg-white font-medium text-xs text-slate-600 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-300 transition-all duration-200"
         >
           <RotateCw size={12} />
           Reload Ledger
@@ -278,11 +278,11 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
       </div>
 
       {/* Issues Table Ledger */}
-      <div className="bg-slate-800/30 border border-slate-700/40 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-white/30 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse min-w-[1200px]">
             <thead>
-              <tr className="bg-slate-800/80 border-b border-slate-700/50 text-slate-400 text-[11px] font-semibold uppercase tracking-wider font-mono">
+              <tr className="bg-white/80 border-b border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-slate-500 text-[11px] font-semibold uppercase tracking-wider font-mono">
                 <th className="py-4 px-6">Issue ID</th>
                 <th className="py-4 px-6">Issue Title</th>
                 <th className="py-4 px-6">Description</th>
@@ -300,7 +300,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 <th className="py-4 px-6 text-center">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-700/30 text-sm text-slate-300">
+            <tbody className="divide-y divide-slate-200/60 text-sm text-slate-600">
               {loading ? (
                 <tr>
                   <td colSpan={15} className="py-20 text-center">
@@ -320,23 +320,23 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                   const ap = i.autoProgress || 0;
                   
                   return (
-                    <tr key={i.id} className="hover:bg-slate-800/15 transition-colors group">
-                      <td className="py-4 px-6 font-mono text-xs font-semibold text-slate-400">{i.id}</td>
-                      <td className="py-4 px-6 font-medium text-slate-200">{i.name}</td>
-                      <td className="py-4 px-6 text-slate-400 max-w-xs truncate" title={i.description}>{i.description || "-"}</td>
-                      <td className="py-4 px-6 text-slate-400">{i.department}</td>
-                      <td className="py-4 px-6 text-slate-400">{i.reporter}</td>
-                      <td className="py-4 px-6 text-slate-400 font-mono text-xs">
+                    <tr key={i.id} className="hover:bg-slate-50/70 transition-colors group">
+                      <td className="py-4 px-6 font-mono text-xs font-semibold text-slate-500">{i.id}</td>
+                      <td className="py-4 px-6 font-medium text-slate-700">{i.name}</td>
+                      <td className="py-4 px-6 text-slate-500 max-w-xs truncate" title={i.description}>{i.description || "-"}</td>
+                      <td className="py-4 px-6 text-slate-500">{i.department}</td>
+                      <td className="py-4 px-6 text-slate-500">{i.reporter}</td>
+                      <td className="py-4 px-6 text-slate-500 font-mono text-xs">
                         {i.createdTime ? new Date(i.createdTime).toLocaleDateString() : "-"}
                       </td>
-                      <td className="py-4 px-6 text-slate-400">{i.assignee}</td>
-                      <td className="py-4 px-6 text-slate-400 text-xs">{i.tags || "-"}</td>
-                      <td className="py-4 px-6 text-slate-400 font-mono text-xs">
+                      <td className="py-4 px-6 text-slate-500">{i.assignee}</td>
+                      <td className="py-4 px-6 text-slate-500 text-xs">{i.tags || "-"}</td>
+                      <td className="py-4 px-6 text-slate-500 font-mono text-xs">
                         {i.dueDate ? new Date(i.dueDate).toLocaleDateString() : "-"}
                       </td>
                       <td className="py-4 px-6">
-                        <div className="flex flex-col gap-1 w-full max-w-[150px] font-mono text-[10px] font-medium text-slate-400">
-                          <div className="flex justify-between items-center text-[10px] text-slate-400">
+                        <div className="flex flex-col gap-1 w-full max-w-[150px] font-mono text-[10px] font-medium text-slate-500">
+                          <div className="flex justify-between items-center text-[10px] text-slate-500">
                             <span>Manual: {mp}%</span>
                             <span style={{ color: getHeatmapColor(ap) }}>Auto: {ap}%</span>
                           </div>
@@ -362,12 +362,12 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                           {i.severity}
                         </span>
                       </td>
-                      <td className="py-4 px-6 text-slate-400 font-mono text-xs">{i.classification || "-"}</td>
+                      <td className="py-4 px-6 text-slate-500 font-mono text-xs">{i.classification || "-"}</td>
                       <td className="py-4 px-6">
                         <span className={`text-[10px] font-semibold tracking-wide border px-2 py-0.5 rounded ${
                           String(i.flag).toLowerCase() === 'critical' ? 'bg-red-500/10 text-red-400 border-red-500/15' :
                           String(i.flag).toLowerCase() === 'important' ? 'bg-amber-500/10 text-amber-400 border-amber-500/15' :
-                          'bg-slate-500/10 text-slate-400 border-slate-500/15'
+                          'bg-slate-500/10 text-slate-500 border-slate-500/15'
                         }`}>
                           {i.flag || "Normal"}
                         </span>
@@ -376,14 +376,14 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                         <div className="flex items-center justify-center gap-1">
                           <button
                             onClick={() => showDetails(i)}
-                            className="p-1 text-slate-500 hover:text-slate-100 rounded hover:bg-slate-755/50 cursor-pointer"
+                            className="p-1 text-slate-500 hover:text-slate-800 rounded hover:bg-slate-700/50 cursor-pointer"
                             title="Quick Info"
                           >
                             <Eye size={14} />
                           </button>
                           <button
                             onClick={() => handleEditClick(i)}
-                            className="p-1 text-slate-500 hover:text-blue-400 rounded hover:bg-slate-755/50 cursor-pointer"
+                            className="p-1 text-slate-500 hover:text-blue-400 rounded hover:bg-slate-700/50 cursor-pointer"
                             title="Update Ticket"
                           >
                             <Edit size={14} />
@@ -391,7 +391,7 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                           <button
                             onClick={() => handleDelete(i)}
                             disabled={currentUser.role !== "Admin" && currentUser.id !== i.assignee}
-                            className="p-1 text-slate-500 hover:text-red-400 disabled:opacity-20 rounded hover:bg-slate-755/50 cursor-pointer"
+                            className="p-1 text-slate-500 hover:text-red-400 disabled:opacity-20 rounded hover:bg-slate-700/50 cursor-pointer"
                             title="Delete Ticket"
                           >
                             <Trash2 size={14} />
@@ -409,20 +409,20 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
 
       {/* CREATE MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border border-slate-700 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-700/65 flex justify-between items-center bg-slate-900/50">
-              <h3 className="text-lg font-display font-medium text-slate-200">Open Blocker / Ticket</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-100 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+              <h3 className="text-lg font-display font-medium text-slate-700">Open Blocker / Ticket</h3>
+              <button onClick={() => setShowCreateModal(false)} className="text-slate-500 hover:text-slate-800 text-sm font-semibold cursor-pointer">✕</button>
             </div>
             <form onSubmit={handleCreateSubmit}>
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Issue Title</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Issue Title</label>
                     <input
                       type="text"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. Broken links on department portals"
                       value={createForm.name}
                       onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
@@ -430,9 +430,9 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Associated Segment</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Associated Segment</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                       value={createForm.department}
                       onChange={(e) => setCreateForm({ ...createForm, department: e.target.value })}
                       required
@@ -446,9 +446,9 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Detailed explanation</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Detailed explanation</label>
                   <textarea
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                     placeholder="Enter thorough details so the assignee has full context..."
                     rows={3}
                     value={createForm.description}
@@ -458,9 +458,9 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Severity Level</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Severity Level</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                       value={createForm.severity}
                       onChange={(e) => setCreateForm({ ...createForm, severity: e.target.value })}
                       required
@@ -471,10 +471,10 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                     </select>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block font-mono">Due Date Limit</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block font-mono">Due Date Limit</label>
                     <input
                       type="date"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                       value={createForm.dueDate}
                       onChange={(e) => setCreateForm({ ...createForm, dueDate: e.target.value })}
                     />
@@ -483,20 +483,20 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Classification</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Classification</label>
                     <input
                       type="text"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. Bug, Improvement, Task"
                       value={createForm.classification}
                       onChange={(e) => setCreateForm({ ...createForm, classification: e.target.value })}
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Metadata Tags</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Metadata Tags</label>
                     <input
                       type="text"
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. visual, logic, blocker"
                       value={createForm.tags}
                       onChange={(e) => setCreateForm({ ...createForm, tags: e.target.value })}
@@ -506,9 +506,9 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Priority Flags</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Priority Flags</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                       value={createForm.flag}
                       onChange={(e) => setCreateForm({ ...createForm, flag: e.target.value })}
                     >
@@ -518,9 +518,9 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                     </select>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Assignee Target</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Assignee Target</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                       value={createForm.assignee}
                       onChange={(e) => setCreateForm({ ...createForm, assignee: e.target.value })}
                     >
@@ -533,18 +533,18 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-700/60 bg-slate-900/50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-200/60 bg-slate-50 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowCreateModal(false)}
-                  className="px-4 py-2 text-sm text-slate-400 hover:text-slate-100 font-medium cursor-pointer"
+                  className="px-4 py-2 text-sm text-slate-500 hover:text-slate-800 font-medium cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-slate-100 text-sm shadow-md cursor-pointer transition-all flex items-center gap-1.5"
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-white text-sm shadow-md cursor-pointer transition-all flex items-center gap-1.5"
                 >
                   {submitting && <Loader2 size={14} className="animate-spin" />}
                   Register Issue
@@ -557,18 +557,18 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
 
       {/* EDIT MODAL */}
       {showEditModal && selectedIssue && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-700 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-700/65 flex justify-between items-center bg-slate-900/50">
-              <h3 className="text-lg font-display font-medium text-slate-200">Update Issue Ticket: {selectedIssue.id}</h3>
-              <button onClick={() => setShowEditModal(false)} className="text-slate-400 hover:text-slate-100 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+              <h3 className="text-lg font-display font-medium text-slate-700">Update Issue Ticket: {selectedIssue.id}</h3>
+              <button onClick={() => setShowEditModal(false)} className="text-slate-500 hover:text-slate-800 text-sm font-semibold cursor-pointer">✕</button>
             </div>
             <form onSubmit={handleEditSubmit}>
               <div className="p-6 space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Status</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Status</label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                     value={editForm.status}
                     onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
                   >
@@ -579,12 +579,12 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
 
                 <div className="space-y-1.5">
                   <div className="flex justify-between items-center">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Completion percentage</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Completion percentage</label>
                     <span className="font-mono text-sm text-blue-400 font-bold">{editForm.completion}%</span>
                   </div>
                   <input
                     type="range"
-                    className="w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-blue-500 focus:outline-none"
+                    className="w-full h-2 bg-white rounded-lg appearance-none cursor-pointer accent-blue-500 focus:outline-none"
                     min="0"
                     max="100"
                     step="5"
@@ -594,9 +594,9 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Severity Level</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Severity Level</label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                     value={editForm.severity}
                     onChange={(e) => setEditForm({ ...editForm, severity: e.target.value })}
                   >
@@ -607,9 +607,9 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Assignee Target</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Assignee Target</label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                     value={editForm.assignee}
                     onChange={(e) => setEditForm({ ...editForm, assignee: e.target.value })}
                   >
@@ -621,19 +621,19 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Classification</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Classification</label>
                   <input
                     type="text"
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                     value={editForm.classification}
                     onChange={(e) => setEditForm({ ...editForm, classification: e.target.value })}
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Priority Flag</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Priority Flag</label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                     value={editForm.flag}
                     onChange={(e) => setEditForm({ ...editForm, flag: e.target.value })}
                   >
@@ -644,18 +644,18 @@ export default function IssuesTab({ currentUser }: IssuesTabProps) {
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-700/60 bg-slate-900/50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-200/60 bg-slate-50 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowEditModal(false)}
-                  className="px-4 py-2 text-sm text-slate-400 hover:text-slate-100 font-medium cursor-pointer"
+                  className="px-4 py-2 text-sm text-slate-500 hover:text-slate-800 font-medium cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-slate-100 text-sm shadow-md cursor-pointer transition-all flex items-center gap-1.5"
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-white text-sm shadow-md cursor-pointer transition-all flex items-center gap-1.5"
                 >
                   {submitting && <Loader2 size={14} className="animate-spin" />}
                   Save Changes

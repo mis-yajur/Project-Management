@@ -94,7 +94,7 @@ export default function App() {
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center border border-blue-100 shadow-sm">
-              <Sparkles size={19} className="text-blue-650" />
+              <Sparkles size={19} className="text-blue-600" />
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -136,8 +136,8 @@ export default function App() {
         </div>
 
         {/* Horizontal Nav Bar containing all Menu items */}
-        <nav className="flex items-center gap-1 overflow-x-auto pb-0 -mx-6 px-6 scrollbar-none border-t border-slate-100 mt-1">
-          {menuItems.map((item) => {
+        <nav className="dock-nav mt-3">
+          {menuItems.map((item, index) => {
             if (item.adminOnly && !isAdmin) return null;
             const IconComp = item.icon;
             const isActive = activeTab === item.id;
@@ -150,19 +150,12 @@ export default function App() {
                   if (item.id !== "dependency") setDependencyOverrideSearch("");
                   setActiveTab(item.id);
                 }}
-                className={`px-4 py-3 border-b-2 font-medium text-xs flex items-center gap-2 tracking-wide cursor-pointer group transition-all duration-150 shrink-0 ${
-                  isActive
-                    ? "border-blue-600 text-blue-600 font-semibold bg-blue-50/30"
-                    : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-50"
-                }`}
+                className={`dock-block ${isActive ? "ring-2 ring-blue-500 rounded-full" : ""}`}
+                style={{"--bg": `var(--gradient-${(index % 9) + 1})`} as any}
               >
-                <IconComp
-                  size={15}
-                  className={`transition-colors duration-150 ${
-                    isActive ? "text-blue-600" : "text-slate-400 group-hover:text-slate-700"
-                  }`}
-                />
-                {item.label}
+                <div className={`dock-item`}>
+                  <IconComp size={20} />
+                </div>
               </button>
             );
           })}

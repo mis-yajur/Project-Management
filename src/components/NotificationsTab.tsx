@@ -192,17 +192,17 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
   return (
     <div className="space-y-6">
       {/* Header Panel */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/20 px-6 py-5 rounded-2xl border border-slate-700/35 backdrop-blur">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white px-6 py-5 rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] backdrop-blur">
         <div className="space-y-1">
-          <h2 className="text-xl font-display font-medium text-slate-100 tracking-tight flex items-center gap-2">
+          <h2 className="text-xl font-display font-semibold text-slate-800 tracking-tight flex items-center gap-2">
             <Bell size={20} className="text-blue-400" />
             Notification Settings & Audit Logs
           </h2>
-          <p className="text-xs text-slate-400 font-sans">Manage email settings, trigger manual notifications, and inspect dispatched mail indexes.</p>
+          <p className="text-xs text-slate-500 font-sans">Manage email settings, trigger manual notifications, and inspect dispatched mail indexes.</p>
         </div>
         <button
           onClick={loadData}
-          className="px-4 py-2 border border-slate-700 hover:bg-slate-800 font-medium text-xs text-slate-300 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-600 transition-all duration-200"
+          className="px-4 py-2 border border-slate-200 hover:bg-white font-medium text-xs text-slate-600 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-300 transition-all duration-200"
         >
           <RotateCw size={12} />
           Reload logs
@@ -212,42 +212,42 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
       {/* Grid: Settings and Manual Trigger Cards */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Card 1: Email Configuration */}
-        <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
-          <div className="px-6 py-5 border-b border-slate-700/50 flex items-center gap-2 bg-slate-900/10">
+        <div className="bg-slate-50 border-b border-slate-200/60 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
+          <div className="px-6 py-5 border-b border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex items-center gap-2 bg-white/10">
             <Mail size={18} className="text-blue-400" />
-            <span className="font-display font-medium text-slate-200 tracking-wide">Automated Email System API</span>
+            <span className="font-display font-medium text-slate-700 tracking-wide">Automated Email System API</span>
           </div>
           <div className="p-6 space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <label className="text-sm font-semibold text-slate-200 tracking-wide" htmlFor="email_enabled">Enable Email Notifications</label>
+                <label className="text-sm font-semibold text-slate-700 tracking-wide" htmlFor="email_enabled">Enable Email Notifications</label>
                 <p className="text-xs text-slate-500 font-sans">Dispatches logs directly via standard SMTP/MailApp services.</p>
               </div>
               <input
                 type="checkbox"
                 id="email_enabled"
                 disabled={currentUser.role === "User"}
-                className="w-5 h-5 text-blue-600 bg-slate-900 border-slate-700 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                className="w-5 h-5 text-blue-600 bg-white border-slate-200 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
                 checked={settings.email_enabled === "true"}
                 onChange={(e) => setSettings({ ...settings, email_enabled: e.target.checked ? "true" : "false" })}
               />
             </div>
             
-            <hr className="border-slate-700/45 my-2" />
+            <hr className="border-slate-200/45 my-2" />
 
             <div className="space-y-3">
               <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-slate-500">Auto-trigger Event Rules</span>
               
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-xs text-slate-300" htmlFor="auto_notify_task_create">On New Task Creation</label>
+                  <label className="text-xs text-slate-600" htmlFor="auto_notify_task_create">On New Task Creation</label>
                   <p className="text-[10px] text-slate-500 font-sans">Alerts the assignee only when task is created by another team member.</p>
                 </div>
                 <input
                   type="checkbox"
                   id="auto_notify_task_create"
                   disabled={currentUser.role === "User"}
-                  className="w-4 h-4 text-blue-600 bg-slate-900 border-slate-700 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                  className="w-4 h-4 text-blue-600 bg-white border-slate-200 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
                   checked={settings.auto_notify_task_create === "true"}
                   onChange={(e) => setSettings({ ...settings, auto_notify_task_create: e.target.checked ? "true" : "false" })}
                 />
@@ -255,14 +255,14 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
 
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-xs text-slate-300" htmlFor="auto_notify_task_assign">On Task Reassignment Change</label>
+                  <label className="text-xs text-slate-600" htmlFor="auto_notify_task_assign">On Task Reassignment Change</label>
                   <p className="text-[10px] text-slate-500 font-sans">Triggers instant notification specifically when a leader reallocates task owner.</p>
                 </div>
                 <input
                   type="checkbox"
                   id="auto_notify_task_assign"
                   disabled={currentUser.role === "User"}
-                  className="w-4 h-4 text-blue-600 bg-slate-900 border-slate-700 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                  className="w-4 h-4 text-blue-600 bg-white border-slate-200 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
                   checked={settings.auto_notify_task_assign === "true"}
                   onChange={(e) => setSettings({ ...settings, auto_notify_task_assign: e.target.checked ? "true" : "false" })}
                 />
@@ -270,25 +270,25 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
 
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-xs text-slate-300" htmlFor="auto_notify_issue_assign">On Issue Assignment Change</label>
+                  <label className="text-xs text-slate-600" htmlFor="auto_notify_issue_assign">On Issue Assignment Change</label>
                   <p className="text-[10px] text-slate-500 font-sans">Alerts assigned developer profile that a new blocker contains their tag.</p>
                 </div>
                 <input
                   type="checkbox"
                   id="auto_notify_issue_assign"
                   disabled={currentUser.role === "User"}
-                  className="w-4 h-4 text-blue-600 bg-slate-900 border-slate-700 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
+                  className="w-4 h-4 text-blue-600 bg-white border-slate-200 rounded focus:ring-blue-500 cursor-pointer disabled:opacity-30"
                   checked={settings.auto_notify_issue_assign === "true"}
                   onChange={(e) => setSettings({ ...settings, auto_notify_issue_assign: e.target.checked ? "true" : "false" })}
                 />
               </div>
             </div>
           </div>
-          <div className="p-4 px-6 border-t border-slate-700/50 bg-slate-900/20">
+          <div className="p-4 px-6 border-t border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] bg-white/20">
             <button
               onClick={handleSaveSettings}
               disabled={savingSettings || currentUser.role === "User"}
-              className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-slate-100 rounded-xl text-sm font-semibold shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-35"
+              className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-semibold shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-35"
             >
               {savingSettings ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
               {currentUser.role === "User" ? "Admin / Manager Access only" : "Save Automation Parameters"}
@@ -297,16 +297,16 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
         </div>
 
         {/* Card 2: Manual Notification Dispatcher */}
-        <div className="bg-slate-800/40 border border-slate-700/50 rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
-          <div className="px-6 py-5 border-b border-slate-700/50 flex items-center gap-2 bg-slate-900/10">
+        <div className="bg-slate-50 border-b border-slate-200/60 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
+          <div className="px-6 py-5 border-b border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex items-center gap-2 bg-white/10">
             <Send size={18} className="text-indigo-400" />
-            <span className="font-display font-medium text-slate-200 tracking-wide">Manual Mail Dispatcher Terminal</span>
+            <span className="font-display font-medium text-slate-700 tracking-wide">Manual Mail Dispatcher Terminal</span>
           </div>
           <div className="p-6 space-y-4">
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Scope Category</label>
               <select
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                 value={manualType}
                 onChange={(e) => setManualType(e.target.value as "task" | "issue")}
               >
@@ -318,7 +318,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Select Target deliverable</label>
               <select
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                 value={selectedTarget}
                 onChange={(e) => setSelectedTarget(e.target.value)}
               >
@@ -331,11 +331,11 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
               </select>
             </div>
 
-            <div className="bg-blue-600/5 border border-blue-500/10 p-3.5 rounded-xl text-xs text-slate-400 font-sans leading-relaxed">
+            <div className="bg-blue-600/5 border border-blue-500/10 p-3.5 rounded-xl text-xs text-slate-500 font-sans leading-relaxed">
               <strong>💡 Mechanism:</strong> Resolves the recipient address associated with the target’s owner profile tag dynamically, drafts a structured email complete with priority variables, logs the outcome, and attempts to send SMTP mail safely.
             </div>
           </div>
-          <div className="p-4 px-6 border-t border-slate-700/50 bg-slate-900/20">
+          <div className="p-4 px-6 border-t border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] bg-white/20">
             <button
               onClick={handleSendManual}
               disabled={sendingEmail || !selectedTarget}
@@ -350,7 +350,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
 
       {/* Notification Log History Section */}
       <div className="space-y-3">
-        <div className="bg-slate-800/15 border border-slate-700/25 p-4 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div className="bg-slate-50/70 border border-slate-200/25 p-4 rounded-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full md:max-w-2xl">
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500 pointer-events-none">
@@ -358,7 +358,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
               </span>
               <input
                 type="text"
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg py-1.5 pl-8 pr-3 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full bg-white border border-slate-200 rounded-lg py-1.5 pl-8 pr-3 text-xs text-slate-700 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
                 placeholder="Search logs..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -366,7 +366,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
             </div>
             <div>
               <select
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg py-1.5 px-3.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+                className="w-full bg-white border border-slate-200 rounded-lg py-1.5 px-3.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
@@ -377,7 +377,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
             </div>
             <div>
               <select
-                className="w-full bg-slate-900 border border-slate-700 rounded-lg py-1.5 px-3.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+                className="w-full bg-white border border-slate-200 rounded-lg py-1.5 px-3.5 text-xs text-slate-700 focus:outline-none focus:border-blue-500"
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
               >
@@ -402,11 +402,11 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
         </div>
 
         {/* Audit Log table */}
-        <div className="bg-slate-800/30 border border-slate-700/40 rounded-xl overflow-hidden shadow-sm">
+        <div className="bg-white/30 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-xl overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[1100px]">
               <thead>
-                <tr className="bg-slate-800/80 border-b border-slate-700/50 text-slate-400 text-[11px] font-semibold uppercase tracking-wider font-mono">
+                <tr className="bg-white/80 border-b border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-slate-500 text-[11px] font-semibold uppercase tracking-wider font-mono">
                   <th className="py-4 px-6 w-28">Notif ID</th>
                   <th className="py-4 px-6">Reference ID</th>
                   <th className="py-4 px-6">Alert Category</th>
@@ -419,7 +419,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
                   <th className="py-4 px-6 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-700/30 text-xs text-slate-300">
+              <tbody className="divide-y divide-slate-200/60 text-xs text-slate-600">
                 {loading ? (
                   <tr>
                     <td colSpan={10} className="py-16 text-center">
@@ -435,8 +435,8 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
                   </tr>
                 ) : (
                   filteredLogs.map((log) => (
-                    <tr key={log.id} className="hover:bg-slate-800/15 transition-colors group">
-                      <td className="py-3.5 px-6 font-mono text-slate-400 font-semibold">{log.id}</td>
+                    <tr key={log.id} className="hover:bg-slate-50/70 transition-colors group">
+                      <td className="py-3.5 px-6 font-mono text-slate-500 font-semibold">{log.id}</td>
                       <td className="py-3.5 px-6 font-mono text-blue-400 font-semibold">{log.referenceId || "—"}</td>
                       <td className="py-3.5 px-6">
                         <span className={`text-[9px] font-semibold font-mono border px-2 py-0.5 rounded-full ${
@@ -446,7 +446,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
                         </span>
                       </td>
                       <td className="py-3.5 px-6 font-semibold">{log.recipientName}</td>
-                      <td className="py-3.5 px-6 font-mono text-slate-450">{log.recipientEmail}</td>
+                      <td className="py-3.5 px-6 font-mono text-slate-500">{log.recipientEmail}</td>
                       <td className="py-3.5 px-6">
                         {log.status === "Sent" ? (
                           <span className="inline-flex items-center gap-1 text-[10px] text-green-400 font-medium tracking-wide">
@@ -460,11 +460,11 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
                           </span>
                         )}
                       </td>
-                      <td className="py-3.5 px-6 max-w-sm shrink text-slate-400 font-sans line-clamp-1" title={log.message}>{log.message}</td>
-                      <td className="py-3.5 px-6 text-slate-450 font-mono text-[10px]">
+                      <td className="py-3.5 px-6 max-w-sm shrink text-slate-500 font-sans line-clamp-1" title={log.message}>{log.message}</td>
+                      <td className="py-3.5 px-6 text-slate-500 font-mono text-[10px]">
                         {log.sentDate ? new Date(log.sentDate).toLocaleString() : "—"}
                       </td>
-                      <td className="py-3.5 px-6 text-slate-450 font-mono text-[10px]">{log.triggeredBy}</td>
+                      <td className="py-3.5 px-6 text-slate-500 font-mono text-[10px]">{log.triggeredBy}</td>
                       <td className="py-3.5 px-6 text-center">
                         <button
                           onClick={() => handleDeleteLog(log.id)}

@@ -106,17 +106,17 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
   return (
     <div className="space-y-6">
       {/* Search & Action Panel */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-800/20 px-6 py-5 rounded-2xl border border-slate-700/35 backdrop-blur">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white px-6 py-5 rounded-2xl border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] backdrop-blur">
         <div className="space-y-1">
-          <h2 className="text-xl font-display font-medium text-slate-100 tracking-tight flex items-center gap-2">
+          <h2 className="text-xl font-display font-semibold text-slate-800 tracking-tight flex items-center gap-2">
             <Building2 size={20} className="text-blue-400" />
             Departments Segments
           </h2>
-          <p className="text-xs text-slate-400 font-sans">Manage corporate partitions and section performance indices.</p>
+          <p className="text-xs text-slate-500 font-sans">Manage corporate partitions and section performance indices.</p>
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-slate-100 flex items-center gap-2 text-sm shadow-lg shadow-blue-500/10 hover:shadow-blue-500/15 group tracking-wide cursor-pointer transition-all duration-200"
+          className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-white flex items-center gap-2 text-sm shadow-lg shadow-blue-500/10 hover:shadow-blue-500/15 group tracking-wide cursor-pointer transition-all duration-200"
         >
           <Plus size={16} />
           New Department
@@ -124,10 +124,10 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
       </div>
 
       {/* Ribbon Filters */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-800/10 p-4 rounded-xl border border-slate-700/20">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-white/10 p-4 rounded-xl border border-slate-200/20">
         <div>
           <select
-            className="w-full bg-slate-900/40 border border-slate-700/60 rounded-lg py-2 px-3 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+            className="w-full bg-white/40 border border-slate-200/60 rounded-lg py-2 px-3 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
             value={filterSel}
             onChange={(e) => setFilterSel(e.target.value)}
           >
@@ -143,7 +143,7 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
           </span>
           <input
             type="text"
-            className="w-full bg-slate-900/40 border border-slate-700/60 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full bg-white/40 border border-slate-200/60 rounded-lg py-2 pl-9 pr-3 text-sm text-slate-700 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
             placeholder="Search department..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -151,7 +151,7 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
         </div>
         <button
           onClick={loadData}
-          className="px-4 py-2 border border-slate-700 hover:bg-slate-800 font-medium text-xs text-slate-300 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-600 transition-all duration-200"
+          className="px-4 py-2 border border-slate-200 hover:bg-white font-medium text-xs text-slate-600 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer hover:border-slate-300 transition-all duration-200"
         >
           <RotateCw size={12} />
           Reload Sections
@@ -159,11 +159,11 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
       </div>
 
       {/* Departments Table */}
-      <div className="bg-slate-800/30 border border-slate-700/40 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-white/30 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-800/80 border-b border-slate-700/50 text-slate-400 text-[11px] font-semibold uppercase tracking-wider font-mono">
+              <tr className="bg-white/80 border-b border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-slate-500 text-[11px] font-semibold uppercase tracking-wider font-mono">
                 <th className="py-4 px-6">Dept ID</th>
                 <th className="py-4 px-6">Department Name</th>
                 <th className="py-4 px-6">Description</th>
@@ -174,7 +174,7 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
                 {currentUser.role === "Admin" && <th className="py-4 px-6 text-center">Action</th>}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-700/30 text-sm text-slate-300">
+            <tbody className="divide-y divide-slate-200/60 text-sm text-slate-600">
               {loading ? (
                 <tr>
                   <td colSpan={8} className="py-20 text-center">
@@ -190,19 +190,19 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
                 </tr>
               ) : (
                 filteredDepartments.map((d) => (
-                  <tr key={d.id} className="hover:bg-slate-800/15 transition-colors group">
-                    <td className="py-4 px-6 font-mono text-xs font-semibold text-slate-400">{d.id}</td>
-                    <td className="py-4 px-6 font-medium text-slate-200">{d.name}</td>
-                    <td className="py-4 px-6 text-slate-400 max-w-sm truncate" title={d.description}>{d.description || "-"}</td>
-                    <td className="py-4 px-6 text-slate-400">{d.owner || "-"}</td>
+                  <tr key={d.id} className="hover:bg-slate-50/70 transition-colors group">
+                    <td className="py-4 px-6 font-mono text-xs font-semibold text-slate-500">{d.id}</td>
+                    <td className="py-4 px-6 font-medium text-slate-700">{d.name}</td>
+                    <td className="py-4 px-6 text-slate-500 max-w-sm truncate" title={d.description}>{d.description || "-"}</td>
+                    <td className="py-4 px-6 text-slate-500">{d.owner || "-"}</td>
                     <td className="py-4 px-6">
                       <span className={`text-[10px] font-medium tracking-wide font-mono px-2.5 py-0.5 rounded-full border ${
-                        d.status === "Open" ? "bg-green-500/10 text-green-400 border-green-500/15" : "bg-slate-500/10 text-slate-400 border-slate-500/15"
+                        d.status === "Open" ? "bg-green-500/10 text-green-400 border-green-500/15" : "bg-slate-500/10 text-slate-500 border-slate-500/15"
                       }`}>
                         {d.status}
                       </span>
                     </td>
-                    <td className="py-4 px-6 text-center font-semibold font-mono text-slate-200">{d.totalTasks}</td>
+                    <td className="py-4 px-6 text-center font-semibold font-mono text-slate-700">{d.totalTasks}</td>
                     <td className="py-4 px-6 text-center">
                       <span className={`font-semibold font-mono px-2 py-0.5 rounded ${
                         d.openTasks > 0 ? "text-amber-400 bg-amber-500/5" : "text-green-400 bg-green-500/5"
@@ -231,19 +231,19 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
 
       {/* Creation Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-slate-800 w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-700 animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-700/65 flex justify-between items-center bg-slate-900/50">
-              <h3 className="text-lg font-display font-medium text-slate-200">Register New Segment</h3>
-              <button onClick={() => setShowModal(false)} className="text-slate-400 hover:text-slate-100 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+              <h3 className="text-lg font-display font-medium text-slate-700">Register New Segment</h3>
+              <button onClick={() => setShowModal(false)} className="text-slate-500 hover:text-slate-800 text-sm font-semibold cursor-pointer">✕</button>
             </div>
             <form onSubmit={handleCreateDept}>
               <div className="p-6 space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Segment Name</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Segment Name</label>
                   <input
                     type="text"
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                     placeholder="e.g. Quality Engineering"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -252,9 +252,9 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Description</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Description</label>
                   <textarea
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                     placeholder="Brief description of responsibilities"
                     rows={3}
                     value={formData.description}
@@ -263,9 +263,9 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Managing Director / Owner</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Managing Director / Owner</label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none focus:border-blue-500"
                     value={formData.owner}
                     onChange={(e) => setFormData({ ...formData, owner: e.target.value })}
                   >
@@ -277,18 +277,18 @@ export default function DepartmentsTab({ currentUser }: DepartmentsTabProps) {
                 </div>
               </div>
 
-              <div className="px-6 py-4 border-t border-slate-700/60 bg-slate-900/50 flex justify-end gap-3">
+              <div className="px-6 py-4 border-t border-slate-200/60 bg-slate-50 flex justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
-                  className="px-4 py-2 text-sm text-slate-400 hover:text-slate-100 font-medium cursor-pointer"
+                  className="px-4 py-2 text-sm text-slate-500 hover:text-slate-800 font-medium cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-slate-100 text-sm shadow-md cursor-pointer transition-all flex items-center gap-1.5"
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-500 rounded-xl font-medium text-white text-sm shadow-md cursor-pointer transition-all flex items-center gap-1.5"
                 >
                   {submitting && <Loader2 size={14} className="animate-spin" />}
                   Create Section

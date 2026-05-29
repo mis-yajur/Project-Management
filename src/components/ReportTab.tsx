@@ -310,12 +310,12 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
           </select>
 
           <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-2.5 text-slate-450 pointer-events-none">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-2.5 text-slate-500 pointer-events-none">
               <Search size={14} />
             </span>
             <input
               type="text"
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg py-1.5 pl-8 pr-7 text-xs text-slate-800 placeholder-slate-450 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
+              className="w-full bg-slate-50 border border-slate-200 rounded-lg py-1.5 pl-8 pr-7 text-xs text-slate-800 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:bg-white transition-colors"
               placeholder="Query search..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -407,7 +407,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
                   <th
                     key={th.key}
                     onClick={() => !th.noSort && toggleSort(th.key)}
-                    className={`py-4 px-4 ${!th.noSort ? "cursor-pointer hover:bg-slate-100 text-slate-650" : "text-slate-450"}`}
+                    className={`py-4 px-4 ${!th.noSort ? "cursor-pointer hover:bg-slate-100 text-slate-600" : "text-slate-500"}`}
                   >
                     <div className="flex items-center gap-1">
                       {th.label}
@@ -455,10 +455,10 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
                       const days = Math.ceil((due.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
                       if (days < 0) {
                         dlimitText = `${Math.abs(days)}d Overdue`;
-                        dlimitStyle = "text-rose-650 font-semibold";
+                        dlimitStyle = "text-rose-600 font-semibold";
                       } else if (days <= 3) {
                         dlimitText = `${days}d Left`;
-                        dlimitStyle = "text-amber-650 font-semibold";
+                        dlimitStyle = "text-amber-600 font-semibold";
                       } else {
                         dlimitText = `${days} days`;
                         dlimitStyle = "text-slate-600";
@@ -468,7 +468,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
 
                   return (
                     <tr key={t.id} className={`hover:bg-slate-50/70 transition-colors group ${isSub ? "bg-slate-50/40" : ""}`}>
-                      <td className="py-3.5 px-4 font-mono font-bold text-slate-505">{t.id}</td>
+                      <td className="py-3.5 px-4 font-mono font-bold text-slate-500">{t.id}</td>
                       <td className="py-3.5 px-4">
                         <span className={`text-[9px] font-bold px-2 py-0.5 rounded font-mono border ${
                           isSub ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-blue-50 text-blue-700 border-blue-200"
@@ -477,13 +477,13 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
                         </span>
                       </td>
                       <td className="py-3.5 px-4 font-semibold text-slate-800 truncate max-w-[150px]" title={t.name}>{t.name}</td>
-                      <td className="py-3.5 px-4 text-slate-505 max-w-[170px] truncate" title={t.description}>{t.description || "-"}</td>
-                      <td className="py-3.5 px-4 text-slate-505 truncate max-w-[120px]" title={t.department}>{t.department}</td>
-                      <td className="py-3.5 px-4 text-slate-505 truncate" title={t.owner}>{t.owner}</td>
-                      <td className="py-3.5 px-4 text-slate-505 truncate font-mono text-xs">{t.tags || "-"}</td>
+                      <td className="py-3.5 px-4 text-slate-500 max-w-[170px] truncate" title={t.description}>{t.description || "-"}</td>
+                      <td className="py-3.5 px-4 text-slate-500 truncate max-w-[120px]" title={t.department}>{t.department}</td>
+                      <td className="py-3.5 px-4 text-slate-500 truncate" title={t.owner}>{t.owner}</td>
+                      <td className="py-3.5 px-4 text-slate-500 truncate font-mono text-xs">{t.tags || "-"}</td>
                       <td className="py-3.5 px-4">
                         <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded border inline-block ${
-                          t.status === "Closed" ? "bg-slate-100 text-slate-650 border-slate-200" : "bg-blue-50 text-blue-700 border-blue-200"
+                          t.status === "Closed" ? "bg-slate-100 text-slate-600 border-slate-200" : "bg-blue-50 text-blue-700 border-blue-200"
                         }`}>
                           {t.status}
                         </span>
@@ -498,9 +498,9 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
                           {t.priority}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 text-slate-505 font-mono text-xs truncate max-w-[100px]">{t.group || "-"}</td>
-                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-505">{t.startDate ? t.startDate.slice(0,10) : "-"}</td>
-                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-505">{t.dueDate ? t.dueDate.slice(0,10) : "-"}</td>
+                      <td className="py-3.5 px-4 text-slate-500 font-mono text-xs truncate max-w-[100px]">{t.group || "-"}</td>
+                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-500">{t.startDate ? t.startDate.slice(0,10) : "-"}</td>
+                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-500">{t.dueDate ? t.dueDate.slice(0,10) : "-"}</td>
                       <td className={`py-3.5 px-4 font-mono font-semibold ${dlimitStyle}`}>{dlimitText}</td>
                       <td className="py-3.5 px-4 text-slate-600">
                         {/* Manual progress indicator */}
@@ -520,7 +520,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
                           <span className="font-bold font-mono" style={{ color: getHeatmapColor(pctA) }}>{pctA}%</span>
                         </div>
                       </td>
-                      <td className="py-3.5 px-4 font-mono text-slate-505 text-[10px]">{t.parentTaskId || "-"}</td>
+                      <td className="py-3.5 px-4 font-mono text-slate-500 text-[10px]">{t.parentTaskId || "-"}</td>
                       <td className="py-3.5 px-4">
                         <span className={`text-[9px] font-bold font-mono px-1.5 py-0.5 rounded inline-block ${
                           t.dependency === "Yes" ? "bg-indigo-50 text-indigo-700 border border-indigo-200" : "text-slate-400"
@@ -528,7 +528,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
                           {t.dependency}
                         </span>
                       </td>
-                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-505">{t.createdDate ? t.createdDate.slice(0,10) : "-"}</td>
+                      <td className="py-3.5 px-4 font-mono text-[10px] text-slate-500">{t.createdDate ? t.createdDate.slice(0,10) : "-"}</td>
                     </tr>
                   );
                 })

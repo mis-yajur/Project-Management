@@ -215,7 +215,7 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
               </div>
             ) : myTasks.length === 0 ? (
               <div className="py-20 text-center text-slate-400 px-6">
-                <CheckSquare size={36} className="mx-auto text-slate-350 mb-3 stroke-[1.5]" />
+                <CheckSquare size={36} className="mx-auto text-slate-400 mb-3 stroke-[1.5]" />
                 <p className="text-sm">Clean Desk! No pending deliverables.</p>
               </div>
             ) : (
@@ -282,7 +282,7 @@ export default function DashboardTab({ currentUser, onNavigateTab }: DashboardPr
               </div>
             ) : myIssues.length === 0 ? (
               <div className="py-20 text-center text-slate-400 px-6">
-                <AlertTriangle size={36} className="mx-auto text-slate-350 mb-3 stroke-[1.5]" />
+                <AlertTriangle size={36} className="mx-auto text-slate-400 mb-3 stroke-[1.5]" />
                 <p className="text-sm">Safe! No flags assigned to you.</p>
               </div>
             ) : (
