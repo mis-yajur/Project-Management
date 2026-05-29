@@ -11,6 +11,17 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
   const [reportTasks, setReportTasks] = useState<Task[]>([]);
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeUsers, setActiveUsers] = useState<any[]>([]);
+
+  const getOwnerName = (ownerId: string) => {
+    if (!ownerId) return "-";
+    const user = activeUsers.find(
+      u => (String(u.id).trim().toLowerCase() === String(ownerId).trim().toLowerCase() ||
+            String(u.username).trim().toLowerCase() === String(ownerId).trim().toLowerCase() ||
+            String(u.fullName).trim().toLowerCase() === String(ownerId).trim().toLowerCase())
+    );
+    return user ? user.fullName : ownerId;
+  };
 
   // Dynamic filter lists
   const [departments, setDepartments] = useState<string[]>([]);
@@ -57,6 +68,11 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
         });
         setDepartments(Array.from(deptsSet).sort());
         setGroups(Array.from(grpsSet).sort());
+      }
+
+      const usersRes = await api.getAllActiveUsers();
+      if (usersRes && usersRes.success) {
+        setActiveUsers(usersRes.data);
       }
     } catch (err) {
       console.error("Load report error", err);
@@ -197,7 +213,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
         t.name,
         t.description || "",
         t.department || "",
-        t.owner || "",
+        getOwnerName(t.owner),
         t.tags || "",
         t.status || "",
         t.priority || "None",
@@ -479,7 +495,7 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
                       <td className="py-3.5 px-4 font-semibold text-slate-800 truncate max-w-[150px]" title={t.name}>{t.name}</td>
                       <td className="py-3.5 px-4 text-slate-500 max-w-[170px] truncate" title={t.description}>{t.description || "-"}</td>
                       <td className="py-3.5 px-4 text-slate-500 truncate max-w-[120px]" title={t.department}>{t.department}</td>
-                      <td className="py-3.5 px-4 text-slate-500 truncate" title={t.owner}>{t.owner}</td>
+                      <td className="py-3.5 px-4 text-slate-500 truncate" title={getOwnerName(t.owner)}>{getOwnerName(t.owner)}</td>
                       <td className="py-3.5 px-4 text-slate-500 truncate font-mono text-xs">{t.tags || "-"}</td>
                       <td className="py-3.5 px-4">
                         <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded border inline-block ${

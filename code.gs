@@ -1147,9 +1147,11 @@ function executeAction(action, args) {
                           (priority || "") + "," +
                           (taskUpdateLink || "");
         
-        // Pass parameters to the new endpoint
+        // Pass parameters to the new endpoint, including updated tsk_10 template key
         var qs = "?phone=" + encodeURIComponent(formattedPhone) +
-                 "&Params=" + encodeURIComponent(paramsValue);
+                 "&Params=" + encodeURIComponent(paramsValue) +
+                 "&text=tsk_10" +
+                 "&template=tsk_10";
                  
         var url = baseUrl + qs;
         
@@ -1160,7 +1162,20 @@ function executeAction(action, args) {
 
         var responseText = response.getContentText();
         
-        if (responseText && responseText.indexOf("S-") > -1 || responseText.indexOf("success") > -1) {
+        // Check for all common BhashSMS success patterns like S.85419, S-219422, success, etc.
+        var isSuccess = false;
+        if (responseText) {
+          var trimmedText = responseText.trim();
+          var lowerText = trimmedText.toLowerCase();
+          if (trimmedText.indexOf("S-") > -1 || 
+              trimmedText.indexOf("S.") > -1 || 
+              lowerText.indexOf("success") > -1 ||
+              /^[Ss][.-]?\d+/.test(trimmedText)) {
+            isSuccess = true;
+          }
+        }
+
+        if (isSuccess) {
           return { success: true, message: "WhatsApp message sent successfully via BhashSMS API. Log: " + responseText };
         } else {
           return { success: false, message: "SMS API returned failure: " + responseText };

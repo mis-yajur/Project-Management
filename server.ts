@@ -900,6 +900,7 @@ async function executeAction(action: string, args: any[]): Promise<any> {
       }
 
       const formattedPhone = String(phone).replace(/[+\s-]/g, "");
+      const waTemplate = process.env.WA_TEMPLATE || "tsk_10";
 
       try {
         const url = new URL("https://bhashsms.com/api/sendmsgutil.php");
@@ -907,7 +908,7 @@ async function executeAction(action: string, args: any[]): Promise<any> {
         url.searchParams.append("pass", process.env.WA_PASS || "123456");
         url.searchParams.append("sender", process.env.WA_SENDER || "BUZWAP");
         url.searchParams.append("phone", formattedPhone);
-        url.searchParams.append("text", "tsk_9");
+        url.searchParams.append("text", waTemplate);
         url.searchParams.append("priority", "wa");
         url.searchParams.append("stype", "normal");
         
@@ -916,7 +917,7 @@ async function executeAction(action: string, args: any[]): Promise<any> {
         const paramsValue = `${name || ""},${taskId || ""},${daysLimit || ""},${priority || ""},${taskUpdateLink || ""}`;
         url.searchParams.append("Params", paramsValue);
 
-        console.log(`Sending WhatsApp call via BhashSMS API to ${formattedPhone} (Params: ${paramsValue})`);
+        console.log(`Sending WhatsApp call via BhashSMS API to ${formattedPhone} (Template: ${waTemplate}, Params: ${paramsValue})`);
         
         const response = await fetch(url.toString(), {
           method: "GET",
@@ -939,7 +940,7 @@ async function executeAction(action: string, args: any[]): Promise<any> {
           recipientEmail: "",
           channel: "WhatsApp",
           status: "Sent",
-          message: `WhatsApp template 'tsk_9' sent successfully. Recipient: ${name} (${formattedPhone})`,
+          message: `WhatsApp template '${waTemplate}' sent successfully. Recipient: ${name} (${formattedPhone})`,
           sentDate: new Date().toISOString(),
           triggeredBy: "WhatsApp Integration Client"
         });

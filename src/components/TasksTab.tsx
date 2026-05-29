@@ -39,6 +39,15 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
   // Dropdown options
   const [departments, setDepartments] = useState<any[]>([]);
   const [activeUsers, setActiveUsers] = useState<any[]>([]);
+  const getOwnerName = (ownerId: string) => {
+    if (!ownerId) return "-";
+    const user = activeUsers.find(
+      u => (String(u.id).trim().toLowerCase() === String(ownerId).trim().toLowerCase() ||
+            String(u.username).trim().toLowerCase() === String(ownerId).trim().toLowerCase() ||
+            String(u.fullName).trim().toLowerCase() === String(ownerId).trim().toLowerCase())
+    );
+    return user ? user.fullName : ownerId;
+  };
   const [parentTasks, setParentTasks] = useState<Task[]>([]);
 
   // Modals Toggle
@@ -429,7 +438,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     const dlimit = calculateDaysLeft(t.dueDate, t.status);
     const daysLimitStr = dlimit.text;
     const priorityStr = t.priority || "Medium";
-    const formattedLink = `${window.location.origin}/?tab=tasks&search=${t.id}`;
+    const formattedLink = `https://mis-yajur.github.io/Project-Management/?tab=tasks&search=${t.id}`;
 
     console.log("Attempting to call api.sendWhatsApp");
     try {
@@ -894,7 +903,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                             {t.description || "-"}
                           </td>
                           <td className="py-4 px-6 text-slate-500">{t.department}</td>
-                          <td className="py-4 px-6 text-slate-500">{t.owner}</td>
+                          <td className="py-4 px-6 text-slate-500">{getOwnerName(t.owner)}</td>
                           <td className="py-4 px-6">
                             <span className={`text-[10px] font-bold tracking-wide border font-mono px-2 py-0.5 rounded-full ${getStatusStyle(t.status)}`}>
                               {t.status}
@@ -1003,7 +1012,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                                 {c.description || "-"}
                               </td>
                               <td className="py-3 px-6 text-slate-500 text-xs">{c.department}</td>
-                              <td className="py-3 px-6 text-slate-500 text-xs">{c.owner}</td>
+                              <td className="py-3 px-6 text-slate-500 text-xs">{getOwnerName(c.owner)}</td>
                               <td className="py-3 px-6">
                                 <span className={`text-[9px] font-bold tracking-wide border font-mono px-1.5 py-0.5 rounded-full ${getStatusStyle(c.status)}`}>
                                   {c.status}
@@ -1486,7 +1495,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     { label: "Milestone Name", val: selectedTask.name },
                     { label: "Description", val: selectedTask.description || "-" },
                     { label: "Associated Segment", val: selectedTask.department },
-                    { label: "Leader / Owner", val: selectedTask.owner },
+                    { label: "Leader / Owner", val: getOwnerName(selectedTask.owner) },
                     { label: "Status Level", val: selectedTask.status },
                     { label: "Doer (Tags / Assignee)", val: selectedTask.tags || "-" },
                     { label: "Start Date", val: selectedTask.startDate ? new Date(selectedTask.startDate).toLocaleDateString() : "-" },
