@@ -1212,11 +1212,11 @@ function executeAction(action, args) {
                           (taskUpdateLink || "") + "," +
                           (ownerName || "Owner");
         
-        // Pass parameters to the new endpoint, including updated project_managment template key
+        // Pass parameters to the new endpoint, including updated project_mangment template key
         var qs = "?phone=" + encodeURIComponent(formattedPhone) +
                  "&Params=" + encodeURIComponent(paramsValue) +
-                 "&text=project_managment" +
-                 "&template=project_managment";
+                 "&text=project_mangment" +
+                 "&template=project_mangment";
                  
         var url = baseUrl + qs;
         

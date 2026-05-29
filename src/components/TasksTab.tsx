@@ -57,6 +57,22 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
   
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
+  // WhatsApp Notification Dialog States
+  const [waModal, setWaModal] = useState<{
+    isOpen: boolean;
+    type: "success" | "error" | "prompt";
+    title: string;
+    message: string;
+    inputValue?: string;
+    onConfirm?: (val: string) => void;
+  }>({
+    isOpen: false,
+    type: "success",
+    title: "",
+    message: "",
+    inputValue: ""
+  });
+
   // Quick Dependency Modal
   const [showDependencyModal, setShowDependencyModal] = useState(false);
   const [dependencyTargetTask, setDependencyTargetTask] = useState<Task | null>(null);
@@ -402,6 +418,56 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     return null;
   };
 
+  const executeWhatsAppAPI = async (t: Task, phone: string, doer: string) => {
+    const dlimit = calculateDaysLeft(t.dueDate, t.status);
+    const daysLimitStr = dlimit.text;
+    const priorityStr = t.priority || "Medium";
+    const formattedLink = `https://mis-yajur.github.io/Project-Management/?tab=tasks&search=${t.id}`;
+    
+    // Resolve human owner name from ID, fallback to "Owner" if unresolved or empty
+    const rawOwner = t.owner ? getOwnerName(t.owner) : "";
+    const ownerNameStr = (rawOwner && !rawOwner.startsWith("USR-") && rawOwner !== "-") ? rawOwner : "Owner";
+
+    console.log("Attempting to call api.sendWhatsApp with phone:", phone);
+    try {
+      const res = await api.sendWhatsApp(
+        phone,
+        doer,
+        t.id,
+        daysLimitStr,
+        priorityStr,
+        formattedLink,
+        ownerNameStr
+      );
+
+      console.log("WhatsApp response:", res);
+
+      if (res && res.success) {
+        setWaModal({
+          isOpen: true,
+          type: "success",
+          title: "Sms Sent Successfully!",
+          message: `The WhatsApp automated message has been successfully dispatched to ${doer} (${phone}).`
+        });
+      } else {
+        setWaModal({
+          isOpen: true,
+          type: "error",
+          title: "Sms sending failed!",
+          message: res?.message || "Failed to send WhatsApp message"
+        });
+      }
+    } catch (err: any) {
+      console.error("WhatsApp API Exception:", err);
+      setWaModal({
+        isOpen: true,
+        type: "error",
+        title: "API Exception Occurred",
+        message: err.message || "An unexpected network exception was encountered."
+      });
+    }
+  };
+
   const handleSendWhatsApp = async (t: Task) => {
     const recipient = getTaskRecipientUser(t);
     const defaultPhone = recipient?.contactNumber;
@@ -414,58 +480,31 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         phoneVal = String(defaultPhone || "").trim().replace(/[+\s-]/g, "");
     }
 
-    // If we have a phone number on file, present a direct click-to-confirm dialog instead of asking to type
     if (phoneVal) {
-      const confirmSend = window.confirm(
-        `Send auto WhatsApp task notification for [${t.id}] to ${doerName} at ${phoneVal}?`
-      );
-      if (!confirmSend) return;
+      // Confirmation not require... its auto ok! Skip prompt entirely, send directly and show beautiful HTML success/error popup
+      await executeWhatsAppAPI(t, phoneVal, doerName);
     } else {
-      // Prompt for phone number only if not available on file
-      const phoneInput = window.prompt(
-        `Send auto task notification via WhatsApp?\n\nRecipient: ${doerName}\n\nEnter Phone Number with country code (e.g. 919876543210):`,
-        ""
-      );
-      if (phoneInput === null) return;
-      phoneVal = String(phoneInput || "").trim().replace(/[+\s-]/g, "");
-    }
-
-    if (!phoneVal) {
-      alert("Error: Mobile phone number is required to trigger WhatsApp.");
-      return;
-    }
-
-    const dlimit = calculateDaysLeft(t.dueDate, t.status);
-    const daysLimitStr = dlimit.text;
-    const priorityStr = t.priority || "Medium";
-    const formattedLink = `https://mis-yajur.github.io/Project-Management/?tab=tasks&search=${t.id}`;
-    
-    // Resolve human owner name from ID, fallback to "Owner" if unresolved or empty
-    const rawOwner = t.owner ? getOwnerName(t.owner) : "";
-    const ownerNameStr = (rawOwner && !rawOwner.startsWith("USR-") && rawOwner !== "-") ? rawOwner : "Owner";
-
-    console.log("Attempting to call api.sendWhatsApp");
-    try {
-      const res = await api.sendWhatsApp(
-        phoneVal,
-        doerName,
-        t.id,
-        daysLimitStr,
-        priorityStr,
-        formattedLink,
-        ownerNameStr
-      );
-
-      console.log("WhatsApp response:", res);
-
-      if (res && res.success) {
-        alert("Success: Sms Sent Successfully!");
-      } else {
-        alert(`Error: ${res?.message || "Failed to send WhatsApp message"}`);
-      }
-    } catch (err: any) {
-      console.error("WhatsApp API Exception:", err);
-      alert(`API Exception: ${err.message}`);
+      // Prompt for phone number inside a beautiful HTML dialog instead of standard window.prompt
+      setWaModal({
+        isOpen: true,
+        type: "prompt",
+        title: "Recipient Phone Number Required",
+        message: `Send auto task notification via WhatsApp?\n\nRecipient: ${doerName}\n\nPlease enter the phone number with country code (e.g. 919876543210):`,
+        inputValue: "",
+        onConfirm: async (inputVal: string) => {
+          const formattedInput = inputVal.trim().replace(/[+\s-]/g, "");
+          if (!formattedInput) {
+            setWaModal({
+              isOpen: true,
+              type: "error",
+              title: "Validation Error",
+              message: "Error: Mobile phone number is required to trigger WhatsApp."
+            });
+            return;
+          }
+          await executeWhatsAppAPI(t, formattedInput, doerName);
+        }
+      });
     }
   };
 
@@ -1648,6 +1687,98 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* CUSTOM WHATSAPP HTML POPUP MODAL */}
+      {waModal.isOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-[9999] animate-fade-in">
+          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-150">
+            <div className="p-6 text-center">
+              {waModal.type === "success" && (
+                <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-emerald-100 mb-4 shadow-inner">
+                  <span className="text-3xl text-emerald-600">✓</span>
+                </div>
+              )}
+              {waModal.type === "error" && (
+                <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-rose-100 mb-4 shadow-inner">
+                  <span className="text-3xl text-rose-600">✕</span>
+                </div>
+              )}
+              {waModal.type === "prompt" && (
+                <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-indigo-100 mb-4 shadow-inner">
+                  <span className="text-2xl text-indigo-600">📞</span>
+                </div>
+              )}
+
+              <h3 className="text-lg font-bold text-slate-800 mb-2 font-display">
+                {waModal.title}
+              </h3>
+              
+              <div className="text-sm text-slate-605 mb-5 whitespace-pre-line leading-relaxed font-sans">
+                {waModal.message}
+              </div>
+
+              {waModal.type === "prompt" && (
+                <div className="mb-6">
+                  <input
+                    type="text"
+                    autoFocus
+                    placeholder="e.g. 919876543210"
+                    value={waModal.inputValue || ""}
+                    onChange={(e) => setWaModal(prev => ({ ...prev, inputValue: e.target.value }))}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && waModal.onConfirm) {
+                        const confirmFn = waModal.onConfirm;
+                        const val = waModal.inputValue || "";
+                        setWaModal(prev => ({ ...prev, isOpen: false }));
+                        confirmFn(val);
+                      }
+                    }}
+                    className="w-full bg-slate-50 border border-slate-350 hover:border-slate-400 rounded-xl px-4 py-2.5 text-sm text-slate-800 text-center font-semibold tracking-wider font-mono focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                  />
+                </div>
+              )}
+
+              <div className="flex justify-center gap-3">
+                {waModal.type === "prompt" ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setWaModal(prev => ({ ...prev, isOpen: false }))}
+                      className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-705 rounded-xl text-sm font-bold transition-all border border-slate-200/50 cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const confirmFn = waModal.onConfirm;
+                        const val = waModal.inputValue || "";
+                        setWaModal(prev => ({ ...prev, isOpen: false }));
+                        if (confirmFn) confirmFn(val);
+                      }}
+                      className="px-5 py-2.5 bg-indigo-650 hover:bg-indigo-750 text-white rounded-xl text-sm font-bold shadow-md shadow-indigo-500/10 transition-all cursor-pointer"
+                    >
+                      Confirm
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setWaModal(prev => ({ ...prev, isOpen: false }))}
+                    className={`px-6 py-2.5 text-white rounded-xl text-sm font-bold transition-all cursor-pointer shadow-md ${
+                      waModal.type === "success" 
+                        ? "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/10" 
+                        : "bg-rose-600 hover:bg-rose-700 shadow-rose-500/10"
+                    }`}
+                  >
+                    OK
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

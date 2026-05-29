@@ -390,97 +390,125 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
               </select>
             </div>
           </div>
-          {currentUser.role === "Admin" && logs.length > 0 && (
-            <button
-              onClick={handleClearAll}
-              className="px-3.5 py-1.5 text-xs bg-red-600/10 hover:bg-red-600/20 text-red-400 border border-red-500/20 font-medium rounded-lg flex items-center justify-center gap-1 cursor-pointer transition-all duration-150 ml-auto"
-            >
-              <Trash2 size={13} />
-              Clear Log History
-            </button>
-          )}
         </div>
 
-        {/* Audit Log table */}
-        <div className="bg-white/30 border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] rounded-xl overflow-hidden shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse min-w-[1100px]">
-              <thead>
-                <tr className="bg-white/80 border-b border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-slate-500 text-[11px] font-semibold uppercase tracking-wider font-mono">
-                  <th className="py-4 px-6 w-28">Notif ID</th>
-                  <th className="py-4 px-6">Reference ID</th>
-                  <th className="py-4 px-6">Alert Category</th>
-                  <th className="py-4 px-6">Recipient Name</th>
-                  <th className="py-4 px-6">Email Address</th>
-                  <th className="py-4 px-6">Status Indicator</th>
-                  <th className="py-4 px-6 max-w-sm">Summary Body</th>
-                  <th className="py-4 px-6">Dispatched date</th>
-                  <th className="py-4 px-6">Triggered By</th>
-                  <th className="py-4 px-6 text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200/60 text-xs text-slate-600">
-                {loading ? (
-                  <tr>
-                    <td colSpan={10} className="py-16 text-center">
-                      <span className="animate-spin inline-block border-2 border-blue-500 border-t-transparent rounded-full w-5 h-5 mr-1"></span>
-                      <span className="font-sans text-slate-500">Querying logs audit ledger...</span>
-                    </td>
-                  </tr>
-                ) : filteredLogs.length === 0 ? (
-                  <tr>
-                    <td colSpan={10} className="py-16 text-center text-slate-500 font-sans">
-                      No notifications rows match criteria or catalog is currently blank.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredLogs.map((log) => (
-                    <tr key={log.id} className="hover:bg-slate-50/70 transition-colors group">
-                      <td className="py-3.5 px-6 font-mono text-slate-500 font-semibold">{log.id}</td>
-                      <td className="py-3.5 px-6 font-mono text-blue-400 font-semibold">{log.referenceId || "—"}</td>
-                      <td className="py-3.5 px-6">
-                        <span className={`text-[9px] font-semibold font-mono border px-2 py-0.5 rounded-full ${
-                          log.type.includes("Issue") ? "bg-orange-500/10 text-orange-400 border-orange-500/15" : "bg-blue-500/10 text-blue-400 border-blue-500/15"
+        {/* Audit Log Modern Color-Coded Card Display */}
+        {loading ? (
+          <div className="bg-white border border-slate-200 rounded-2xl p-16 text-center shadow-xs">
+            <div className="flex flex-col items-center justify-center gap-3">
+              <span className="animate-spin inline-block border-3 border-purple-650 border-t-transparent rounded-full w-8 h-8"></span>
+              <p className="text-sm font-semibold tracking-wide text-slate-600 font-sans">Querying logs and compiling audit ledger...</p>
+            </div>
+          </div>
+        ) : filteredLogs.length === 0 ? (
+          <div className="bg-white border border-dashed border-slate-200 rounded-2xl py-16 px-6 text-center max-w-2xl mx-auto shadow-xs">
+            <div className="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-slate-50 mb-4 text-slate-350">
+              <Bell size={24} className="animate-pulse" />
+            </div>
+            <h3 className="text-sm font-extrabold text-slate-800 tracking-tight font-display">No logs found</h3>
+            <p className="text-xs text-slate-500 mt-1 mb-1 font-sans">
+              There are currently no notification rows matching your search parameters or the log database is empty.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in duration-300">
+            {filteredLogs.map((log) => {
+              const isIssue = log.type.includes("Issue");
+              const isSent = log.status === "Sent";
+              
+              return (
+                <div 
+                  key={log.id} 
+                  className={`relative bg-white border border-slate-200/80 hover:border-slate-300 rounded-2xl shadow-[0_2px_8px_rgba(0,0,0,0.015)] hover:shadow-[0_8px_20px_rgba(0,0,0,0.04)] transition-all duration-300 flex flex-col justify-between overflow-hidden group ${
+                    isSent ? "border-l-4 border-l-emerald-500" : "border-l-4 border-l-rose-400"
+                  }`}
+                >
+                  {/* Card Main Area */}
+                  <div className="p-5 space-y-4">
+                    {/* Header: ID & Meta tags */}
+                    <div className="flex items-center justify-between gap-1.5">
+                      <div className="flex items-center gap-2">
+                        {log.referenceId ? (
+                          <span className={`text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-md tracking-wider border ${
+                            isIssue 
+                              ? "bg-amber-500/10 text-amber-600 border-amber-500/20" 
+                              : "bg-indigo-500/10 text-indigo-600 border-indigo-500/20"
+                          }`}>
+                            {log.referenceId}
+                          </span>
+                        ) : null}
+                        
+                        <span className={`text-[9px] font-semibold tracking-wider uppercase font-sans ${
+                          isIssue ? "text-amber-500" : "text-indigo-500"
                         }`}>
                           {log.type}
                         </span>
-                      </td>
-                      <td className="py-3.5 px-6 font-semibold">{log.recipientName}</td>
-                      <td className="py-3.5 px-6 font-mono text-slate-500">{log.recipientEmail}</td>
-                      <td className="py-3.5 px-6">
-                        {log.status === "Sent" ? (
-                          <span className="inline-flex items-center gap-1 text-[10px] text-green-400 font-medium tracking-wide">
-                            <CheckCircle size={10} />
+                      </div>
+                      
+                      <span className="text-[10px] font-mono select-all bg-slate-50 border border-slate-100 rounded-md px-1.5 py-0.5 text-slate-400 font-semibold shadow-2xs">
+                        {log.id}
+                      </span>
+                    </div>
+
+                    {/* Recipient User Block */}
+                    <div className="space-y-1">
+                      <div className="text-xs font-bold text-slate-800 tracking-tight font-sans">
+                        {log.recipientName}
+                      </div>
+                      <div className="text-[10px] font-mono text-slate-450 flex items-center gap-1">
+                        <Mail size={10} className="text-slate-350" />
+                        {log.recipientEmail}
+                      </div>
+                    </div>
+
+                    {/* Speech snippet of the alert content */}
+                    <div className="bg-slate-50 hover:bg-slate-50/80 rounded-xl p-3 border border-slate-100/85 transition-colors">
+                      <p className="text-xs text-slate-600 leading-relaxed font-sans line-clamp-3 select-text" title={log.message}>
+                        {log.message}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Card bottom metadata ribbon */}
+                  <div className="px-5 py-3 bg-slate-50/60 border-t border-slate-100 flex items-center justify-between gap-1.5 text-[10px] font-mono text-slate-450 mt-auto">
+                    <div className="flex flex-col gap-0.5 shrink">
+                      <div className="text-slate-500 font-bold">
+                        {log.sentDate ? new Date(log.sentDate).toLocaleString() : "—"}
+                      </div>
+                      <div className="text-slate-400">
+                        Triggered: <span className="text-slate-520 font-semibold">{log.triggeredBy}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="shrink-0">
+                        {isSent ? (
+                          <span className="inline-flex items-center gap-1 text-[9px] text-emerald-600 bg-emerald-50 border border-emerald-200/60 font-bold px-2 py-0.5 rounded-full select-none shadow-2xs">
+                            <CheckCircle size={9} />
                             Dispatched
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-[10px] text-red-400 font-medium tracking-wide" title={log.status}>
-                            <AlertTriangle size={10} />
-                            Blocked
+                          <span className="inline-flex items-center gap-1 text-[9px] text-rose-500 bg-rose-50 border border-rose-200/60 font-bold px-2 py-0.5 rounded-full select-none shadow-2xs" title={log.status}>
+                            <AlertTriangle size={9} />
+                            Failed
                           </span>
                         )}
-                      </td>
-                      <td className="py-3.5 px-6 max-w-sm shrink text-slate-500 font-sans line-clamp-1" title={log.message}>{log.message}</td>
-                      <td className="py-3.5 px-6 text-slate-500 font-mono text-[10px]">
-                        {log.sentDate ? new Date(log.sentDate).toLocaleString() : "—"}
-                      </td>
-                      <td className="py-3.5 px-6 text-slate-500 font-mono text-[10px]">{log.triggeredBy}</td>
-                      <td className="py-3.5 px-6 text-center">
-                        <button
-                          onClick={() => handleDeleteLog(log.id)}
-                          className="p-1 px-1.5 text-slate-500 hover:text-red-400 hover:bg-slate-700/50 rounded transition-all cursor-pointer"
-                          title="Purge transaction row"
-                        >
-                          <Trash2 size={13} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                      </div>
+
+                      <button
+                        onClick={() => handleDeleteLog(log.id)}
+                        className="p-1.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50/80 rounded-lg transition-all cursor-pointer border border-transparent hover:border-rose-100/80"
+                        title="Purge transaction record"
+                      >
+                        <Trash2 size={12} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

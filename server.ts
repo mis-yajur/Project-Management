@@ -900,7 +900,7 @@ async function executeAction(action: string, args: any[]): Promise<any> {
       }
 
       const formattedPhone = String(phone).replace(/[+\s-]/g, "");
-      const waTemplate = process.env.WA_TEMPLATE || "project_managment";
+      const waTemplate = process.env.WA_TEMPLATE || "project_mangment";
 
       try {
         const url = new URL("https://bhashsms.com/api/sendmsgutil.php");
