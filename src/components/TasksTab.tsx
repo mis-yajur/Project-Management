@@ -264,7 +264,27 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       };
       const res = await api.createTask(payload, currentUser.id);
       if (res.success) {
-        alert("Task successfully provisioned!");
+        alert("Task successfully provisioned! Dispatching automated notification...");
+        const createdTask: Task = {
+          id: res.taskId,
+          name: payload.name,
+          description: payload.description || "",
+          department: payload.department,
+          owner: payload.owner || currentUser.id,
+          status: payload.status || "Open",
+          tags: payload.tags || "",
+          startDate: payload.startDate,
+          dueDate: payload.dueDate,
+          priority: payload.priority || "Medium",
+          completion: 0,
+          group: payload.group || "",
+          createdDate: new Date().toISOString(),
+          autoProgress: 0,
+          parentTaskId: payload.parentTaskId,
+          calculatedAuto: 0,
+          dependency: "No"
+        };
+        
         setShowCreateModal(false);
         setCreateForm({
           name: "",
@@ -281,6 +301,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         });
         setIsSubtask(false);
         loadData();
+        
+        // Trigger SMS sending automatically
+        handleSendWhatsApp(createdTask);
       } else {
         alert(res.message || "Write transaction failed.");
       }
