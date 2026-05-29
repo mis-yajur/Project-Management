@@ -1199,20 +1199,20 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
       {/* CREATE MODAL */}
       {showCreateModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border border-slate-200 shadow-xl animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-200 shadow-xl/65 flex justify-between items-center bg-slate-900/50">
-              <h3 className="text-lg font-display font-medium text-slate-200">Create Task Deliverable</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-100 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white">
+              <h3 className="text-lg font-display font-medium text-slate-900">Create Task Deliverable</h3>
+              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-600 text-sm font-semibold cursor-pointer">✕</button>
             </div>
             <form onSubmit={handleCreateSubmit}>
               <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Task Name</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Task Name</label>
                     <input
                       type="text"
-                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                       placeholder="e.g. Conduct compliance checks"
                       value={createForm.name}
                       onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
@@ -1220,9 +1220,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block required">Department Segment</label>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block required">Department Segment</label>
                     <select
-                      className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                       value={createForm.department}
                       onChange={(e) => setCreateForm({ ...createForm, department: e.target.value })}
                       required
@@ -1236,9 +1236,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Description</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Description</label>
                   <textarea
-                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500"
                     placeholder="Enter detailed instructions or bullet items..."
                     rows={3}
                     value={createForm.description}
@@ -1379,18 +1379,18 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
       {/* UPDATE MODAL */}
       {showEditModal && selectedTask && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-200 shadow-xl animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-6 py-5 border-b border-slate-200 shadow-xl/65 flex justify-between items-center bg-slate-900/50">
-              <h3 className="text-lg font-display font-medium text-slate-200">Update Deliverable details: {selectedTask.id}</h3>
-              <button onClick={() => setShowEditModal(false)} className="text-slate-400 hover:text-slate-100 text-sm font-semibold cursor-pointer">✕</button>
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl border border-slate-100 animate-in fade-in zoom-in-95 duration-150">
+            <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-white">
+              <h3 className="text-lg font-display font-medium text-slate-900">Update Deliverable details: {selectedTask.id}</h3>
+              <button onClick={() => setShowEditModal(false)} className="text-slate-400 hover:text-slate-600 text-sm font-semibold cursor-pointer">✕</button>
             </div>
             <form onSubmit={handleEditSubmit}>
               <div className="p-6 space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Status</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Status</label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                     value={editForm.status}
                     onChange={(e) => setEditForm({ ...editForm, status: e.target.value })}
                   >
@@ -1404,12 +1404,12 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
                 <div className="space-y-1.5">
                   <div className="flex justify-between items-center">
-                    <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Manual Completion %</label>
-                    <span className="font-mono text-sm text-blue-400 font-bold">{editForm.completion}%</span>
+                    <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Manual Completion %</label>
+                    <span className="font-mono text-sm text-blue-600 font-bold">{editForm.completion}%</span>
                   </div>
                   <input
                     type="range"
-                    className="w-full h-2 bg-slate-900 rounded-lg appearance-none cursor-pointer accent-blue-500 focus:outline-none"
+                    className="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600 focus:outline-none"
                     min="0"
                     max="100"
                     step="5"
@@ -1420,9 +1420,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Priority</label>
+                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Priority</label>
                   <select
-                    className="w-full bg-slate-900 border border-slate-200 shadow-xl rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-slate-900 focus:outline-none focus:border-blue-500"
                     value={editForm.priority}
                     onChange={(e) => setEditForm({ ...editForm, priority: e.target.value })}
                   >
