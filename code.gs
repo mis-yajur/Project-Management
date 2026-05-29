@@ -58,7 +58,7 @@ function doGet(e) {
         Logger.log("Settings read error: " + settingsErr);
       }
 
-      var bhashUrl = "https://bhashsms.com/api/sendmsgutil.php" +
+      var bhashUrl = "http://bhashsms.com/api/sendmsgutil.php" +
                      "?user=" + encodeURIComponent(waUser) +
                      "&pass=" + encodeURIComponent(waPass) +
                      "&sender=" + encodeURIComponent(waSender) +
@@ -1284,7 +1284,7 @@ function executeAction(action, args) {
                           (ownerName || "Owner");
         
         // 1. First attempt to call the BhashSMS API DIRECTLY from Apps Script to bypass redirects that return the operational message
-        var bhashUrl = "https://bhashsms.com/api/sendmsgutil.php" +
+        var bhashUrl = "http://bhashsms.com/api/sendmsgutil.php" +
                        "?user=" + encodeURIComponent(waUser) +
                        "&pass=" + encodeURIComponent(waPass) +
                        "&sender=" + encodeURIComponent(waSender) +

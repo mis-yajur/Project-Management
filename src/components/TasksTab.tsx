@@ -490,19 +490,21 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
           message: `The WhatsApp automated message has been successfully dispatched to ${doer} (${phone}).${cleanCode ? `\n\nStatus Code: ${cleanCode}` : ""}`
         });
       } else {
-        let errorMsg = res?.message || "Failed to send WhatsApp message";
+        const errorMsg = res?.message || "Failed to send WhatsApp message";
         let displayError = errorMsg;
         
         // Extract common bhashsms patterns or keep it compact
         const errorCodeMatch = errorMsg.match(/(\b\d{3}\b)/);
         if (errorCodeMatch) {
-          displayError = `Code ${errorCodeMatch[1]}`;
+          const codeStr = `Code ${errorCodeMatch[1]}`;
+          displayError = `${codeStr}\n\nDetails: ${errorMsg}`;
         } else if (errorMsg.includes("failure:")) {
-          displayError = errorMsg.split("failure:")[1].trim();
+          const detail = errorMsg.split("failure:")[1].trim();
+          displayError = `Failure\n\nDetails: ${detail}`;
         }
         
-        if (displayError.length > 100) {
-          displayError = displayError.substring(0, 100) + "...";
+        if (displayError.length > 300) {
+          displayError = displayError.substring(0, 300) + "...";
         }
 
         setWaModal({

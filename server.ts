@@ -907,7 +907,7 @@ async function executeAction(action: string, args: any[]): Promise<any> {
       const waTemplate = db.settings?.wa_template_name || process.env.WA_TEMPLATE || "project_mangment";
 
       try {
-        const url = new URL("https://bhashsms.com/api/sendmsgutil.php");
+        const url = new URL("http://bhashsms.com/api/sendmsgutil.php");
         url.searchParams.append("user", db.settings?.wa_user || process.env.WA_USER || "YajurFibre_BWAI");
         url.searchParams.append("pass", db.settings?.wa_pass || process.env.WA_PASS || "123456");
         url.searchParams.append("sender", db.settings?.wa_sender || process.env.WA_SENDER || "BUZWAP");
