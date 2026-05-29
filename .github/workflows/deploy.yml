@@ -42,7 +42,7 @@ jobs:
       - name: Build production bundle
         run: npm run build
         env:
-          VITE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbyboh73f8icdlfpxDCK6DBQLnIkwVdsDgwxDj-CqmkaIUop2_BmqMUWsl64Jb3wkX_nIQ/exec"
+          VITE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxAxOGVWrjJWpPVPZd9Vf0ADgKCMSYvVeiPrksCwMqI_2BehdMxD7tkjOphb1TAEOg9bA/exec"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

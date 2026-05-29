@@ -465,7 +465,17 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
 
       console.log("WhatsApp response:", res);
 
-      if (res && res.success) {
+      const isActuallySuccess = res && (
+        res.success ||
+        (res.message && (
+          res.message.includes("S.") ||
+          res.message.includes("S-") ||
+          res.message.toLowerCase().includes("success") ||
+          /s[.-]?\d+/i.test(res.message)
+        ))
+      );
+
+      if (isActuallySuccess) {
         setWaModal({
           isOpen: true,
           type: "success",
