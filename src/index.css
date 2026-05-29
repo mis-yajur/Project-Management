@@ -25,7 +25,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(59, 130, 246, 0.4);
 }
-
+  
 /* Premium smooth layout & ambient animations */
 .glass-panel {
   background: rgba(15, 23, 42, 0.65);
@@ -52,82 +52,4 @@
 
 .animate-pulse-subtle {
   animation: pulse-subtle 4s infinite ease-in-out;
-}
-
-/* Mac-dock hover effect */
-:root {
-  --lerp-0: 1;
-  --lerp-1: 0.5625;
-  --lerp-2: 0.25;
-  --lerp-3: 0.0625;
-  --lerp-4: 0;
-  --gradient-1: linear-gradient(to right, #3b82f6, #6366f1);
-  --gradient-2: linear-gradient(to right, #ef4444, #f97316);
-  --gradient-3: linear-gradient(to right, #22c55e, #10b981);
-  --gradient-4: linear-gradient(to right, #a855f7, #d946ef);
-  --gradient-5: linear-gradient(to right, #eab308, #f59e0b);
-  --gradient-6: linear-gradient(to right, #06b6d4, #3b82f6);
-  --gradient-7: linear-gradient(to right, #f43f5e, #e11d48);
-  --gradient-8: linear-gradient(to right, #8b5cf6, #6366f1);
-  --gradient-9: linear-gradient(to right, #14b8a6, #0d9488);
-}
-
-.dock-nav {
-  display: flex;
-  list-style-type: none;
-  border-radius: 9999px;
-  gap: 8px;
-  align-items: center;
-  justify-content: center;
-}
-
-.dock-block {
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  transition: flex 0.2s;
-  flex: calc(0.2 + (var(--lerp, 0) * 1.5));
-  position: relative;
-  cursor: pointer;
-  outline: none;
-}
-
-.dock-item {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 12px;
-  background: var(--bg);
-  display: grid;
-  place-items: center;
-  transition: transform 0.2s;
-  transform-origin: 50% 100%;
-  transform: translateY(calc(var(--lerp) * -25%));
-  color: white;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-}
-
-:is(.dock-block:hover, .dock-block:focus-visible) {
-  --lerp: var(--lerp-0);
-  z-index: 5;
-}
-.dock-block:has( + :is(.dock-block:hover, .dock-block:focus-visible)),
-:is(.dock-block:hover, .dock-block:focus-visible) + .dock-block {
-  --lerp: var(--lerp-1);
-  z-index: 4;
-}
-.dock-block:has( + .dock-block + :is(.dock-block:hover, .dock-block:focus-visible)),
-:is(.dock-block:hover, .dock-block:focus-visible) + .dock-block + .dock-block {
-  --lerp: var(--lerp-2);
-  z-index: 3;
-}
-.dock-block:has( + .dock-block + .dock-block + :is(.dock-block:hover, .dock-block:focus-visible)),
-:is(.dock-block:hover, .dock-block:focus-visible) + .dock-block + .dock-block + .dock-block {
-  --lerp: var(--lerp-3);
-  z-index: 2;
-}
-.dock-block:has( + .dock-block + .dock-block + .dock-block + :is(.dock-block:hover, .dock-block:focus-visible)),
-:is(.dock-block:hover, .dock-block:focus-visible) + .dock-block + .dock-block + .dock-block + .dock-block {
-  --lerp: var(--lerp-4);
-  z-index: 1;
 }
