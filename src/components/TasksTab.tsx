@@ -439,6 +439,10 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     const daysLimitStr = dlimit.text;
     const priorityStr = t.priority || "Medium";
     const formattedLink = `https://mis-yajur.github.io/Project-Management/?tab=tasks&search=${t.id}`;
+    
+    // Resolve human owner name from ID, fallback to "Owner" if unresolved or empty
+    const rawOwner = t.owner ? getOwnerName(t.owner) : "";
+    const ownerNameStr = (rawOwner && !rawOwner.startsWith("USR-") && rawOwner !== "-") ? rawOwner : "Owner";
 
     console.log("Attempting to call api.sendWhatsApp");
     try {
@@ -448,7 +452,8 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
         t.id,
         daysLimitStr,
         priorityStr,
-        formattedLink
+        formattedLink,
+        ownerNameStr
       );
 
       console.log("WhatsApp response:", res);

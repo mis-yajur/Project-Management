@@ -894,13 +894,13 @@ async function executeAction(action: string, args: any[]): Promise<any> {
     }
 
     case "sendWhatsApp": {
-      const [phone, name, taskId, daysLimit, priority, taskUpdateLink] = args;
+      const [phone, name, taskId, daysLimit, priority, taskUpdateLink, ownerName] = args;
       if (!phone) {
         return { success: false, message: "Recipient phone number is missing." };
       }
 
       const formattedPhone = String(phone).replace(/[+\s-]/g, "");
-      const waTemplate = process.env.WA_TEMPLATE || "tsk_10";
+      const waTemplate = process.env.WA_TEMPLATE || "project_managment";
 
       try {
         const url = new URL("https://bhashsms.com/api/sendmsgutil.php");
@@ -912,9 +912,9 @@ async function executeAction(action: string, args: any[]): Promise<any> {
         url.searchParams.append("priority", "wa");
         url.searchParams.append("stype", "normal");
         
-        // Params = Name, Task ID, Days Limit, Priority, task update Link
+        // Params = Name, Task ID, Days Limit, Priority, task update Link, Owner Name
         // Name is: Doer (Tags)
-        const paramsValue = `${name || ""},${taskId || ""},${daysLimit || ""},${priority || ""},${taskUpdateLink || ""}`;
+        const paramsValue = `${name || ""},${taskId || ""},${daysLimit || ""},${priority || ""},${taskUpdateLink || ""},${ownerName || "Owner"}`;
         url.searchParams.append("Params", paramsValue);
 
         console.log(`Sending WhatsApp call via BhashSMS API to ${formattedPhone} (Template: ${waTemplate}, Params: ${paramsValue})`);

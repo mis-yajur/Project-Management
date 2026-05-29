@@ -1131,6 +1131,7 @@ function executeAction(action, args) {
       var daysLimit = args[3];
       var priority = args[4];
       var taskUpdateLink = args[5];
+      var ownerName = args[6] || "Owner";
       
       if (!phone) {
         return { success: false, message: "Recipient phone number is missing." };
@@ -1145,13 +1146,14 @@ function executeAction(action, args) {
                           (taskId || "") + "," +
                           (daysLimit || "") + "," +
                           (priority || "") + "," +
-                          (taskUpdateLink || "");
+                          (taskUpdateLink || "") + "," +
+                          (ownerName || "Owner");
         
-        // Pass parameters to the new endpoint, including updated tsk_10 template key
+        // Pass parameters to the new endpoint, including updated project_managment template key
         var qs = "?phone=" + encodeURIComponent(formattedPhone) +
                  "&Params=" + encodeURIComponent(paramsValue) +
-                 "&text=tsk_10" +
-                 "&template=tsk_10";
+                 "&text=project_managment" +
+                 "&template=project_managment";
                  
         var url = baseUrl + qs;
         

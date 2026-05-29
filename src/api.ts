@@ -115,5 +115,5 @@ export const api = {
   
   triggerTaskNotification: (taskId: string, triggeredByUserId: string) => rpcCall("triggerTaskNotification", [taskId, triggeredByUserId]),
   triggerIssueNotification: (issueId: string, triggeredByUserId: string) => rpcCall("triggerIssueNotification", [issueId, triggeredByUserId]),
-  sendWhatsApp: (phone: string, name: string, taskId: string, daysLimit: string, priority: string, updateLink: string) => rpcCall("sendWhatsApp", [phone, name, taskId, daysLimit, priority, updateLink]),
+  sendWhatsApp: (phone: string, name: string, taskId: string, daysLimit: string, priority: string, updateLink: string, ownerName: string) => rpcCall("sendWhatsApp", [phone, name, taskId, daysLimit, priority, updateLink, ownerName]),
 };
