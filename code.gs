@@ -108,8 +108,8 @@ function initializeGoogleSheet() {
   }
 }
 
-// Database helper functions to read sheet data as array of JSON objects
-function readSheetData(sheetName) {
+// Database helper functions to read sheet data as array of JSON objects without applying mapping transformations
+function readSheetDataRaw(sheetName) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sheet = ss.getSheetByName(sheetName);
   if (!sheet) return [];
@@ -131,6 +131,39 @@ function readSheetData(sheetName) {
   return data;
 }
 
+// Database helper functions to read sheet data as array of JSON objects
+function readSheetData(sheetName) {
+  var data = readSheetDataRaw(sheetName);
+
+  // If reading Tasks, map owner's Full Name back to User ID (e.g. USR-0001) for internal system logic consistency
+  if (sheetName === "Tasks") {
+    try {
+      var usersList = readSheetDataRaw("Users");
+      for (var i = 0; i < data.length; i++) {
+        var ownerVal = String(data[i].owner || "").trim();
+        if (ownerVal) {
+          var foundUser = null;
+          for (var u = 0; u < usersList.length; u++) {
+            var user = usersList[u];
+            if (String(user.fullName || "").trim().toLowerCase() === ownerVal.toLowerCase() ||
+                String(user.username || "").trim().toLowerCase() === ownerVal.toLowerCase() ||
+                String(user.id || "").trim().toLowerCase() === ownerVal.toLowerCase()) {
+              foundUser = user;
+              break;
+            }
+          }
+          if (foundUser) {
+            data[i].owner = foundUser.id; // Convert to ID internally
+          }
+        }
+      }
+    } catch (err) {
+      Logger.log("Error mapping owners in readSheetData: " + err);
+    }
+  }
+  return data;
+}
+
 // Database helper to rewrite a full sheet's rows (skipping headers)
 function writeSheetData(sheetName, dataList) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -146,11 +179,41 @@ function writeSheetData(sheetName, dataList) {
   
   var headers = SCHEMA[sheetName];
   var rowsToWrite = [];
+
+  var usersList = [];
+  if (sheetName === "Tasks") {
+    try {
+      usersList = readSheetDataRaw("Users");
+    } catch (err) {
+      Logger.log("Error loading users for writeSheetData: " + err);
+    }
+  }
+
   for (var i = 0; i < dataList.length; i++) {
     var item = dataList[i];
     var row = [];
     for (var c = 0; c < headers.length; c++) {
-      var val = item[headers[c]];
+      var headerName = headers[c];
+      var val = item[headerName];
+
+      // Special logic: write Owner Full Name in the "Tasks" Google Sheet
+      if (sheetName === "Tasks" && headerName === "owner" && val) {
+        var strVal = String(val).trim();
+        var foundUser = null;
+        for (var u = 0; u < usersList.length; u++) {
+          var user = usersList[u];
+          if (String(user.id || "").trim().toLowerCase() === strVal.toLowerCase() ||
+              String(user.username || "").trim().toLowerCase() === strVal.toLowerCase() ||
+              String(user.fullName || "").trim().toLowerCase() === strVal.toLowerCase()) {
+            foundUser = user;
+            break;
+          }
+        }
+        if (foundUser && foundUser.fullName) {
+          val = foundUser.fullName;
+        }
+      }
+
       row.push(val === undefined || val === null ? "" : val);
     }
     rowsToWrite.push(row);

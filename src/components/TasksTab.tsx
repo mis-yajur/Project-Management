@@ -44,9 +44,9 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
     const user = activeUsers.find(
       u => (String(u.id).trim().toLowerCase() === String(ownerId).trim().toLowerCase() ||
             String(u.username).trim().toLowerCase() === String(ownerId).trim().toLowerCase() ||
-            String(u.fullName).trim().toLowerCase() === String(ownerId).trim().toLowerCase())
+            String(u.name).trim().toLowerCase() === String(ownerId).trim().toLowerCase())
     );
-    return user ? user.fullName : ownerId;
+    return user ? user.name : ownerId;
   };
   const [parentTasks, setParentTasks] = useState<Task[]>([]);
 
@@ -378,12 +378,12 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
   const getTaskRecipientUser = (t: Task) => {
     if (!activeUsers || activeUsers.length === 0) return null;
 
-    // 1. Try to match by tags (case-insensitive username or name/fullName)
+    // 1. Try to match by tags (case-insensitive username or name)
     if (t.tags) {
       const cleanTag = String(t.tags).trim().toLowerCase();
       const match = activeUsers.find(
         u => (String(u.username).trim().toLowerCase() === cleanTag ||
-              String(u.fullName).trim().toLowerCase() === cleanTag)
+              String(u.name).trim().toLowerCase() === cleanTag)
       );
       if (match) return match;
     }
@@ -394,7 +394,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       const match = activeUsers.find(
         u => (String(u.id).trim().toLowerCase() === cleanOwner ||
               String(u.username).trim().toLowerCase() === cleanOwner ||
-              String(u.fullName).trim().toLowerCase() === cleanOwner)
+              String(u.name).trim().toLowerCase() === cleanOwner)
       );
       if (match) return match;
     }
@@ -405,7 +405,7 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
   const handleSendWhatsApp = async (t: Task) => {
     const recipient = getTaskRecipientUser(t);
     const defaultPhone = recipient?.contactNumber;
-    const doerName = recipient?.fullName || t.tags || "Team Member";
+    const doerName = recipient?.name || t.tags || "Team Member";
 
     console.log("handleSendWhatsApp called for task", t.id, "recipient", recipient);
 

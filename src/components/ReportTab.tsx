@@ -18,9 +18,9 @@ export default function ReportTab({ currentUser }: ReportTabProps) {
     const user = activeUsers.find(
       u => (String(u.id).trim().toLowerCase() === String(ownerId).trim().toLowerCase() ||
             String(u.username).trim().toLowerCase() === String(ownerId).trim().toLowerCase() ||
-            String(u.fullName).trim().toLowerCase() === String(ownerId).trim().toLowerCase())
+            String(u.name).trim().toLowerCase() === String(ownerId).trim().toLowerCase())
     );
-    return user ? user.fullName : ownerId;
+    return user ? user.name : ownerId;
   };
 
   // Dynamic filter lists
