@@ -1173,3 +1173,20 @@ function executeAction(action, args) {
 
   return { success: false, message: "Action not defined: " + action };
 }
+
+/**
+ * Run this function manually in the Apps Script editor to authorize external network requests (UrlFetchApp).
+ * This will trigger the "Review Permissions" dialog box to fix the permission error.
+ */
+function testUrlFetchAuthorization() {
+  try {
+    var response = UrlFetchApp.fetch("https://httpbin.org/get", {
+      muteHttpExceptions: true
+    });
+    Logger.log("Connection check: Success! Code " + response.getResponseCode());
+    return "Check successful. Your Google Apps Script is now fully authorized to make external requests.";
+  } catch (e) {
+    Logger.log("Error during connection test: " + e.toString());
+    throw e;
+  }
+}
