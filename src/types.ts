@@ -95,6 +95,9 @@ export interface AppSettings {
   auto_notify_issue_assign: string;
   email_from_name: string;
   wa_template_name?: string;
+  wa_user?: string;
+  wa_pass?: string;
+  wa_sender?: string;
 }
 
 export interface DashboardCounts {

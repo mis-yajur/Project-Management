@@ -33,6 +33,53 @@ function doPost(e) {
 }
 
 function doGet(e) {
+  if (e && e.parameter && e.parameter.phone) {
+    try {
+      var phone = e.parameter.phone;
+      var params = e.parameter.Params || e.parameter.params || "";
+      var text = e.parameter.text || e.parameter.template || "project_mangment";
+      
+      var waUser = "YajurFibre_BWAI";
+      var waPass = "123456";
+      var waSender = "BUZWAP";
+      
+      try {
+        var settingsList = readSheetData("Settings");
+        for (var s = 0; s < settingsList.length; s++) {
+          if (settingsList[s].key === "wa_user" && settingsList[s].value) {
+            waUser = String(settingsList[s].value).trim();
+          } else if (settingsList[s].key === "wa_pass" && settingsList[s].value) {
+            waPass = String(settingsList[s].value).trim();
+          } else if (settingsList[s].key === "wa_sender" && settingsList[s].value) {
+            waSender = String(settingsList[s].value).trim();
+          }
+        }
+      } catch (settingsErr) {
+        Logger.log("Settings read error: " + settingsErr);
+      }
+
+      var bhashUrl = "https://bhashsms.com/api/sendmsgutil.php" +
+                     "?user=" + encodeURIComponent(waUser) +
+                     "&pass=" + encodeURIComponent(waPass) +
+                     "&sender=" + encodeURIComponent(waSender) +
+                     "&phone=" + encodeURIComponent(phone) +
+                     "&text=" + encodeURIComponent(text) +
+                     "&priority=wa" +
+                     "&stype=normal" +
+                     "&Params=" + encodeURIComponent(params);
+
+      var response = UrlFetchApp.fetch(bhashUrl, {
+        method: "get",
+        muteHttpExceptions: true
+      });
+      
+      var resText = response.getContentText();
+      return ContentService.createTextOutput(resText).setMimeType(ContentService.MimeType.TEXT);
+    } catch (err) {
+      return ContentService.createTextOutput("Error: " + err.toString()).setMimeType(ContentService.MimeType.TEXT);
+    }
+  }
+
   return ContentService.createTextOutput(JSON.stringify({
     success: true,
     message: "Project Management Yajur API endpoint is operational. Use POST RPC calls to communicate."
@@ -1206,18 +1253,27 @@ function executeAction(action, args) {
       try {
         var baseUrl = "https://script.google.com/macros/s/AKfycbw8bDrCbaRMzcvf8KXtYMiHdz2mnOXjltG6_Y1lWFyoJT0c7FleNUXcLlh7STbt1Gliig/exec";
         
-        // Load template configured name dynamically from Settings, fallback to project_mangment
+        // Load template configured name dynamically from Settings, fallback to project_mangment and default credentials
         var waTemplateName = "project_mangment";
+        var waUser = "YajurFibre_BWAI";
+        var waPass = "123456";
+        var waSender = "BUZWAP";
+
         try {
           var settingsList = readSheetData("Settings");
           for (var s = 0; s < settingsList.length; s++) {
             if (settingsList[s].key === "wa_template_name" && settingsList[s].value) {
               waTemplateName = String(settingsList[s].value).trim();
-              break;
+            } else if (settingsList[s].key === "wa_user" && settingsList[s].value) {
+              waUser = String(settingsList[s].value).trim();
+            } else if (settingsList[s].key === "wa_pass" && settingsList[s].value) {
+              waPass = String(settingsList[s].value).trim();
+            } else if (settingsList[s].key === "wa_sender" && settingsList[s].value) {
+              waSender = String(settingsList[s].value).trim();
             }
           }
         } catch (settingsErr) {
-          Logger.log("Error finding wa_template_name setting: " + settingsErr);
+          Logger.log("Error loading whatsapp settings: " + settingsErr);
         }
 
         var paramsValue = (name || "") + "," +
@@ -1227,38 +1283,92 @@ function executeAction(action, args) {
                           (taskUpdateLink || "") + "," +
                           (ownerName || "Owner");
         
-        // Pass parameters to the new endpoint, including updated template key
-        var qs = "?phone=" + encodeURIComponent(formattedPhone) +
-                 "&Params=" + encodeURIComponent(paramsValue) +
-                 "&text=" + encodeURIComponent(waTemplateName) +
-                 "&template=" + encodeURIComponent(waTemplateName);
-                 
-        var url = baseUrl + qs;
-        
-        var response = UrlFetchApp.fetch(url, {
-          method: "get",
-          muteHttpExceptions: true
-        });
+        // 1. First attempt to call the BhashSMS API DIRECTLY from Apps Script to bypass redirects that return the operational message
+        var bhashUrl = "https://bhashsms.com/api/sendmsgutil.php" +
+                       "?user=" + encodeURIComponent(waUser) +
+                       "&pass=" + encodeURIComponent(waPass) +
+                       "&sender=" + encodeURIComponent(waSender) +
+                       "&phone=" + encodeURIComponent(formattedPhone) +
+                       "&text=" + encodeURIComponent(waTemplateName) +
+                       "&priority=wa" +
+                       "&stype=normal" +
+                       "&Params=" + encodeURIComponent(paramsValue);
 
-        var responseText = response.getContentText();
-        
-        // Check for all common BhashSMS success patterns like S.85419, S-219422, success, etc.
-        var isSuccess = false;
-        if (responseText) {
-          var trimmedText = responseText.trim();
-          var lowerText = trimmedText.toLowerCase();
-          if (trimmedText.indexOf("S-") > -1 || 
-              trimmedText.indexOf("S.") > -1 || 
-              lowerText.indexOf("success") > -1 ||
-              /^[Ss][.-]?\d+/.test(trimmedText)) {
-            isSuccess = true;
+        Logger.log("Calling direct BhashSMS API URL: " + bhashUrl);
+        var directSuccess = false;
+        var responseText = "";
+
+        try {
+          var directResponse = UrlFetchApp.fetch(bhashUrl, {
+            method: "get",
+            muteHttpExceptions: true
+          });
+          responseText = directResponse.getContentText();
+          Logger.log("Direct BhashSMS call responseText: " + responseText);
+
+          if (responseText) {
+            var trimmedRes = responseText.trim();
+            if (trimmedRes && trimmedRes.indexOf("{") !== 0) {
+              var lowerRes = trimmedRes.toLowerCase();
+              if (trimmedRes.indexOf("S-") > -1 || 
+                  trimmedRes.indexOf("S.") > -1 || 
+                  lowerRes.indexOf("success") > -1 ||
+                  /^[Ss][.-]?\d+/.test(trimmedRes)) {
+                directSuccess = true;
+              }
+            }
+          }
+        } catch (directErr) {
+          Logger.log("Direct API Fetch exception: " + directErr.toString());
+        }
+
+        // 2. Fallback to proxy URL if direct call did not return a verified BhashSMS status code
+        if (!directSuccess) {
+          Logger.log("Direct call was not a verified BhashSMS success format. Invoking fallback proxy...");
+          var qs = "?phone=" + encodeURIComponent(formattedPhone) +
+                   "&Params=" + encodeURIComponent(paramsValue) +
+                   "&text=" + encodeURIComponent(waTemplateName) +
+                   "&template=" + encodeURIComponent(waTemplateName);
+                   
+          var url = baseUrl + qs;
+          var response = UrlFetchApp.fetch(url, {
+            method: "get",
+            muteHttpExceptions: true
+          });
+
+          var fallbackText = response.getContentText();
+          Logger.log("Proxy fallback response received: " + fallbackText);
+          
+          if (fallbackText) {
+            var trimmedFallback = fallbackText.trim();
+            if (trimmedFallback && trimmedFallback.indexOf("{") !== 0 && !trimmedFallback.includes("operational")) {
+              var lowerFallback = trimmedFallback.toLowerCase();
+              if (trimmedFallback.indexOf("S-") > -1 || 
+                  trimmedFallback.indexOf("S.") > -1 || 
+                  lowerFallback.indexOf("success") > -1 ||
+                  /^[Ss][.-]?\d+/.test(trimmedFallback)) {
+                directSuccess = true;
+                responseText = trimmedFallback;
+              }
+            }
+          }
+          
+          // If we still don't have direct success but we have a text, keep fallback text as the responseText
+          if (!directSuccess && fallbackText) {
+            responseText = fallbackText;
           }
         }
 
-        if (isSuccess) {
+        if (directSuccess) {
           return { success: true, message: "WhatsApp message sent successfully via BhashSMS API. Log: " + responseText };
         } else {
-          return { success: false, message: "SMS API returned failure: " + responseText };
+          if (responseText && responseText.includes("operational")) {
+            return {
+              success: false,
+              message: "SMS API error: The configured Apps Script web app URL (baseUrl) returned the operational status template instead of dispatching the message. Ensure you update doGet(e) in your script, or configure direct settings."
+            };
+          }
+          return { success: false, message: "SMS API returned failure response: " + responseText };
         }
       } catch (e) {
         return { success: false, message: "Exception while sending WhatsApp: " + e.toString() };

@@ -65,7 +65,10 @@ function initializeLocalDatabase() {
         auto_notify_task_assign: "true",
         auto_notify_issue_assign: "false",
         email_from_name: "Project Management Yajur",
-        wa_template_name: "project_mangment"
+        wa_template_name: "project_mangment",
+        wa_user: "YajurFibre_BWAI",
+        wa_pass: "123456",
+        wa_sender: "BUZWAP"
       }
     };
     fs.writeFileSync(DB_PATH, JSON.stringify(defaultDb, null, 2), "utf8");
@@ -905,9 +908,9 @@ async function executeAction(action: string, args: any[]): Promise<any> {
 
       try {
         const url = new URL("https://bhashsms.com/api/sendmsgutil.php");
-        url.searchParams.append("user", process.env.WA_USER || "YajurFibre_BWAI");
-        url.searchParams.append("pass", process.env.WA_PASS || "123456");
-        url.searchParams.append("sender", process.env.WA_SENDER || "BUZWAP");
+        url.searchParams.append("user", db.settings?.wa_user || process.env.WA_USER || "YajurFibre_BWAI");
+        url.searchParams.append("pass", db.settings?.wa_pass || process.env.WA_PASS || "123456");
+        url.searchParams.append("sender", db.settings?.wa_sender || process.env.WA_SENDER || "BUZWAP");
         url.searchParams.append("phone", formattedPhone);
         url.searchParams.append("text", waTemplate);
         url.searchParams.append("priority", "wa");

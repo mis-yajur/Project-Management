@@ -19,7 +19,10 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
     auto_notify_task_assign: "true",
     auto_notify_issue_assign: "false",
     email_from_name: "Project Management Yajur",
-    wa_template_name: "project_mangment"
+    wa_template_name: "project_mangment",
+    wa_user: "YajurFibre_BWAI",
+    wa_pass: "123456",
+    wa_sender: "BUZWAP"
   });
   const [savingSettings, setSavingSettings] = useState(false);
 
@@ -40,7 +43,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
       // 1. Fetch current settings
       const settingsRes = await api.getSettings();
       if (settingsRes && settingsRes.success && settingsRes.data) {
-        setSettings(settingsRes.data);
+        setSettings(prev => ({ ...prev, ...settingsRes.data }));
       }
 
       // 2. Fetch logs
@@ -288,7 +291,7 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
             <hr className="border-slate-100 my-1" />
 
             <div className="space-y-3">
-              <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-slate-400 block">WhatsApp Template Integration</span>
+              <span className="text-[10px] uppercase font-mono tracking-wider font-semibold text-slate-400 block">WhatsApp Template & Credentials Integration</span>
               <div className="space-y-1.5">
                 <label className="text-xs text-slate-700 font-semibold block" htmlFor="wa_template_name">WhatsApp SMS Template ID / Name</label>
                 <input
@@ -303,6 +306,47 @@ export default function NotificationsTab({ currentUser }: NotificationsTabProps)
                 <p className="text-[10px] text-slate-400 font-sans leading-normal">
                   The active template registered on BhashSMS (e.g. <code>project_mangment</code> or <code>new_task_assigned</code>).
                 </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+                <div className="space-y-1.5">
+                  <label className="text-xs text-slate-700 font-semibold block" htmlFor="wa_user">BhashSMS User</label>
+                  <input
+                    type="text"
+                    id="wa_user"
+                    disabled={currentUser.role === "User"}
+                    placeholder="YajurFibre_BWAI"
+                    className="w-full bg-slate-55 border border-slate-200/85 rounded-xl px-4 py-2 text-xs text-slate-800 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff]"
+                    value={settings.wa_user || ""}
+                    onChange={(e) => setSettings({ ...settings, wa_user: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs text-slate-700 font-semibold block" htmlFor="wa_pass">BhashSMS Password</label>
+                  <input
+                    type="password"
+                    id="wa_pass"
+                    disabled={currentUser.role === "User"}
+                    placeholder="••••••"
+                    className="w-full bg-slate-55 border border-slate-200/85 rounded-xl px-4 py-2 text-xs text-slate-800 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff]"
+                    value={settings.wa_pass || ""}
+                    onChange={(e) => setSettings({ ...settings, wa_pass: e.target.value })}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs text-slate-700 font-semibold block" htmlFor="wa_sender">Sender ID</label>
+                  <input
+                    type="text"
+                    id="wa_sender"
+                    disabled={currentUser.role === "User"}
+                    placeholder="BUZWAP"
+                    className="w-full bg-slate-55 border border-slate-200/85 rounded-xl px-4 py-2 text-xs text-slate-800 outline-none focus:border-[#9a55ff] focus:ring-1 focus:ring-[#9a55ff]"
+                    value={settings.wa_sender || ""}
+                    onChange={(e) => setSettings({ ...settings, wa_sender: e.target.value })}
+                  />
+                </div>
               </div>
             </div>
           </div>

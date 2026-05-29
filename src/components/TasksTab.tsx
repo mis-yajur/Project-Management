@@ -476,18 +476,40 @@ export default function TasksTab({ currentUser, onNavigateTab, overrideFilter }:
       );
 
       if (isActuallySuccess) {
+        let cleanCode = "";
+        const msgStr = res?.message || "";
+        const bhashMatch = msgStr.match(/([Ss][.-]?\d+)/);
+        if (bhashMatch) {
+          cleanCode = bhashMatch[1];
+        }
+
         setWaModal({
           isOpen: true,
           type: "success",
           title: "Sms Sent Successfully!",
-          message: `The WhatsApp automated message has been successfully dispatched to ${doer} (${phone}).\n\nLog response: ${res?.message || "Success"}`
+          message: `The WhatsApp automated message has been successfully dispatched to ${doer} (${phone}).${cleanCode ? `\n\nStatus Code: ${cleanCode}` : ""}`
         });
       } else {
+        let errorMsg = res?.message || "Failed to send WhatsApp message";
+        let displayError = errorMsg;
+        
+        // Extract common bhashsms patterns or keep it compact
+        const errorCodeMatch = errorMsg.match(/(\b\d{3}\b)/);
+        if (errorCodeMatch) {
+          displayError = `Code ${errorCodeMatch[1]}`;
+        } else if (errorMsg.includes("failure:")) {
+          displayError = errorMsg.split("failure:")[1].trim();
+        }
+        
+        if (displayError.length > 100) {
+          displayError = displayError.substring(0, 100) + "...";
+        }
+
         setWaModal({
           isOpen: true,
           type: "error",
           title: "Sms sending failed!",
-          message: res?.message || "Failed to send WhatsApp message"
+          message: displayError
         });
       }
     } catch (err: any) {
